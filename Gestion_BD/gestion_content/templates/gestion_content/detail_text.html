@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+    {% load static %}
+    <!DOCTYPE html>
+    <html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Détails de l'Auteur</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+        <style>
+            .rating {
+                direction: rtl;
+                display: flex;
+                justify-content: start;
+            }
+            .rating input {
+                display: none;
+            }
+            .rating label {
+                font-size: 25px;
+                color: #ccc;
+                cursor: pointer;
+            }
+            .rating input:checked ~ label,
+            .rating label:hover,
+            .rating label:hover ~ label {
+                color: #FFD700;
+            }
+            .comment-box {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+                margin-bottom: 10px;
+            }
+            .submit-btn {
+                background-color: #6c757d;
+                color: white;
+                border: none;
+                padding: 10px 15px;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            .submit-btn:hover {
+                background-color: #5a6268;
+            }
+            .form-container {
+    border: 1px solid #ddd; /* Bordure grise */
+    border-radius: 8px; /* Coins arrondis */
+    padding: 16px; /* Espacement interne */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Légère ombre */
+}
+
+        </style>
+    </head>
+    <body>
+    
+    <h2>Avis des lecteurs</h2>
+    
+    <!-- Formulaire de notation -->
+    <form method="post" class="form-container">
+        {% csrf_token %}
+        <textarea name="comment" class="comment-box" placeholder="Donnez votre avis..." required></textarea>
+    
+        <div>
+            <label>Note</label>
+            <div class="rating">
+                <input type="radio" name="rating" id="star5" value="5" required><label for="star5" class="fas fa-star"></label>
+                <input type="radio" name="rating" id="star4" value="4"><label for="star4" class="fas fa-star"></label>
+                <input type="radio" name="rating" id="star3" value="3"><label for="star3" class="fas fa-star"></label>
+                <input type="radio" name="rating" id="star2" value="2"><label for="star2" class="fas fa-star"></label>
+                <input type="radio" name="rating" id="star1" value="1"><label for="star1" class="fas fa-star"></label>
+            </div>
+        </div>
+    
+        <button type="submit" class="submit-btn">Publier</button>
+    </form>
+
+    
+    
+    <!-- Affichage des avis -->
+    {% for notation in notations %}
+        <div class="comment-box">
+            <strong>{{ notation.user.username }}</strong>
+            <p>
+                {% for i in "12345"|make_list %}
+                    {% if forloop.counter <= notation.rating %}
+                        <i class="fas fa-star" style="color:#FFD700;"></i>
+                    {% else %}
+                        <i class="far fa-star"></i>
+                    {% endif %}
+                {% endfor %}
+            </p>
+            <p>{{ notation.comment }}</p>
+            <small>Publié le {{ notation.created_at|date:"d M Y" }}</small>
+        </div>
+    {% empty %}
+        <p>Aucun avis pour le moment.</p>
+    {% endfor %}
+
+
+
+    {% for oeuvre in oeuvres %}
+        <li>
+            <strong>{{ oeuvre.title }}</strong> - Publié le {{ oeuvre.publication_date|date:"d M Y" }}
+        </li>
+    {% empty %}
+        <p>Aucune œuvre trouvée.</p>
+    {% endfor %}
+
+
+    <h3>Réseaux Sociaux</h3>
+<ul>
+    {% for key, url in social_links.items %}
+        <li>
+            <a href="{{ url }}" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 5px;">
+                {% if key == "facebook" %}
+                    <i class="fab fa-facebook"></i> <span>Facebook</span>
+                {% elif key == "twitter" %}
+                    <i class="fab fa-twitter"></i> <span>Twitter</span>
+                {% elif key == "linkedin" %}
+                    <i class="fab fa-linkedin"></i> <span>LinkedIn</span>
+                {% elif key == "instagram" %}
+                    <i class="fab fa-instagram"></i> <span>Instagram</span>
+                {% elif key == "youtube" %}
+                    <i class="fab fa-youtube"></i> <span>YouTube</span>
+                {% else %}
+                    <i class="fas fa-link"></i> <span>{{ key|capfirst }}</span>
+                {% endif %}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
+    
+    </body>
+    </html>
+    
+    
+</body>
+</html>
