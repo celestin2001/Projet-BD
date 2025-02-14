@@ -1,0 +1,458 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carte Bootstrap</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="{% static "gestion_content/css/bootstrap.min.css"%}">
+    <style>
+        /* 111111111111111111 */
+        .custom-card {
+            border: 1px solid #ddd; /* Bordure fine et élégante */
+            border-radius: 15px; /* Coins arrondis */
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Effet d'ombre léger */
+            background-color: #fff;
+            overflow: hidden;
+            width: 22rem;
+        }
+
+        /* Style de l'image */
+        .custom-card img {
+            display: block;
+            width: 90%; /* L'image ne prend pas toute la largeur */
+            height: 400px; /* Ajustement de la hauteur */
+            object-fit: cover;
+            border-radius: 10px; /* Coins arrondis */
+            margin: 10px auto; /* Centrage */
+        }
+
+        /* Style des badges */
+        .badge-custom {
+            background-color: #f8f9fa;
+            color: #333;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Style des boutons */
+        .btn-custom {
+            background: white;
+            border: 1px solid #ddd;
+            width: 100%;
+            text-align: left;
+            font-weight: 500;
+            border-radius: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-custom:hover {
+            background: #f1f1f1;
+        }
+              /* FIN 111111111111111111 */
+/* 
+              22222222222222222222 */
+
+              body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            margin-top: 40px;
+        }
+
+        .card {
+            border: none;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+
+        .card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .card:hover {
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-body {
+            background: white;
+            padding: 15px;
+        }
+
+        .card-title {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .card-text {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .year {
+            float: right;
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* FIN 222222222222222222 */
+
+        /* 333333333333333333 */
+
+  /* Conteneur principal */
+  .bibliographie-section {
+            margin-top: 30px;
+        }
+
+        /* Style des cartes */
+        .bibliographie-card {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            transition: 0.3s;
+            height: 100%;
+        }
+
+        .bibliographie-card:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .bibliographie-card i {
+            font-size: 26px;
+            color: #666;
+        }
+
+        .bibliographie-card .title {
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .bibliographie-card .year {
+            color: #888;
+            font-size: 14px;
+        }
+/* 333333333333333333 */
+
+
+
+
+        /* css formulaire de note */
+          .rating {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: start;
+        }
+        .rating input {
+            display: none;
+        }
+        .rating label {
+            font-size: 25px;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        .rating input:checked ~ label,
+        .rating label:hover,
+        .rating label:hover ~ label {
+            color: #FFD700;
+        }
+        .comment-box {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .submit-btn {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #5a6268;
+        }
+        .form-container,.avis {
+    border: 1px solid #ddd; /* Bordure grise */
+    border-radius: 8px; /* Coins arrondis */
+    padding: 16px; /* Espacement interne */
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Légère ombre */
+}
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="col-lg-4">
+            <div class=" mt-5 d-flex justify-content-center">
+                <div class="card custom-card">
+                    <img src="{{ auteur.user.profil_picture.url }}" alt="Auteur">
+                    
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{auteur.user.username}}</h5>
+                        <p class="card-text">
+                            <span class="text-warning">&#9733;</span>
+                            <strong>4.8</strong> &bull; / {{auteur.nombre_oeuvres}} oeuvre(s)
+                        </p>
+                        {% comment %} <div class="mb-3">
+                            {% for genre in auteur.genres.all %}
+                            <span class="badge badge-custom"> {{ genre.nom }}{% if not forloop.last %}, {% endif %}</span>
+                            {% endfor %}
+                        </div> {% endcomment %}
+        
+                        
+                    
+                        <ul class="p-0">
+                            {% for key, url in social_links.items %}
+                                <li style="list-style-type: none;">
+                                    <a href="{{ url }}" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 5px;">
+                                        {% if key == "facebook" %}
+
+                                        <button class="btn btn-custom d-flex align-items-center mt-2">
+                                              <i class="fab fa-facebook"></i> <span> Facebook</span>
+                                        </button>
+                                          
+                                        {% elif key == "twitter" %}
+                                        <button class="btn btn-custom d-flex align-items-center mt-2">
+                                             <i class="fab fa-twitter"></i> <span> Twitter</span>
+                                        </button>
+                                           
+                                        {% elif key == "linkedin" %}
+                                        <button class="btn btn-custom d-flex align-items-center mt-2">
+                                             <i class="fab fa-linkedin"></i> <span> LinkedIn</span>
+                                        </button>
+                                           
+                                        {% elif key == "instagram" %}
+                                        <button class="btn btn-custom d-flex align-items-center mt-2">
+                                             <i class="fab fa-instagram"></i> <span> Instagram</span>
+                                        </button>
+                                           
+                                        {% elif key == "youtube" %}
+                                        <button class="btn btn-custom d-flex align-items-center mt-2">
+                                            <i class="fab fa-youtube"></i> <span> YouTube</span>
+                                        </button>
+                                            
+                                        {% endif %}
+                                    </a>
+                                </li>
+                                {%empty%}
+                                <h5>pas de réseau social</h5>
+                            {% endfor %}
+                        </ul>
+
+
+
+
+                        {% comment %} <ul>
+                            {% for key, value in auteur.social_links.items %}
+                                <li><a href="{{ value }}" target="_blank">{{ key }}</a></li>
+                            {% empty %}
+                                <li>Aucun réseau social disponible.</li>
+                            {% endfor %}
+                        </ul>
+        
+                        <ul>
+                            {% for post in auteur.blog_posts.all %}
+                                <li><a href="#">{{ post.title }}</a> ({{ post.created_at|date:"d M Y" }})</li>
+                            {% empty %}
+                                <li>Aucune œuvre pour cet auteur.</li>
+                            {% endfor %}
+                        </ul> {% endcomment %}
+        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        
+
+
+            <!-- oeuvre -->
+
+        <div class="col-lg-8 bibliographie-section py-3">
+
+            <div class="container">
+                <h3 class="fw-bold">À propos</h3>
+                <p>
+                   {{ auteur.user.bio }}
+                </p>
+            
+                <h3 class="fw-bold mt-4">Œuvres remarquables</h3>
+                <div class="row g-4 mt-3">
+                    <!-- Carte 1 -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <img src="{% static 'gestion_content/images/bd1.png' %}" alt="Auteur">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div class="card-title">L'Incal</div>
+                                    <div class="year">1981</div>
+                                </div>
+                                <p class="card-text">Un chef-d'œuvre de science-fiction en collaboration avec Alejandro Jodorowsky.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Carte 2 -->
+                    <div class="col-md-6">
+                        <div class="card">
+                            <img src="{% static 'gestion_content/images/bd1.png' %}" alt="Auteur">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between">
+                                    <div class="card-title">Arzak</div>
+                                    <div class="year">1975</div>
+                                </div>
+                                <p class="card-text">Une bande dessinée sans paroles mettant en scène des paysages désertiques surréalistes.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h3 class="fw-bold mt-5">Bibliographie</h3>
+            <div class="row g-4 mt-3">
+                <!-- Carte 1 -->
+                {% for oeuvre in oeuvres %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="bibliographie-card">
+                            <i class="fas fa-book"></i>
+                            <div>
+                                <div class="title">{{ oeuvre.title }}</div>
+                                <div class="year">publier le {{ oeuvre.publication_date|date:"d M Y" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Aucune œuvre trouvée.</p>
+                {% endfor %}
+
+                            
+            </div>
+
+
+            <!-- deuxieme partie7777777 -->
+
+
+
+
+<!-- formulaire de commentaire et notation -->
+
+
+<div class="container">
+    <h3 class="fw-bold">Avis des lecteurs</h3>
+
+
+    <!-- Formulaire de notation -->
+    <form method="post" class="mb-4 form-container">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label class="form-label">Votre avis</label>
+            <textarea name="comment" class="form-control" placeholder="Donnez votre avis..." required></textarea>
+        </div>
+    
+        <div class="mb-3">
+            <label class="form-label">Note</label>
+            <div class="rating">
+                <input type="radio" name="rating" id="star5" value="5" required><label for="star5" class="fas fa-star"></label>
+                <input type="radio" name="rating" id="star4" value="4"><label for="star4" class="fas fa-star"></label>
+                <input type="radio" name="rating" id="star3" value="3"><label for="star3" class="fas fa-star"></label>
+                <input type="radio" name="rating" id="star2" value="2"><label for="star2" class="fas fa-star"></label>
+                <input type="radio" name="rating" id="star1" value="1"><label for="star1" class="fas fa-star"></label>
+            </div>
+        </div>
+    
+        <button type="submit" class="submit-btn">Publier</button>
+    </form>
+
+    <!-- Un avis déjà publié -->
+    <div class="review p-3 avis">
+        <div class="">
+        <!-- <strong>Michel Dupont</strong> -->
+        {% for notation in notations %}
+        <div class="stars">
+            <div class="d-flex justify-content-between">
+            <strong>{{ notation.user.username }}</strong>
+            <p>
+                {% for i in "12345"|make_list %}
+                    {% if forloop.counter <= notation.rating %}
+                        <i class="fas fa-star" style="color:#FFD700;"></i>
+                    {% else %}
+                        <i class="far fa-star"></i>
+                    {% endif %}
+                {% endfor %}
+            </p>
+        </div>
+            <p>{{ notation.comment }}</p>
+            <small>Publié le {{ notation.created_at|date:"d M Y" }}</small>
+        </div>
+    {% empty %}
+        <p>Aucun avis pour le moment.</p>
+    {% endfor %}
+    <!-- </div>
+        <p>Un artiste extraordinaire qui a révolutionné la bande dessinée. Ses œuvres sont intemporelles.</p>
+        <small>Publié le 12 mars 2024</small>
+    </div> -->
+</div>
+        </div>
+    </div>
+
+
+  
+    
+    
+
+
+    <!-- <div class="stars">
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+        <i class="fas fa-star"></i>
+    </div> -->
+
+
+
+
+
+
+
+
+<script>
+    // Système de notation dynamique
+    const stars = document.querySelectorAll(".rating-stars i");
+
+    stars.forEach(star => {
+        star.addEventListener("click", () => {
+            let value = star.getAttribute("data-value");
+
+            stars.forEach(s => {
+                s.classList.remove("active");
+            });
+
+            for (let i = 0; i < value; i++) {
+                stars[i].classList.add("active");
+            }
+        });
+    });
+</script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
+    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
+</body>
+</html>
