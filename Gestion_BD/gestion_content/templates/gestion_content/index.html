@@ -49,18 +49,38 @@
                 <i class="fas fa-book me-2"></i>
                 Auteurs de BD
             </a>
-            <form class="d-flex flex-grow-1 mx-3">
-                <div class="input-group">
+            <form class="d-flex flex-grow-1 mx-3" method="GET" {% url 'home' %}>
+                <div class="input-group me-2">
                     <span class="input-group-text"><i class="fas fa-search"></i></span>
-                    <input class="form-control search-input" type="search" placeholder="Rechercher des auteurs...">
+                    <input class="form-control search-input" type="search" name="q" placeholder="Rechercher des auteurs...">
                 </div>
+            
+                <!-- Filtre par genre -->
+                <select class="form-select me-2" name="genre">
+                    {% for genre  in genres  %}
+                    <option value="">{{genre.name}}</option>
+                    {% endfor %}
+                    {% comment %} <option value="manga">Manga</option>
+                    <option value="comics">Comics</option>
+                    <option value="bande-dessinée">Bande dessinée</option>
+                    <option value="manhwa">Manhwa</option> {% endcomment %}
+                </select>
+            
+                <!-- Filtre par pays -->
+                <select class="form-select me-2" name="pays">
+                    <option value="">Tous les pays</option>
+                    <option value="france">France</option>
+                    <option value="japon">Japon</option>
+                    <option value="usa">USA</option>
+                    <option value="corée">Corée du Sud</option>
+                </select>
+            
+                <button type="submit" class="btn btn-primary">Rechercher</button>
             </form>
-            <button class="btn btn-outline-secondary me-2">
-                <i class="fas fa-search"></i> Recherche avancée
-            </button>
             <button class="btn btn-outline-secondary">
                 <i class="fas fa-user"></i> Se connecter
             </button>
+          
         </div>
     </nav>
 
@@ -73,9 +93,10 @@
     </header>
 
     <!-- Auteurs en vedette -->
+    <h2 class="mb-4">Auteurs en vedette</h2>
     <div class="mx-5">
         <div class="">
-            <h2 class="mb-4">Auteurs en vedette</h2>
+        
             <div class=" py-5">
                 <div class="row g-4">
                   
@@ -85,14 +106,14 @@
                             
                             <div class="card">
                                 <a href="">
-                                    <img style="height: 350px; object-fit:cover;" src="{{auteur.user.profil_picture.url}}" class="img-fluid rounded" alt="Auteur 1">              
+                                    <img style="height: 250px; object-fit:cover;" src="{{auteur.user.profil_picture.url}}" class="img-fluid rounded" alt="Auteur 1">              
                                 </a>
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
-                                    <h5 class="card-title">{{auteur.user.username}} oeuvres</h5>
+                                    <h5 class="card-title">{{auteur.user.username}} </h5>
                                     <span class="star-rating">⭐ 4.7</span>
                                    </div>
-                                    <p class="text-muted">{{auteur.nombre_oeuvres}}</p>
+                                    <p class="text-muted">{{auteur.nombre_oeuvres}} oeuvre(s)</p>
                                    
         
                                     <p class="card-text">{{auteur.user.bio |truncatewords:10}}</p>
@@ -102,6 +123,10 @@
                             
                         
                         </div>
+
+                        {% empty %}
+        <p>Aucun avis pour le moment.</p>
+    
                       
                     {% endfor %}
                 </div>
