@@ -2,20 +2,20 @@ from django.shortcuts import get_object_or_404, render,redirect
 from gestion_content.models import *
 from gestion_utilisateur.models import Auteur
 from .form import NotationForm
-from django.db.models import Avg
+from django.db.models import Avg,Q
 
 
 def home(request):
     auteurs = Auteur.objects.all()
-    # gestion de recherche avancée
-    q = request.GET.get('q', '')  # Recherche par nom d'auteur
+    
+    # Récupération des paramètres de recherche
+    q = request.GET.get('q', '')  # Recherche par nom d'auteur ou username
     genre_id = request.GET.get('genre', '')
     pays = request.GET.get('pays', '')
 
-    auteurs = Auteur.objects.all()
-
+    # Filtrer les résultats
     if q:
-        auteurs = auteurs.filter(user__username__icontains=q)
+        auteurs = auteurs.filter(Q(user__username__icontains=q) )
 
     if genre_id:
         auteurs = auteurs.filter(genres__id=genre_id)
@@ -26,7 +26,12 @@ def home(request):
     genres = Genre.objects.all()
     pays_list = Auteur.objects.values_list('pays', flat=True).distinct()
 
-    return render(request,'gestion_content/index.html',{'auteurs':auteurs})
+    return render(request,'gestion_content/index.html',{
+        'auteurs':auteurs,
+        'genres':genres,
+        'pays_list':pays_list
+        
+        })
 
 
 def detail_auteur(request, auteur_id):
@@ -56,7 +61,8 @@ def detail_auteur(request, auteur_id):
                     comment=comment
                 )
         
-        return redirect('detail', auteur_id=auteur_id)
+        return redirect('detail_auteur', auteur_id=auteur_id)
+
 
     return render(request, 'gestion_content/detail.html', {
         'auteur': auteur,
@@ -67,5 +73,5 @@ def detail_auteur(request, auteur_id):
 
 def detail(request):
 
-    return render(request,'gestion_content/detail_text.html')
+ return render(request,'gestion_content/detail_text.html')
 
