@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="fr">
@@ -195,17 +196,118 @@
     </style>
 </head>
 <body>
+    
+       <!-- Navbar -->
+       <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3">
+        <div class="container-fluid">
+            <!-- Logo de l'entreprise -->
+            <a class="navbar-brand" href="#">
+                <img src="logo.png" alt="Logo" width="120" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link active" href="{% url 'home' %}">Actualités</a>
+                        
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link active" href="{% url 'evenement' %}">Evenements</a>
+                        
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="{% url 'auteur' %}">Auteur</a>
+                        
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Qui nous sommes</a>
+                    </li>
+                    {% if not user_authenticate %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}">S’inscrire</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary text-white px-3" href="{% url 'signin' %}">Identifier vous</a>
+                    </li>
+                    {% endif %}
+                   
+
+                    <!-- start profile  -->
+                     {% if user_authenticate %}
+                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'deconnexion' %}">Se deconnecter</a>
+                    </li>
+                     {% endif %}
+                    <!-- end profile  -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="mb-3 mx-5" id="texte">
+      <h2 class="fw-bold  " id="typed-text">Rechercher des auteurs de bandes dessinées</h2>
+      <p class="text-muted h5 ">Découvrez des artistes et des auteurs talentueux dans l'industrie de la bande dessinée</p>
+    </div>
+   
+    
+    <!-- recherche avance -->
+    <nav class="navbar navbar-expand-lg px-3 shadow p-5 mb-2 mx-5 bg-body-tertiary rounded" id="nav_recherche">
+        <div class="container-fluid">
+           
+            <form class="d-flex flex-grow-1 mx-3" method="GET" {% url 'home' %}>
+                <div class="input-group me-2">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input class="form-control search-input" type="search" name="q" placeholder="Rechercher des auteurs...">
+                </div>
+            
+                <!-- Filtre par genre -->
+                <select class="form-select me-2" name="genre">
+                    {% for genre  in genres  %}
+                    <option value="">{{genre.name}}</option>
+                    {% endfor %}
+                    {% comment %} <option value="manga">Manga</option>
+                    <option value="comics">Comics</option>
+                    <option value="bande-dessinée">Bande dessinée</option>
+                    <option value="manhwa">Manhwa</option> {% endcomment %}
+                </select>
+            
+                <!-- Filtre par pays -->
+                <select class="form-select me-2" name="pays">
+                    <option selected value="">filtrer par pays</option>
+                    <option value="france">France</option>
+                    <option value="japon">Japon</option>
+                    <option value="usa">USA</option>
+                    <option value="corée">Corée du Sud</option>
+                </select>
+            
+                <button type="submit" class="btn btn-primary">Filtrer</button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- fin recherche avance -->
+   
     <div class="row">
         <div class="col-lg-4">
             <div class=" mt-5 d-flex justify-content-center">
                 <div class="card custom-card">
-                    <img src="{{ auteur.user.profil_picture.url }}" alt="Auteur">
-                    
+                    {% if auteur.profil_picture %}
+                    <img src="{{ auteur.profil_picture.url }}" alt="Auteur">
+                    {% else %}
+                    <img  src="{% static "gestion_content/images/prof.png" %}" class="img-fluid rounded img-thumbnail col-sm-12" alt="Auteur 1">   
+                    {% endif %}
                     <div class="card-body">
-                        <h5 class="card-title fw-bold">{{auteur.user.username}}</h5>
+                        <h5 class="card-title fw-bold">{{auteur.username}}</h5>
                         <p class="card-text">
-                            <span class="text-warning">&#9733;</span>
-                            <strong>4.8</strong> &bull; / {{auteur.nombre_oeuvres}} oeuvre(s)
+                            <span class="text-warning">&#9733;</span> 
+                            <!-- <p>{{ notations.count }}pts {{ notif }}</p> -->
+                             {% if nb_notif  %}
+                            <strong>{{ nb_notif }}</strong> &bull; <i class="fas fa-book"></i>{{auteur.nombre_oeuvres}} oeuvre(s)
+                            {% else %}
+                            <span class="star-rating">⭐ 4.7</span>
+                            
+                            {% endif %}
                         </p>
                         {% comment %} <div class="mb-3">
                             {% for genre in auteur.genres.all %}
@@ -290,7 +392,7 @@
             <div class="container">
                 <h3 class="fw-bold">À propos</h3>
                 <p>
-                   {{ auteur.user.bio }}
+                   {{ auteur.bio }}
                 </p>
             
                 <h3 class="fw-bold mt-4">Œuvres remarquables</h3>
@@ -358,6 +460,7 @@
 
 
     <!-- Formulaire de notation -->
+     {% if user_authenticate %}
     <form method="post" class="mb-4 form-container">
         {% csrf_token %}
         <div class="mb-3">
@@ -378,7 +481,7 @@
     
         <button type="submit" class="submit-btn">Publier</button>
     </form>
-
+    {% endif %}
     <!-- Un avis déjà publié -->
     <div class="review p-3 avis">
         <div class="">
@@ -410,7 +513,7 @@
 </div>
         </div>
     </div>
-
+</div>
 
   
     
@@ -425,7 +528,7 @@
         <i class="fas fa-star"></i>
     </div> -->
 
-
+ {% include "gestion_content/footer.html" %}
 
 
 
@@ -449,6 +552,15 @@
             }
         });
     });
+    $(document).ready(function(){
+        $("#nav_recherche").hide();
+        $("#texte").hide();
+     $("#recherche").click(function(){
+        $("#nav_recherche").fadeIn();
+        $("#texte").fadeIn();
+        $("#header").hide();
+     });
+});
 </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

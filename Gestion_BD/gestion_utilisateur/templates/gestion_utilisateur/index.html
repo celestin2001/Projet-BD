@@ -1,0 +1,356 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auteurs de BD</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
+
+    <style>
+        .search-input:focus {
+            border-color: black !important;
+            box-shadow: 0 0 2px black !important;
+            outline: none;
+        }
+
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .star-rating {
+            color: gold;
+            font-size: 1.2rem;
+        }
+        .accordion-button {
+            font-weight: bold;
+            color: #fff;
+            background: #007bff;
+            border-radius: 8px;
+        }
+        .accordion-button:not(.collapsed) {
+            background: #0056b3;
+            color: #fff;
+        }
+        .accordion-body {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+        }
+    </style>
+
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3">
+        <div class="container-fluid">
+            <!-- Logo de l'entreprise -->
+            <a class="navbar-brand" href="#">
+                <img src="logo.png" alt="Logo" width="120" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link active" href="#">Actualités</a>
+                        
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link active" href="{% url 'evenement' %}">Evenements</a>
+                        
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="{% url 'auteur' %}">Auteur</a>
+                        
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Qui nous sommes</a>
+                    </li>
+                    {% if not user_authenticate %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}">S’inscrire</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary text-white px-3" href="{% url 'signin' %}">Identifier vous</a>
+                    </li>
+                    {% endif %}
+                    
+
+                    <!-- start profile  -->
+                     {% if user_authenticate %}
+                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'deconnexion' %}">Se deconnecter</a>
+                    </li>
+                     {% endif %}
+                    <!-- end profile  -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- search avanced start -->
+    <nav class="navbar navbar-expand-lg px-3 shadow p-5 mb-2 mx-5 bg-body-tertiary rounded" id="nav_recherche">
+        <div class="container-fluid">
+           
+            <form class="d-flex flex-grow-1 mx-3" method="GET" {% url 'home' %}>
+                <div class="input-group me-2">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input class="form-control search-input" type="search" name="q" placeholder="Rechercher des auteurs...">
+                </div>
+            
+                <!-- Filtre par genre -->
+                <select class="form-select me-2" name="genre">
+                    <option selected value=""></i>Filtrer par genres</option>
+                    {% for genre  in genres  %}
+                    <option value="">{{genre.name}}</option>
+                    {% endfor %}
+                    {% comment %} <option value="manga">Manga</option>
+                    <option value="comics">Comics</option>
+                    <option value="bande-dessinée">Bande dessinée</option>
+                    <option value="manhwa">Manhwa</option> {% endcomment %}
+                </select>
+            
+                <!-- Filtre par pays -->
+                <select class="form-select me-2" name="pays">
+                    <option selected value="">Filtrer par pays</option>
+                    <option value="france">France</option>
+                    <option value="japon">Japon</option>
+                    <option value="usa">USA</option>
+                    <option value="corée">Corée du Sud</option>
+                </select>
+            
+                <button type="submit" class="btn btn-primary">
+                  Filtrer
+                </button>
+            </form>
+        </div>
+    </nav>
+
+    <!-- fin recherche avance -->
+    <div id="carouselExample" class="carousel slide mt-4" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="{% static "gestion_content/images/I1.jpg" %}" class="d-block w-100" alt="Nature">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>La beauté de la nature</h5>
+                    <p>Découvrez la splendeur du monde qui nous entoure.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{% static "gestion_content/images/I2.jpg" %}" class="d-block w-100" alt="City">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Les lumières de la ville</h5>
+                    <h2>Un spectacle fascinant entre modernité et tradition.</h2>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="{% static "gestion_content/images/I3.webp" %}" class="d-block w-100" alt="Ocean">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>Le mystère de l'océan</h5>
+                    <h2>Un monde infini sous les vagues.</h2>
+                </div>
+            </div>
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Précédent</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Suivant</span>
+        </button>
+    </div>
+
+    {% comment %} accordion actualite et evenement {% endcomment %}
+    <div class="mb-3 mx-5 text-center" id="texte">
+        <h2 class="fw-bold  " id="typed-text">Plongez au coeur de l'actualité BD</h2>
+        <p class="text-muted h5 ">Dernières sorties, événements marquants et tendances du moment</p>
+      </div>
+    <div class="container mt-5">
+        
+        
+            <!-- Actualité -->
+           
+                
+                    <hr><hr><hr><hr>
+                 
+                      {% if user_authenticate  %}
+                    <center>
+                        <button type="button" class="btn btn-primary d-flex mb-5  " data-toggle="modal" data-target="#exampleModal">
+                            Faites une publication
+                          </button>
+                    </center>
+                    {% endif %}
+               
+                    {% for actu in actualite %}
+                    <div class="container">
+                        <div class="row justify-content-center mb-5">
+                            <div class="col-12 col-md-8"> <!-- Largeur différente selon l'écran -->
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="d-flex align-items-center">
+                                            <div>
+                                                <img class="img-fluid mr-2" src="{{actu.author.profil_picture.url}}" alt=""
+                                                     style="width: 50px; height: 50px; border-radius: 150px; border: 1px solid black;">
+                                            </div>
+                                            <div>
+                                                <strong>{{actu.author.username}}</strong><em> | {{actu.author.role}}</em>
+                                                <div><small>{{actu.created_at}}</small></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                    
+                                    <!-- Image qui s'adapte aux écrans -->
+                                    <img class="card-img-top img-fluid" src="{{actu.media.url}}" alt="Card image cap">
+                    
+                                    <div class="card-body">
+                                        <h5 class="card-title">{{actu.title}}</h5>
+                                        <p class="card-text">{{actu.content|truncatewords:10}}</p>
+                                        <a href="#" class="btn btn-primary">Voir plus</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+
+                    
+
+                </div>
+
+                
+            
+            
+             
+        </div>
+    </div>
+
+
+    <!-- Hero Section -->
+<!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          ...
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">publication</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            <form action="" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <input class="form-control mb-3" type="text" placeholder="Titre de publication" name="titre">
+                <textarea class="form-control mb-3" name="contenue" id="" cols="15" rows="5" placeholder="Saisisser le text de votre publication ici ..."></textarea>
+                <div>
+                    <label for="">choisir une image</label>
+                    <input class="form-control" type="file" placeholder="choisir" name="image">
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
+                    <button type="submit" class="btn btn-primary">Publier</button>
+                </div>
+            </form>
+            </div>
+            
+      </div>
+    </div>
+</div>
+
+
+
+
+
+        
+    <!-- Auteurs en vedette -->
+
+    
+   
+
+    <!-- start footer -->
+   {% include "gestion_content/footer.html" %}
+
+
+   
+    
+    <!-- Ajout des icônes FontAwesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
+    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+
+
+    <script>
+     $(document).ready(function(){
+        $("#nav_recherche").hide();
+        $("#texte").hide();
+     $("#recherche").click(function(){
+        $("#nav_recherche").fadeIn();
+        $("#texte").fadeIn();
+        $("#header").hide();
+     });
+});
+
+function filterEvents() {
+    let filterValue = document.getElementById("filter-select").value;
+    window.location.href = "?filter=" + filterValue;
+}
+      </script>
+
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,290 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auteurs de BD</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
+
+    <style>
+        .search-input:focus {
+            border-color: black !important;
+            box-shadow: 0 0 2px black !important;
+            outline: none;
+        }
+
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .card img {
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .star-rating {
+            color: gold;
+            font-size: 1.2rem;
+        }
+    </style>
+
+</head>
+<body>
+
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3">
+        <div class="container-fluid">
+            <!-- Logo de l'entreprise -->
+            <a class="navbar-brand" href="#">
+                <img src="logo.png" alt="Logo" width="120" height="40">
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link active" href="{% url 'home' %}">Actualités</a>
+                        
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link active" href="{% url 'evenement' %}">Evenements</a>
+                        
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link " href="{% url 'auteur' %}">Auteur</a>
+                        
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Qui nous sommes</a>
+                    </li>
+                    {% if not user_authenticate %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'signup' %}">S’inscrire</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-primary text-white px-3" href="{% url 'signin' %}">Identifier vous</a>
+                    </li>
+                    {% endif %}
+                    <li>
+                        <button   class="btn btn-outline-secondary ml-3" id="recherche">
+                            <i class="fas fa-search"></i>Recherche avancée
+                        </button>
+                    </li>
+
+                    <!-- start profile  -->
+                     {% if user_authenticate %}
+                     <li class="nav-item">
+                        <a class="nav-link" href="{% url 'deconnexion' %}">Se deconnecter</a>
+                    </li>
+                     {% endif %}
+                    <!-- end profile  -->
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- search avanced start -->
+    <!-- Search Advanced Start -->
+<nav class="navbar navbar-expand-lg shadow p-3 mb-2 mx-3 bg-body-tertiary rounded" id="nav_recherche">
+    <div class="container-fluid">
+        <form class="row w-100 d-flex align-items-center" method="GET" action="{% url 'home' %}">
+            <!-- Champ de recherche -->
+            <div class="col-12 col-md-4 mb-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+                    <input class="form-control search-input" type="search" name="q" placeholder="Rechercher des auteurs...">
+                </div>
+            </div>
+
+            <!-- Filtre par genre -->
+            <div class="col-12 col-md-3 mb-2">
+                <select class="form-select form-select-sm" name="genre">
+                    <option selected value="">Filtrer par genres</option>
+                    {% for genre in genres %}
+                    <option value="{{ genre.id }}">{{ genre.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- Filtre par pays -->
+            <div class="col-12 col-md-3 mb-2">
+                <select class="form-select form-select-sm" id="pays" name="pays" onchange="updateFlag()">
+                    <option value="" data-flag="">-- Sélectionnez un pays --</option>
+                    <option value="gn" data-flag="https://flagcdn.com/w320/gn.png">🇬🇳 Guinée</option>
+                    <option value="sn" data-flag="https://flagcdn.com/w320/sn.png">🇸🇳 Sénégal</option>
+                    <option value="ci" data-flag="https://flagcdn.com/w320/ci.png">🇨🇮 Côte d'Ivoire</option>
+                    <option value="bf" data-flag="https://flagcdn.com/w320/bf.png">🇧🇫 Burkina Faso</option>
+                    <option value="ml" data-flag="https://flagcdn.com/w320/ml.png">🇲🇱 Mali</option>
+                    <!-- Ajoute d'autres pays ici -->
+                </select>
+            </div>
+
+            <!-- Bouton Filtrer -->
+            <div class="col-12 col-md-2 text-center">
+                <button type="submit" class="btn btn-primary btn-sm w-100">Filtrer</button>
+            </div>
+        </form>
+    </div>
+</nav>
+
+  
+
+    
+    <header class="text-center my-5" id="header">
+        <h1 class="fw-bold display-4 " id="typed-text">Découvrir les dessinateurs de Bande dessinées</h1>
+        <p class="text-muted h5 text-center">Découvrez les auteurs de bandes dessinées les plus talentueux au monde et leurs œuvres</p>
+        <p class="text-muted h5 text-center"> et leurs œuvres</p>
+
+    </header>
+        
+       {% if user.role == "lecteur" %}
+       <div class="d-flex justify-content-center align-items-center ">
+        <a href="{% url 'signin_auteur' %}" class="text-center">
+            <button class="btn  d-flex align-items-center gap-2 px-4 py-2 rounded" style="background-color: black; color: white;">
+                <i class="bi bi-person-plus"></i> S'inscrire en tant qu'auteur
+                
+            </button>
+        </a>
+      </div>
+       {% endif %}
+        
+    <!-- Auteurs en vedette -->
+    <h2 class="mb-2 mx-5">Découvrir les differents auteurs</h2>
+    <div class="mx-5">
+        <div class="">
+        
+            <div class=" py-5">
+                <div class="row g-4">
+                  
+                     {% for auteur in auteurs %}
+                       
+                        <div class="col-md-2 col-sm-12"> 
+                            
+                            <div class="card ">
+                                <a href="">
+                                  
+                                    <img style=" " src="{% static "gestion_content/images/prof.png" %}" class="img-fluid rounded img-thumbnail col-sm-12" alt="Auteur 1">   
+                                           
+                                </a>
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                    <h6 class="card-title">{{auteur.username}} </h6>
+                                    <!-- <img src="https://flagcdn.com/h20/cm.png" alt="Drapeau du Cameroun" style="max-height: 30px;"> -->
+                                    <!-- <img src="{{ auteur.get_drapeau }}" style="max-height: height 10px; " alt="{{ auteur.get_pays_display }}"> -->
+                                    <!-- <span class="star-rating">⭐ 4.7</span> -->
+                                   </div>
+                                    <!-- <p class="text-muted">{{auteur.nombre_oeuvres}} oeuvre(s)</p> -->
+                                   
+                                        
+                                    <!-- <p class="card-text">{{auteur.bio |truncatewords:10}}</p> -->
+                                   <a href="{% url 'detail_auteur' auteur.id %}" class="btn btn-primary btn-sm">PLUS D'INFOS</a>
+                                </div>
+                            </div>
+                            
+                        
+                        </div>
+
+                        {% empty %}
+        <p>Aucune information de ce genre dans la base de donné.</p>
+    
+                      
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+      <!-- Pagination -->
+      <nav aria-label="Pagination" class="d-flex justify-content-center">
+        <ul class="pagination">
+            {% if auteurs.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">«</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ auteurs.previous_page_number }}">Précédent</a>
+            </li>
+            {% endif %}
+
+            <li class="page-item disabled">
+                <span class="page-link">Page {{ auteurs.number }} sur {{ auteurs.paginator.num_pages }}</span>
+            </li>
+
+            {% if auteurs.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ auteurs.next_page_number }}">Suivant</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ auteurs.paginator.num_pages }}">»</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+
+    <!-- start footer -->
+   {% include "gestion_content/footer.html" %}
+
+
+   
+                        
+    <!-- Ajout des icônes FontAwesome -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let toggler = document.querySelector(".navbar-toggler");
+            let navCollapse = document.querySelector("#navbarNav");
+    
+            toggler.addEventListener("click", function () {
+                if (navCollapse.classList.contains("show")) {
+                    navCollapse.classList.remove("show"); // Ferme le menu
+                } else {
+                    navCollapse.classList.add("show"); // Ouvre le menu
+                }
+            });
+        });
+
+     $(document).ready(function(){
+        $("#nav_recherche").hide();
+        $("#texte").hide();
+     $("#recherche").click(function(){
+        $("#nav_recherche").slideToggle();
+        $("#texte").fadeIn();
+        $("#header").hide();
+     });
+});
+      </script>
+
+</body>
+</html>
+
+
+
+
+

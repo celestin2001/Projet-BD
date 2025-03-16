@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Avg
-from gestion_utilisateur.models import Auteur, Utilisateur
+from gestion_utilisateur.models import  Utilisateur
 from gestion_content.models import Work, Notation
 from django.contrib.auth.decorators import login_required
 from django import forms

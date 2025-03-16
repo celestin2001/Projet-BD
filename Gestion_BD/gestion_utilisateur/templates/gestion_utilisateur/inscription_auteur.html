@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulaire d'Inscription</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .form-container {
+            width: 1000px; /* Augmentation de la largeur */
+            background: white;
+            padding: 50px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+
+
+    </style>
+</head>
+<body>
+    <div class="text-center">
+        <h2>Inscription Auteur</h2>
+        <h4 class="text-center mb-4">Rejoignez notre communauté d'auteurs de bandes dessinées</h4>
+    </div>
+
+<div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="form-container">
+    
+
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+         
+
+        <div class="section_auteur">
+
+            <div class="mb-3">
+                <label class="form-label">Biographie</label>
+                <textarea class="form-control" value ="{{ user.bio }}"  rows="3" placeholder="Parlez-nous de votre parcours..." name="bio"></textarea>
+            </div>
+             
+
+            <div class="row">
+               
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">Années d'expérience</label>
+                        <select class="form-select" name="annee_experience">
+                            <option selected>Sélectionnez une option</option>
+                            {% for value, label in annee_experience %}
+                            <option value="{{ user.annee_experience }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label class="form-label">pays d'origine</label>
+                        <select class="form-select" name="pays">
+                            <option selected>Sélectionnez une option</option>
+                            {% for value, label in pays %}
+                            <option value="{{ user.pays }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+        </div>
+               
+            </div>
+
+            <button type="submit" class="btn btn-dark w-100">
+                <i class="bi bi-person-plus"></i> S'inscrire en tant qu'auteur
+            </button>
+
+            <p class="text-center mt-3">Déjà inscrit ? <a href="{% url "signin" %}">Connectez-vous</a></p>
+        </form>
+    </div>
+</div>
+
+<script>
+
+</script>
+
+</body>
+</html>

@@ -9,7 +9,7 @@ class Genre(models.Model):
     
 class Work(models.Model):
     title = models.CharField(max_length=255)
-    author = models.ForeignKey('gestion_utilisateur.Auteur', on_delete=models.CASCADE, related_name='works')  
+    author = models.ForeignKey('gestion_utilisateur.Utilisateur', on_delete=models.CASCADE, related_name='works')  
     publication_date = models.DateField()
     cover_image = models.ImageField(upload_to='media/', blank=True, null=True)
     description = models.TextField()
@@ -25,8 +25,14 @@ class Notation(models.Model):
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
+    def notation_auteur(self):
+        
+        return sum(self.rating)
+
     def __str__(self):
-        return f"{self.user.username} - {self.work.title}"
+        return f"{self.user.username} - {self.work.title} - {self.rating}"
+    
+    
 
 
 
