@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-from  gestion_content.models import Genre,Work
+
 
 class Utilisateur(AbstractUser):
     Role_choice = [
