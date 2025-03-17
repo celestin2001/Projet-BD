@@ -87,10 +87,17 @@ REST_FRAMEWORK = {
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-
-DATABASE ={
-    'default': dj_database_url.parse(config('DATABASE_URL'))
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('DB_NAME', 'bd_sql'),
+        'USER': os.getenv('DB_USER', 'bd_sql_user'),
+        'PASSWORD': os.getenv('DB_PASSWORD', 'YzCaqBOpbeVa2HAsI75LTcakEJ6036dR'),
+        'HOST': os.getenv('DB_HOST', 'dpg-cvbs4c52ng1s73ehaj20-a.oregon-postgres.render.com'),
+        'PORT': os.getenv('DB_PORT', '5432'),
+    }
 }
+
 
 
 # Password validation
