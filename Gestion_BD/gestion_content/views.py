@@ -7,45 +7,41 @@ from django.core.paginator import Paginator
 
 
 def Auteur(request):
-    autor = []
-    auteurs_list = Utilisateur.objects.filter(role="auteur").all()
-    paginator = Paginator(auteurs_list,3)
-    page_number = request.GET.get('page')
-    auteurs = paginator.get_page(page_number)
-    user_authenticate = request.user.is_authenticated
-    user = request.user
-   
-    for autors in auteurs:
-        if autors.role == "auteur":
-            autor.append(autors)
-    
-    
+    # Récupérer tous les auteurs
+    auteurs_list = Utilisateur.objects.filter(role="auteur")
+    genres = Genre.objects.all()
     # Récupération des paramètres de recherche
     q = request.GET.get('q', '')  # Recherche par nom d'auteur ou username
     genre_id = request.GET.get('genre', '')
     pays = request.GET.get('pays', '')
-
-    # Filtrer les résultats
+    pays_list = Utilisateur.PAYS_AFRICAINS 
+    # Appliquer les filtres AVANT la pagination
     if q:
-        auteurs = auteurs.filter(Q(username__icontains=q) )
+        auteurs_list = auteurs_list.filter(Q(username=q) | Q(email__icontains=q))
 
     if genre_id:
-        auteurs = auteurs.filter(genres__id=genre_id)
+        auteurs_list = auteurs_list.filter(genres__id=genre_id)
 
     if pays:
-        auteurs = auteurs.filter(pays=pays)
+        auteurs_list = auteurs_list.filter(pays=pays)
 
+    # Pagination après les filtres
+    paginator = Paginator(auteurs_list, 30)
+    page_number = request.GET.get('page')
+    auteurs = paginator.get_page(page_number)
+    # Récupérer les genres et pays pour le formulaire
+   
+    # Récupération des genres et pays pour le formulaire
     genres = Genre.objects.all()
-    pays_list = Utilisateur.objects.values_list('pays', flat=True).distinct()
+    # pays_list = Utilisateur.objects.values_list('pays', flat=True).distinct()
 
-    return render(request,'gestion_content/auteur.html',{
-        'auteurs':auteurs,
-        'genres':genres,
-        'pays_list':pays_list,
-        'user_authenticate':user_authenticate,
-        "user":user
-        
-        })
+    return render(request, 'gestion_content/auteur.html', {
+        'auteurs': auteurs,
+        'genres': genres,
+        'pays_list': pays_list,
+        'user_authenticate': request.user.is_authenticated,
+        'user': request.user
+    })
 
 
 def detail_auteur(request, auteur_id):
@@ -112,3 +108,24 @@ def actualite(request):
     actualite = BlogPost.objects.filter(valid=True).all()
 
     return render(request,'gestion_content/actualite.html',{'actualite':actualite})
+
+def text_affichage(request):
+    auteurs = Utilisateur.objects.all().filter(role="auteur")
+
+    # Récupérer les filtres sélectionnés
+    genres = request.GET.getlist('genre')  # Liste des genres sélectionnés
+    pays = request.GET.getlist('pays')  # Liste des pays sélectionnés
+    
+    # Appliquer les filtres si des options sont sélectionnées
+    if genres:
+        auteurs = auteurs.filter(genre__id__in=genres)  # Filtrer par genres
+
+    if pays:
+        auteurs = auteurs.filter(pays__in=pays)  # Filtrer par pays
+
+    # Vérifier si c'est une requête AJAX
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        return render(request, 'gestion_content/text.html', {'auteurs': auteurs})
+
+    # Si ce n'est pas une requête AJAX, renvoyer la page complète
+    return render(request, 'gestion_content/text.html', {'auteurs': auteurs,"genres":genres})

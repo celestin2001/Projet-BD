@@ -39,10 +39,11 @@
             color: gold;
             font-size: 1.2rem;
         }
+
     </style>
 
 </head>
-<body>
+<body style="background-color: #e9e3e4;">
 
 
     <!-- Navbar -->
@@ -78,7 +79,7 @@
                         <a class="nav-link" href="{% url 'signup' %}">S’inscrire</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link btn btn-primary text-white px-3" href="{% url 'signin' %}">Identifier vous</a>
+                        <a class="nav-link btn btn-primary btn-sm text-white px-3" href="{% url 'signin' %}">Identifier vous</a>
                     </li>
                     {% endif %}
                     <li>
@@ -101,22 +102,22 @@
 
 
     <!-- search avanced start -->
-    <!-- Search Advanced Start -->
-<nav class="navbar navbar-expand-lg shadow p-3 mb-2 mx-3 bg-body-tertiary rounded" id="nav_recherche">
-    <div class="container-fluid">
-        <form class="row w-100 d-flex align-items-center" method="GET" action="{% url 'home' %}">
+  <!-- Search Advanced Start -->
+  <nav class="navbar navbar-expand-lg shadow-sm p-3 mb-2 mx-2 bg-body-tertiary rounded" id="nav_recherche">
+    <div class="container-fluid d-flex justify-content-center">
+        <form class="row g-2 w-75 align-items-center text-center" method="GET" action="{% url 'auteur' %}">
             <!-- Champ de recherche -->
-            <div class="col-12 col-md-4 mb-2">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-text"><i class="fas fa-search"></i></span>
+            <div class="col-12 col-md-4 col-lg-3">
+                <div class="input-group input-group-sm shadow-sm rounded">
+                    <span class="input-group-text bg-light"><i class="fas fa-search text-primary"></i></span>
                     <input class="form-control search-input" type="search" name="q" placeholder="Rechercher des auteurs...">
                 </div>
             </div>
 
             <!-- Filtre par genre -->
-            <div class="col-12 col-md-3 mb-2">
-                <select class="form-select form-select-sm" name="genre">
-                    <option selected value="">Filtrer par genres</option>
+            <div class="col-12 col-md-3 col-lg-2">
+                <select class="form-select form-select-sm shadow-sm rounded" name="genre">
+                    <option selected value="">genres</option>
                     {% for genre in genres %}
                     <option value="{{ genre.id }}">{{ genre.name }}</option>
                     {% endfor %}
@@ -124,25 +125,26 @@
             </div>
 
             <!-- Filtre par pays -->
-            <div class="col-12 col-md-3 mb-2">
-                <select class="form-select form-select-sm" id="pays" name="pays" onchange="updateFlag()">
-                    <option value="" data-flag="">-- Sélectionnez un pays --</option>
-                    <option value="gn" data-flag="https://flagcdn.com/w320/gn.png">🇬🇳 Guinée</option>
-                    <option value="sn" data-flag="https://flagcdn.com/w320/sn.png">🇸🇳 Sénégal</option>
-                    <option value="ci" data-flag="https://flagcdn.com/w320/ci.png">🇨🇮 Côte d'Ivoire</option>
-                    <option value="bf" data-flag="https://flagcdn.com/w320/bf.png">🇧🇫 Burkina Faso</option>
-                    <option value="ml" data-flag="https://flagcdn.com/w320/ml.png">🇲🇱 Mali</option>
-                    <!-- Ajoute d'autres pays ici -->
+            <div class="col-12 col-md-3 col-lg-2">
+                <select class="form-select form-select-sm shadow-sm rounded" id="pays" name="pays" onchange="updateFlag()">
+                    <option value="">pays --</option>
+                    {% for code, nom in pays_list %}
+                        <option value="{{ code }}" data-flag="https://flagcdn.com/w320/{{ code|lower }}.png">
+                            {{ nom }}
+                        </option>
+                    {% endfor %}
                 </select>
             </div>
 
             <!-- Bouton Filtrer -->
-            <div class="col-12 col-md-2 text-center">
-                <button type="submit" class="btn btn-primary btn-sm w-100">Filtrer</button>
+            <div class="col-12 col-md-2 col-lg-2 d-grid">
+                <button type="submit" class="btn btn-primary btn-sm shadow-sm">Filtrer</button>
             </div>
         </form>
     </div>
 </nav>
+
+
 
   
 
@@ -168,19 +170,19 @@
     <!-- Auteurs en vedette -->
     <h2 class="mb-2 mx-5">Découvrir les differents auteurs</h2>
     <div class="mx-5">
-        <div class="">
+        <div class="container-fluid">
         
             <div class=" py-5">
                 <div class="row g-4">
                   
                      {% for auteur in auteurs %}
                        
-                        <div class="col-md-2 col-sm-12"> 
+                        <div class="col-lg-2 col-md-4 col-sm-12"> 
                             
                             <div class="card ">
                                 <a href="">
                                   
-                                    <img style=" " src="{% static "gestion_content/images/prof.png" %}" class="img-fluid rounded img-thumbnail col-sm-12" alt="Auteur 1">   
+                                    <img  src="{% static "gestion_content/images/prof.png" %}" class="img-fluid rounded img-thumbnail  " alt="Auteur 1" style="max-width: 100%;">   
                                            
                                 </a>
                                 <div class="card-body">

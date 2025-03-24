@@ -185,13 +185,37 @@
             cursor: pointer;
         }
         .submit-btn:hover {
-            background-color: #5a6268;
+            background-color: #038110e2;
         }
         .form-container,.avis {
     border: 1px solid #ddd; /* Bordure grise */
     border-radius: 8px; /* Coins arrondis */
     padding: 16px; /* Espacement interne */
     box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Légère ombre */
+}
+body {
+    background-color:  #228B22;
+}
+.profile-card,.avis {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    border-bottom: 2px solid #c00;
+    padding-bottom: 5px;
+    font-weight: bold;
+    margin-top: 20px;
+}
+.icon-text {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.icon-text i {
+    color: #c00;
 }
     </style>
 </head>
@@ -288,145 +312,40 @@
 
     <!-- fin recherche avance -->
    
-    <div class="row">
-        <div class="col-lg-4">
-            <div class=" mt-5 d-flex justify-content-center">
-                <div class="card custom-card">
-                    {% if auteur.profil_picture %}
-                    <img src="{{ auteur.profil_picture.url }}" alt="Auteur">
-                    {% else %}
-                    <img  src="{% static "gestion_content/images/prof.png" %}" class="img-fluid rounded img-thumbnail col-sm-12" alt="Auteur 1">   
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title fw-bold">{{auteur.username}}</h5>
-                        <p class="card-text">
-                            <span class="text-warning">&#9733;</span> 
-                            <!-- <p>{{ notations.count }}pts {{ notif }}</p> -->
-                             {% if nb_notif  %}
-                            <strong>{{ nb_notif }}</strong> &bull; <i class="fas fa-book"></i>{{auteur.nombre_oeuvres}} oeuvre(s)
-                            {% else %}
-                            <span class="star-rating">⭐ 4.7</span>
-                            
-                            {% endif %}
-                        </p>
-                        {% comment %} <div class="mb-3">
-                            {% for genre in auteur.genres.all %}
-                            <span class="badge badge-custom"> {{ genre.nom }}{% if not forloop.last %}, {% endif %}</span>
-                            {% endfor %}
-                        </div> {% endcomment %}
-        
-                        
-                    
-                        <ul class="p-0">
-                            {% for key, url in social_links.items %}
-                                <li style="list-style-type: none;">
-                                    <a href="{{ url }}" target="_blank" style="text-decoration: none; display: flex; align-items: center; gap: 5px;">
-                                        {% if key == "facebook" %}
-
-                                        <button class="btn btn-custom d-flex align-items-center mt-2">
-                                              <i class="fab fa-facebook"></i> <span> Facebook</span>
-                                        </button>
-                                          
-                                        {% elif key == "twitter" %}
-                                        <button class="btn btn-custom d-flex align-items-center mt-2">
-                                             <i class="fab fa-twitter"></i> <span> Twitter</span>
-                                        </button>
-                                           
-                                        {% elif key == "linkedin" %}
-                                        <button class="btn btn-custom d-flex align-items-center mt-2">
-                                             <i class="fab fa-linkedin"></i> <span> LinkedIn</span>
-                                        </button>
-                                           
-                                        {% elif key == "instagram" %}
-                                        <button class="btn btn-custom d-flex align-items-center mt-2">
-                                             <i class="fab fa-instagram"></i> <span> Instagram</span>
-                                        </button>
-                                           
-                                        {% elif key == "youtube" %}
-                                        <button class="btn btn-custom d-flex align-items-center mt-2">
-                                            <i class="fab fa-youtube"></i> <span> YouTube</span>
-                                        </button>
-                                            
-                                        {% endif %}
-                                    </a>
-                                </li>
-                                {%empty%}
-                                <h5>pas de réseau social</h5>
-                            {% endfor %}
-                        </ul>
-
-
-
-
-                        {% comment %} <ul>
-                            {% for key, value in auteur.social_links.items %}
-                                <li><a href="{{ value }}" target="_blank">{{ key }}</a></li>
-                            {% empty %}
-                                <li>Aucun réseau social disponible.</li>
-                            {% endfor %}
-                        </ul>
-        
-                        <ul>
-                            {% for post in auteur.blog_posts.all %}
-                                <li><a href="#">{{ post.title }}</a> ({{ post.created_at|date:"d M Y" }})</li>
-                            {% empty %}
-                                <li>Aucune œuvre pour cet auteur.</li>
-                            {% endfor %}
-                        </ul> {% endcomment %}
-        
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
-
-
-        
-
-
-            <!-- oeuvre -->
-
-        <div class="col-lg-8 bibliographie-section py-3">
-
-            <div class="container">
-                <h3 class="fw-bold">À propos</h3>
-                <p>
-                   {{ auteur.bio }}
-                </p>
+    <div class="container mt-5">
+      <div class="section-green">
+        <div class="profile-card mx-auto p-4">
+            <h4 class="fw-bold section-title">Découvrez {{auteur.username}}</h4>
             
-                <h3 class="fw-bold mt-4">Œuvres remarquables</h3>
-                <div class="row g-4 mt-3">
-                    <!-- Carte 1 -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <img src="{% static 'gestion_content/images/bd1.png' %}" alt="Auteur">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div class="card-title">L'Incal</div>
-                                    <div class="year">1981</div>
-                                </div>
-                                <p class="card-text">Un chef-d'œuvre de science-fiction en collaboration avec Alejandro Jodorowsky.</p>
-                            </div>
-                        </div>
+            <div class="row">
+                <div class="col-md-4 text-center">
+                    <img src="{{auteur.profil_picture.url}}" class="d-block w-100" alt="Nature">
+                </div>
+                <div class="col-md-8">
+                    <div class="mb-2 icon-text">
+                        <i class="bi bi-person-circle"></i> <span>{{auteur.role}}</span>
                     </div>
-                    <!-- Carte 2 -->
-                    <div class="col-md-6">
-                        <div class="card">
-                            <img src="{% static 'gestion_content/images/bd1.png' %}" alt="Auteur">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <div class="card-title">Arzak</div>
-                                    <div class="year">1975</div>
-                                </div>
-                                <p class="card-text">Une bande dessinée sans paroles mettant en scène des paysages désertiques surréalistes.</p>
-                            </div>
-                        </div>
+                    <div class="mb-2 icon-text">
+                        <i class="bi bi-flag-fill"></i> <span>{{auteur.pays}}</span>
                     </div>
+                    <div class="mb-2 icon-text">
+                        <i class="bi bi-pencil-fill"></i> <span>12 ans d'expériences</span>
+                    </div>
+                    <p>
+                       {{auteur.bio}}
+                    </p>
+                    <!-- <div class="mt-3">
+                        <a href="#" class="text-danger text-decoration-none me-3">
+                            <i class="bi bi-globe"></i> madutabd.com
+                        </a>
+                        <a href="#" class="text-danger text-decoration-none">
+                            <i class="bi bi-facebook"></i> Facebook
+                        </a>
+                    </div> -->
                 </div>
             </div>
-
-            <h3 class="fw-bold mt-5">Bibliographie</h3>
+    
+            <h5 class="fw-bold section-title mt-4">Œuvres</h5>
             <div class="row g-4 mt-3">
                 <!-- Carte 1 -->
                 {% for oeuvre in oeuvres %}
@@ -445,7 +364,102 @@
 
                             
             </div>
+        </div>
+    </div>
+        <div class="container mb-4 avis">
+            <h3 class="fw-bold">Avis des lecteurs</h3>
+        
+        
+            <!-- Formulaire de notation -->
+             {% if user_authenticate %}
+            <form method="post" class="mb-4 form-container">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label class="form-label">Votre avis</label>
+                    <textarea name="comment" class="form-control" placeholder="Donnez votre avis..." required></textarea>
+                </div>
+            
+                <div class="mb-3">
+                    <label class="form-label">Note</label>
+                    <div class="rating">
+                        <input type="radio" name="rating" id="star5" value="5" required><label for="star5" class="fas fa-star"></label>
+                        <input type="radio" name="rating" id="star4" value="4"><label for="star4" class="fas fa-star"></label>
+                        <input type="radio" name="rating" id="star3" value="3"><label for="star3" class="fas fa-star"></label>
+                        <input type="radio" name="rating" id="star2" value="2"><label for="star2" class="fas fa-star"></label>
+                        <input type="radio" name="rating" id="star1" value="1"><label for="star1" class="fas fa-star"></label>
+                    </div>
+                </div>
+            
+                <button type="submit" class="submit-btn">Publier</button>
+            </form>
+            {% endif %}
+            <!-- Un avis déjà publié -->
+            <div class="review p-3 avis">
+                <div class="">
+                <!-- <strong>Michel Dupont</strong> -->
+                {% for notation in notations %}
+                <div class="stars">
+                    <div class="d-flex justify-content-between">
+                    <strong>{{ notation.user.username }}</strong>
+                    <p>
+                        {% for i in "12345"|make_list %}
+                            {% if forloop.counter <= notation.rating %}
+                                <i class="fas fa-star" style="color:#FFD700;"></i>
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </p>
+                </div>
+                    <p>{{ notation.comment }}</p>
+                    <small>Publié le {{ notation.created_at|date:"d M Y" }}</small>
+                </div>
+            {% empty %}
+                <p>Aucun avis pour le moment.</p>
+            {% endfor %}
+            <!-- </div>
+                <p>Un artiste extraordinaire qui a révolutionné la bande dessinée. Ses œuvres sont intemporelles.</p>
+                <small>Publié le 12 mars 2024</small>
+            </div> -->
+        </div>
+                </div>
+            </div>
+        </div>
+        
+    </div>
 
+
+
+
+        
+
+
+            <!-- oeuvre -->
+
+        <!-- <div class="col-lg-8 bibliographie-section py-3">
+
+            
+
+            <h3 class="fw-bold mt-5">Bibliographie</h3>
+            <div class="row g-4 mt-3"> -->
+                <!-- Carte 1 -->
+                <!-- {% for oeuvre in oeuvres %}
+                    <div class="col-lg-4 col-md-6">
+                        <div class="bibliographie-card">
+                            <i class="fas fa-book"></i>
+                            <div>
+                                <div class="title">{{ oeuvre.title }}</div>
+                                <div class="year">publier le {{ oeuvre.publication_date|date:"d M Y" }}</div>
+                            </div>
+                        </div>
+                    </div>
+                {% empty %}
+                    <p>Aucune œuvre trouvée.</p>
+                {% endfor %}
+
+                            
+            </div> -->
+        <!-- </div> -->
 
             <!-- deuxieme partie7777777 -->
 
@@ -455,65 +469,7 @@
 <!-- formulaire de commentaire et notation -->
 
 
-<div class="container">
-    <h3 class="fw-bold">Avis des lecteurs</h3>
 
-
-    <!-- Formulaire de notation -->
-     {% if user_authenticate %}
-    <form method="post" class="mb-4 form-container">
-        {% csrf_token %}
-        <div class="mb-3">
-            <label class="form-label">Votre avis</label>
-            <textarea name="comment" class="form-control" placeholder="Donnez votre avis..." required></textarea>
-        </div>
-    
-        <div class="mb-3">
-            <label class="form-label">Note</label>
-            <div class="rating">
-                <input type="radio" name="rating" id="star5" value="5" required><label for="star5" class="fas fa-star"></label>
-                <input type="radio" name="rating" id="star4" value="4"><label for="star4" class="fas fa-star"></label>
-                <input type="radio" name="rating" id="star3" value="3"><label for="star3" class="fas fa-star"></label>
-                <input type="radio" name="rating" id="star2" value="2"><label for="star2" class="fas fa-star"></label>
-                <input type="radio" name="rating" id="star1" value="1"><label for="star1" class="fas fa-star"></label>
-            </div>
-        </div>
-    
-        <button type="submit" class="submit-btn">Publier</button>
-    </form>
-    {% endif %}
-    <!-- Un avis déjà publié -->
-    <div class="review p-3 avis">
-        <div class="">
-        <!-- <strong>Michel Dupont</strong> -->
-        {% for notation in notations %}
-        <div class="stars">
-            <div class="d-flex justify-content-between">
-            <strong>{{ notation.user.username }}</strong>
-            <p>
-                {% for i in "12345"|make_list %}
-                    {% if forloop.counter <= notation.rating %}
-                        <i class="fas fa-star" style="color:#FFD700;"></i>
-                    {% else %}
-                        <i class="far fa-star"></i>
-                    {% endif %}
-                {% endfor %}
-            </p>
-        </div>
-            <p>{{ notation.comment }}</p>
-            <small>Publié le {{ notation.created_at|date:"d M Y" }}</small>
-        </div>
-    {% empty %}
-        <p>Aucun avis pour le moment.</p>
-    {% endfor %}
-    <!-- </div>
-        <p>Un artiste extraordinaire qui a révolutionné la bande dessinée. Ses œuvres sont intemporelles.</p>
-        <small>Publié le 12 mars 2024</small>
-    </div> -->
-</div>
-        </div>
-    </div>
-</div>
 
   
     

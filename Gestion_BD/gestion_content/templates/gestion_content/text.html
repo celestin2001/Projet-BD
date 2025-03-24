@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        /* Style du sidebar (menu latéral) */
+    .filter-sidebar {
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 300px;
+    height: 100%;
+    background: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    transition: transform 0.3s ease;
+    overflow-y: auto;
+    transform: translateX(100%); /* Cache totalement la sidebar */
+}
+
+.filter-sidebar.active {
+    transform: translateX(0); /* Fait apparaître la sidebar */
+}
+
+
+    </style>
+</head>
+<body>
+    <button class="btn btn-primary" onclick="openFilters()">Recherche</button>
+    
+    <!-- Sidebar des filtres avancés -->
+    <div id="filter-sidebar" class="filter-sidebar">
+        <div class="filter-header">
+            <h5>Filtres avancés</h5>
+            <button class="btn btn-outline-secondary" onclick="resetFilters()">Réinitialiser</button>
+            <span onclick="closeFilters()" class="close">&times;</span>
+        </div>
+    
+        <div class="filter-body">
+            <!-- Genres -->
+            <h6>Genres</h6>
+            {% for genre in genres %}
+                <label>
+   
+                    <input type="checkbox" name="genre" value="{{ genre.id }}" onchange="applyFilters()"> {{ genre.name }}
+                </label>
+            {% endfor %}
+    
+            <!-- Pays -->
+            <h6>Pays</h6>
+            {% for code, nom in pays_options %}
+                <label>
+                    <input type="checkbox" name="pays" value="{{ code }}" onchange="applyFilters()"> {{ nom }}
+                </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    
+    <div id="auteur-list">
+        {% for auteur in auteurs %}
+            <div class="card mt-3">
+                <div class="card-body">
+                    <h5>{{ auteur.username }}</h5>
+                    <p><strong>Pays :</strong> {{ auteur.get_pays_display }}</p>
+                    <p><strong>Années d'expérience :</strong> {{ auteur.annee_experience }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+    function openFilters() {
+    document.getElementById("filter-sidebar").classList.add("active");
+}
+
+function closeFilters() {
+    document.getElementById("filter-sidebar").classList.remove("active");
+}
+
+function resetFilters() {
+    // ✅ Décoche toutes les cases
+    document.querySelectorAll('#filter-sidebar input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    // ✅ Recharge uniquement la liste des auteurs (sans réinjecter tout le HTML)
+    fetch("{% url 'auteur' %}", {
+        method: "GET",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(response => response.text())
+    .then(data => {
+        let parser = new DOMParser();
+        let doc = parser.parseFromString(data, "text/html");
+
+        // ✅ Mettre à jour seulement la liste des auteurs
+        document.getElementById('auteur-list').innerHTML = doc.getElementById('auteur-list').innerHTML;
+        
+        // ✅ Fermer la sidebar après réinitialisation
+        closeFilters();
+    })
+    .catch(error => console.error("Erreur lors de la réinitialisation :", error));
+}
+
+
+
+</script>
+
+    
+</body>
+</html>

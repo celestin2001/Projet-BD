@@ -54,6 +54,10 @@
             padding: 15px;
             border-radius: 8px;
         }
+        
+        /* body{
+            background-color: green;
+        } */
     </style>
 
 </head>
@@ -183,11 +187,12 @@
     </div>
 
     {% comment %} accordion actualite et evenement {% endcomment %}
-    <div class="mb-3 mx-5 text-center" id="texte">
-        <h2 class="fw-bold  " id="typed-text">Plongez au coeur de l'actualité BD</h2>
+    <div class="section-centre">
+      <div class="mb-3 mx-5 text-center" id="texte">
+        <h2 class="fw-bold  " id="typed-text">Plongez au coeur de l'actualité bande-dessinée</h2>
         <p class="text-muted h5 ">Dernières sorties, événements marquants et tendances du moment</p>
       </div>
-    <div class="container mt-5">
+      <div class="container mt-5">
         
         
             <!-- Actualité -->
@@ -197,7 +202,7 @@
                  
                       {% if user_authenticate  %}
                     <center>
-                        <button type="button" class="btn btn-primary d-flex mb-5  " data-toggle="modal" data-target="#exampleModal">
+                        <button type="button" class="btn btn-primary  d-flex mb-5  " data-toggle="modal" data-target="#exampleModal">
                             Faites une publication
                           </button>
                     </center>
@@ -206,13 +211,18 @@
                     {% for actu in actualite %}
                     <div class="container">
                         <div class="row justify-content-center mb-5">
-                            <div class="col-12 col-md-8"> <!-- Largeur différente selon l'écran -->
+                            <div class="col-12 col-md-10"> <!-- Largeur différente selon l'écran -->
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="d-flex align-items-center">
                                             <div>
+                                                {% if actu.auhor.profil_picture %}
                                                 <img class="img-fluid mr-2" src="{{actu.author.profil_picture.url}}" alt=""
                                                      style="width: 50px; height: 50px; border-radius: 150px; border: 1px solid black;">
+                                                     {% else %}
+                                                     <img style="width: 50px; height: 50px; border-radius: 150px; border: 1px solid black;" src="{% static "gestion_content/images/prof.png" %}" class="img-fluid mr-2" alt="Auteur 1"
+                                                     >   
+                                                     {% endif %}
                                             </div>
                                             <div>
                                                 <strong>{{actu.author.username}}</strong><em> | {{actu.author.role}}</em>
@@ -245,6 +255,7 @@
             
              
         </div>
+    </div>
     </div>
 
 

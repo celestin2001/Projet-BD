@@ -16,29 +16,35 @@ class Utilisateur(AbstractUser):
     ]
     
     PAYS_AFRICAINS = [
-    ("DZ", "Algérie"), ("AO", "Angola"), ("BJ", "Bénin"), ("BW", "Botswana"), ("BF", "Burkina Faso"),
-    ("BI", "Burundi"), ("CM", "Cameroun"), ("CV", "Cap-Vert"), ("CF", "République Centrafricaine"),
-    ("TD", "Tchad"), ("KM", "Comores"), ("CG", "Congo-Brazzaville"), ("CD", "Congo-Kinshasa"),
-    ("DJ", "Djibouti"), ("EG", "Égypte"), ("GQ", "Guinée Équatoriale"), ("ER", "Érythrée"),
-    ("SZ", "Eswatini"), ("ET", "Éthiopie"), ("GA", "Gabon"), ("GM", "Gambie"), ("GH", "Ghana"),
-    ("GN", "Guinée"), ("GW", "Guinée-Bissau"), ("CI", "Côte d'Ivoire"), ("KE", "Kenya"),
-    ("LS", "Lesotho"), ("LR", "Libéria"), ("LY", "Libye"), ("MG", "Madagascar"), ("MW", "Malawi"),
-    ("ML", "Mali"), ("MR", "Mauritanie"), ("MU", "Maurice"), ("MA", "Maroc"), ("MZ", "Mozambique"),
-    ("NA", "Namibie"), ("NE", "Niger"), ("NG", "Nigéria"), ("RW", "Rwanda"), ("ST", "Sao Tomé-et-Principe"),
-    ("SN", "Sénégal"), ("SC", "Seychelles"), ("SL", "Sierra Leone"), ("SO", "Somalie"), ("ZA", "Afrique du Sud"),
-    ("SS", "Soudan du Sud"), ("SD", "Soudan"), ("TZ", "Tanzanie"), ("TG", "Togo"), ("TN", "Tunisie"),
-    ("UG", "Ouganda"), ("ZM", "Zambie"), ("ZW", "Zimbabwe")
+    ("Algérie", "Algérie"), ("Angola", "Angola"), ("Bénin", "Bénin"), ("Botswana", "Botswana"), 
+    ("Burkina Faso", "Burkina Faso"), ("Burundi", "Burundi"), ("Cameroun", "Cameroun"), 
+    ("Cap-Vert", "Cap-Vert"), ("République Centrafricaine", "République Centrafricaine"), 
+    ("Tchad", "Tchad"), ("Comores", "Comores"), ("Congo-Brazzaville", "Congo-Brazzaville"), 
+    ("Congo-Kinshasa", "Congo-Kinshasa"), ("Djibouti", "Djibouti"), ("Égypte", "Égypte"), 
+    ("Guinée Équatoriale", "Guinée Équatoriale"), ("Érythrée", "Érythrée"), ("Eswatini", "Eswatini"), 
+    ("Éthiopie", "Éthiopie"), ("Gabon", "Gabon"), ("Gambie", "Gambie"), ("Ghana", "Ghana"), 
+    ("Guinée", "Guinée"), ("Guinée-Bissau", "Guinée-Bissau"), ("Côte d'Ivoire", "Côte d'Ivoire"), 
+    ("Kenya", "Kenya"), ("Lesotho", "Lesotho"), ("Libéria", "Libéria"), ("Libye", "Libye"), 
+    ("Madagascar", "Madagascar"), ("Malawi", "Malawi"), ("Mali", "Mali"), ("Mauritanie", "Mauritanie"), 
+    ("Maurice", "Maurice"), ("Maroc", "Maroc"), ("Mozambique", "Mozambique"), ("Namibie", "Namibie"), 
+    ("Niger", "Niger"), ("Nigéria", "Nigéria"), ("Rwanda", "Rwanda"), ("Sao Tomé-et-Principe", "Sao Tomé-et-Principe"), 
+    ("Sénégal", "Sénégal"), ("Seychelles", "Seychelles"), ("Sierra Leone", "Sierra Leone"), 
+    ("Somalie", "Somalie"), ("Afrique du Sud", "Afrique du Sud"), ("Soudan du Sud", "Soudan du Sud"), 
+    ("Soudan", "Soudan"), ("Tanzanie", "Tanzanie"), ("Togo", "Togo"), ("Tunisie", "Tunisie"), 
+    ("Ouganda", "Ouganda"), ("Zambie", "Zambie"), ("Zimbabwe", "Zimbabwe")
 ]
+
 
     role = models.CharField(max_length=120, choices=Role_choice,default='lecteur')
     annee_experience = models.CharField(max_length=120, choices=Annee_Experience,blank=True, null=True)
     bio = models.TextField()
     email = models.EmailField(unique=True)
     profil_picture = models.ImageField(upload_to='media/',blank=True,null=True)
+    genres = models.ManyToManyField("gestion_content.Genre", related_name="auteurs", blank=True, null=True)
    
     # password_confirme = models.CharField(max_length=50)
     token = models.CharField(max_length=120)
-    pays = models.CharField(max_length=100, choices=PAYS_AFRICAINS, default="CM",null=True)
+    pays = models.CharField(max_length=100, choices=PAYS_AFRICAINS, default="Cameroun",null=True)
     valid_auteur = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'  #  l'email pour l'authentification
