@@ -1,14 +1,21 @@
 from django.shortcuts import get_object_or_404, render,redirect
+from Gestion_BD.settings import EMAIL_HOST_USER
 from gestion_content.models import *
 from gestion_utilisateur.models import *
 from .form import NotationForm
 from django.db.models import Avg,Q
 from django.core.paginator import Paginator
+from django.core.mail import EmailMessage
 
 
 def Auteur(request):
     # Récupérer tous les auteurs
     auteurs_list = Utilisateur.objects.filter(role="auteur")
+    usere = request.user
+    try:
+     profil = Utilisateur.objects.get(id=usere.id)
+    except Utilisateur.DoesNotExist:
+     profil = None
     genres = Genre.objects.all()
     # Récupération des paramètres de recherche
     q = request.GET.get('q', '')  # Recherche par nom d'auteur ou username
@@ -40,7 +47,8 @@ def Auteur(request):
         'genres': genres,
         'pays_list': pays_list,
         'user_authenticate': request.user.is_authenticated,
-        'user': request.user
+        'user': request.user,
+        'profil':profil
     })
 
 
@@ -48,6 +56,11 @@ def detail_auteur(request, auteur_id):
     totatl_notif = 0
     nb_notif = 0
     user_authenticate = request.user.is_authenticated
+    usere = request.user
+    try:
+     profil = Utilisateur.objects.get(id=usere.id)
+    except Utilisateur.DoesNotExist:
+     profil = None
      # Récupérer l'auteur
     auteur = get_object_or_404(Utilisateur, id=auteur_id)
 
@@ -96,7 +109,8 @@ def detail_auteur(request, auteur_id):
         'notations': notations,
         # 'social_links':social_links,
         'nb_notif':nb_notif,
-        'user_authenticate':user_authenticate
+        'user_authenticate':user_authenticate,
+        'profil':profil
     })
 
 def detail(request):
@@ -129,3 +143,76 @@ def text_affichage(request):
 
     # Si ce n'est pas une requête AJAX, renvoyer la page complète
     return render(request, 'gestion_content/text.html', {'auteurs': auteurs,"genres":genres})
+
+
+def texte_mail(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        suject = "texte"
+        message = "salut c'est juste un texte"
+        from_email = EMAIL_HOST_USER
+        to_email = [email] 
+        email = EmailMessage(suject, message, from_email, to_email)
+        email.send()
+    return render(request,'gestion_content/texte_mail.html')
+
+
+def profil_auteur(request):
+    totatl_notif = 0
+    nb_notif = 0
+    user_authenticate = request.user.is_authenticated
+    genrese = Genre.objects.all()
+     # Récupérer l'auteur
+    auteur = request.user
+
+    # Récupérer toutes les œuvres de cet auteur avec la moyenne des notations
+    oeuvres = Work.objects.filter(author=auteur).annotate(moyenne_note=Avg('notation__rating'))
+
+
+    # Récupérer toutes les notations liées aux œuvres de cet auteur
+    notations = Notation.objects.filter(work__in=oeuvres).select_related('user', 'work')
+    # notif = Notation.objects.all().count()
+    # social_links = auteur.social_links if auteur.social_links else {}
+   
+   
+    # print(notations.all().count())
+    # Gestion du formulaire de notation sans utiliser Django Forms
+   
+    
+    if notations:
+        for each_notif in notations:
+          totatl_notif = totatl_notif + each_notif.rating
+    
+    notation = Notation.objects.filter(work__in=oeuvres).count()
+    print(notation)
+    if notation !=0:
+       nb_notif = totatl_notif/notation
+    
+    if request.method == 'POST':
+        titre = request.POST.get('titre')
+        contenue = request.POST.get('contenue')
+        image = request.FILES.get('image')
+        genre = request.POST.get('genre')
+        try:
+          genre_instance = Genre.objects.get(id=genre)  # Trouver l'objet Genre correspondant
+        except Genre.DoesNotExist:
+         genre_instance = None
+        oeuvre = Work.objects.create(
+            title = titre,
+            description = contenue,
+            author = auteur,
+            genres = genre_instance,
+            cover_image = image
+        )
+        oeuvre.save()
+    
+    
+    return render(request, 'gestion_content/profil_auteur.html', {
+        'auteur': auteur,
+        'oeuvres': oeuvres,
+        'notations': notations,
+        # 'social_links':social_links,
+        'nb_notif':nb_notif,
+        'user_authenticate':user_authenticate,
+        'genres':genrese
+    })

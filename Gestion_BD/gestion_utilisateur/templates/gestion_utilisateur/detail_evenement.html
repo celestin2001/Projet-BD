@@ -55,6 +55,11 @@
                         <a class="nav-link" href="{% url 'deconnexion' %}">Se deconnecter</a>
                     </li>
                      {% endif %}
+                     {% if profil.role == "auteur" and profil.valid_auteur %}
+                     <li class="nav-item">
+                         <a class="nav-link" href="{% url 'profil_auteur' %}">Profil</a>
+                     </li>
+                 {% endif %}
                     <!-- end profile  -->
                 </ul>
             </div>
@@ -69,7 +74,7 @@
     <div class= " container mt-5">
         <h4 class="fw-bold  mt-5 mb-4 " id="typed-text">{{detail_event.titre_evenement}}</h4>
 
-            <img class="card-img-top img-fluid float-start me-3 img-thumbnail " style="width: 50%"  src="{{detail_event.image.url}}" alt="Card image cap">
+            <img class="card-img-top img-fluid float-start me-3 img-thumbnail col-sm-12 " style="width: 50%"  src="{{detail_event.image.url}}" alt="Card image cap">
             <p class="card-text ">{{detail_event.description}}</p>
     </div>
     <hr><hr>
@@ -95,7 +100,7 @@
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   
     <script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
     <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
 </body>

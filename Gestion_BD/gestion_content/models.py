@@ -10,10 +10,10 @@ class Genre(models.Model):
 class Work(models.Model):
     title = models.CharField(max_length=255)
     author = models.ForeignKey('gestion_utilisateur.Utilisateur', on_delete=models.CASCADE, related_name='works')  
-    publication_date = models.DateField()
+    publication_date = models.DateField(auto_now=True)
     cover_image = models.ImageField(upload_to='media/', blank=True, null=True)
     description = models.TextField()
-    genres = models.ManyToManyField(Genre, related_name='works')
+    genres = models.ForeignKey('Genre',on_delete=models.CASCADE,blank=True,null=True,related_name='work')
 
     def __str__(self):
         return self.title

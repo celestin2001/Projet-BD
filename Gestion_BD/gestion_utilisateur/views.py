@@ -12,13 +12,20 @@ from django.contrib.auth.decorators import login_required
 from django.utils import timezone
 from datetime import timedelta
 from django.http import JsonResponse
-
+# from .task import send_approval_email
+from django.core.mail import send_mail
+import random
 
 
 def Home(request):
    actualite = BlogPost.objects.filter(valid=True).all()
    user_authenticate = request.user.is_authenticated
    usere = request.user
+   try:
+    profil = Utilisateur.objects.get(id=usere.id)
+   except Utilisateur.DoesNotExist:
+    profil = None
+   
    
    if request.method == 'POST':
         user = request.user
@@ -54,12 +61,17 @@ def Home(request):
         events = Evenement.objects.filter(date_evenement__range=[start_next_month, end_next_month])
    else:
         events = Evenement.objects.all()
-   return render(request,'gestion_utilisateur/index.html',{'actualite':actualite,'user_authenticate':user_authenticate,'events':events})
+   return render(request,'gestion_utilisateur/index.html',{'actualite':actualite,'user_authenticate':user_authenticate,'events':events,'profil':profil})
 
 
 def Evenements(request):
    user_authenticate = request.user.is_authenticated
    evenements = Evenement.objects.all()
+   usere = request.user
+   try:
+    profil = Utilisateur.objects.get(id=usere.id)
+   except Utilisateur.DoesNotExist:
+    profil = None
   
 
    today = timezone.localdate()  # Date du jour
@@ -93,7 +105,7 @@ def Evenements(request):
         events_data = list(events.values('id', 'title', 'date', 'description'))
         return JsonResponse({"events": events_data})
 
-   return render(request, "gestion_utilisateur/evenement.html", {"events": events, "filter_type": filter_type,'user_authenticate':user_authenticate})
+   return render(request, "gestion_utilisateur/evenement.html", {"events": events, "filter_type": filter_type,'user_authenticate':user_authenticate,'profil':profil})
 
 def signup(request):
     erreur = ""
@@ -116,12 +128,23 @@ def signup(request):
         # genre = request.POST.getlist('genre')
         user_exist = Utilisateur.objects.filter(username=username)
         if user_exist:
-            erreur = "ce nom d'utilisateur existe deja veuillez essayer autre"
-            return render(request,'gestion_utilisateur/signup.html')
+            erreur = f"le nom d'utulisateur doit être unique voici une option pour vous {username}{random.randint(1,999)} "
+            messages.error(request, erreur)
+            return redirect('signup')
+        if username == "":
+               erreur = "le nom d'utilisateur ne doit pas etre vide"
+               messages.error(request, erreur)
+               return redirect('signup')
+        if email == "":
+               erreur = "le email ne doit pas etre vide"
+               messages.error(request, erreur)
+               return redirect('signup')
+          #   return render(request,'gestion_utilisateur/signup.html',{"erreur":erreur})
         email_exist = Utilisateur.objects.filter(email=email)
         if email_exist:
-            erreur = "ce nom d'utilisateur existe deja veuillez essayer autre"
-            return render(request,'gestion_utilisateur/signup.html')
+            erreur = "ce email existe deja veuillez essayer autre"
+            messages.error(request, erreur)
+            return redirect('signup')
         # if password != password_confirme:
         #     erreur = "vos mot de passe ne sont pas identique"
         #     return render(request,'gestion_utilisateur/signup.html')
@@ -145,9 +168,11 @@ def signup(request):
         user = authenticate(request, username=email, password=password)
         if user:
             login(request, user)  # 🔥 Connexion correcte avec l'utilisateur authentifié
+          #   if user.role == "auteur":
+          #       send_approval_email.delay(user.id)
             return redirect('home')
     return render(request,'gestion_utilisateur/signup.html',{'genres':genrese,
-                        "annee_experience": annee_experience,"role":role,'pays':pays})
+                        "annee_experience": annee_experience,"role":role,'pays':pays,"erreur":erreur})
 
 
 # def auteur(request):
@@ -169,7 +194,7 @@ def signin(request):
             
             return redirect('home')
         else:
-            errors="email ou mot de passe incorecte"
+            errors="informations incorectes"
             return render(request,'gestion_utilisateur/connexion.html',{'errors':errors})
     return render(request,'gestion_utilisateur/connexion.html',{'errors':errors})
 
@@ -369,10 +394,18 @@ def signin_auteur(request):
 
 def detail_evenement(request,my_id):
     detail_event = get_object_or_404(Evenement,id=my_id)
+    user_authenticate = request.user.is_authenticated
+    usere = request.user
+    try:
+     profil = Utilisateur.objects.get(id=usere.id)
+    except Utilisateur.DoesNotExist:
+     profil = None
     events = Evenement.objects.all()[:8]
     context = {
         'detail_event':detail_event,
-        'events':events
+        'events':events,
+            'profil':profil,
+            'user_authenticate':user_authenticate
     }
     return render(request,'gestion_utilisateur/detail_evenement.html',context)
     

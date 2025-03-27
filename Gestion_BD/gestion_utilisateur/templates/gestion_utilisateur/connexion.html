@@ -17,6 +17,7 @@
     <style>
         body {
             background-color: #f8f9fa;
+            margin: 0px;
         }
         .form-container {
             width: 1000px; /* Augmentation de la largeur */
@@ -34,17 +35,22 @@
 </head>
 <body>
    
-    <div class="text-center">
+    <div class="text-center mt-5">
         <h2>Connexion</h2>
         <h4 class="text-center mb-4">Connectez Vous pour plus de nouvelles</h4>
     </div>
+    <hr><hr><hr>
+     {% if errors %}
+       <h4 class="text-center mt-5" style="color: red;">{{errors}}</h4>
+     {% endif %}
+       
 
 <div class="container d-flex justify-content-center align-items-center vh-100">
    
     <div class="form-container">
-        <div class="text-center">
+        <!-- <div class="text-center">
             <h3 class="text-white">se connecter avec</h3>
-        </div>
+        </div> -->
     
         
 

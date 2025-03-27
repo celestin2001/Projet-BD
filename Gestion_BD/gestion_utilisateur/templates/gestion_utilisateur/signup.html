@@ -35,97 +35,94 @@
         <h4 class="text-center mb-4">Rejoignez notre communauté d'auteurs de bandes dessinées</h4>
     </div>
 
-<div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="form-container">
-    
+    {% if messages %}
+    <div class="alert alert-danger text-center">
+        {% for message in messages %}
+            <p style="color: red;">{{ message }}</p>
+        {% endfor %}
+    </div>
+{% endif %}
 
-        <form method="post" enctype="multipart/form-data">
+  <div class="container d-flex justify-content-center align-items-center vh-100">
+    <div class="form-container">
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
             {% csrf_token %}
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Nom d'utilisateur</label>
-                    <input type="text" class="form-control" placeholder="Entrez votre nom d'utilisateur" name="username">
+                    <input type="text" class="form-control" placeholder="Entrez votre nom d'utilisateur" name="username" required>
+                    <div class="invalid-feedback">Veuillez entrer un nom d'utilisateur.</div>
                 </div>
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-control" placeholder="jean.dupont@example.com" name="email">
+                    <input type="email" class="form-control" placeholder="jean.dupont@example.com" name="email" required>
+                    <div class="invalid-feedback">Veuillez entrer un email valide.</div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Nom complet</label>
-                    <input type="text" class="form-control" placeholder="Jean Dupont" name="lastname">
+                    <input type="text" class="form-control" placeholder="Jean Dupont" name="lastname" required>
+                    <div class="invalid-feedback">Veuillez entrer votre nom complet.</div>
                 </div>
-                 <div class="col-md-6 mb-3">
-                    <label class="form-label">role</label>
-                    <select class="form-select" name="role" id="role">
-                        <option selected>S'inscrire en tant que</option>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Rôle</label>
+                    <select class="form-select" name="role" id="role" required>
+                        <option value="" selected disabled>S'inscrire en tant que</option>
                         {% for valeur, labele in role %}
-                        <option  value="{{ valeur }}">{{ labele }}</option>
+                        <option value="{{ valeur }}">{{ labele }}</option>
                         {% endfor %}
                     </select>
-                </div> 
-               
+                    <div class="invalid-feedback">Veuillez sélectionner un rôle.</div>
+                </div>
             </div>
 
             <div class="row">
                 <div class="col-md-6 mb-3">
                     <label class="form-label">Mot de passe</label>
-                    <input type="password" class="form-control" name="password">
+                    <input type="password" class="form-control" name="password" minlength="6" required>
+                    <div class="invalid-feedback">Le mot de passe doit avoir au moins 6 caractères.</div>
                 </div>
-                {% comment %} <div class="col-md-6 mb-3">
-                    <label class="form-label">Confirmer le mot de passe</label>
-                    <input type="password" class="form-control" name="password_confirme">
-                </div> {% endcomment %}
             </div>
-              <!-- section uniquement pour auteur -->
-        <div class="section_auteur">
 
-            <div class="mb-3">
-                <label class="form-label">Biographie</label>
-                <textarea class="form-control" rows="3" placeholder="Parlez-nous de votre parcours..." name="bio"></textarea>
-            </div>
-             
+            <!-- Section uniquement pour auteur -->
+            <div class="section_auteur">
+                <div class="mb-3">
+                    <label class="form-label">Biographie</label>
+                    <textarea class="form-control" rows="3" placeholder="Parlez-nous de votre parcours..." name="bio"></textarea>
+                </div>
 
-            {% comment %} <div class="mb-3">
-                <label class="form-label">Site web (optionnel)</label>
-                <input type="url" class="form-control" placeholder="https://www.votresite.com">
-            </div> {% endcomment %}
-
-            
-               
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Années d'expérience</label>
-                        <select class="form-select" name="annee_experience">
-                            <option selected>Sélectionnez une option</option>
+                        <select class="form-select" name="annee_experience" required>
+                            <option value="" selected disabled>Sélectionnez une option</option>
                             {% for value, label in annee_experience %}
                             <option value="{{ value }}">{{ label }}</option>
                             {% endfor %}
                         </select>
+                        <div class="invalid-feedback">Veuillez sélectionner une expérience.</div>
                     </div>
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">pays d'origine</label>
-                        <select class="form-select" name="nationalite">
-                            <option selected>Sélectionnez une option</option>
+                        <label class="form-label">Pays d'origine</label>
+                        <select class="form-select" name="nationalite" required>
+                            <option value="" selected disabled>Sélectionnez une option</option>
                             {% for value, label in pays %}
                             <option value="{{ value }}">{{ label }}</option>
                             {% endfor %}
                         </select>
+                        <div class="invalid-feedback">Veuillez sélectionner un pays.</div>
                     </div>
                 </div>
-      
-               
             </div>
 
             <button type="submit" class="btn btn-dark w-100">
                 <i class="bi bi-person-plus"></i> S'inscrire en tant qu'auteur
-                
             </button>
 
-            <p class="text-center mt-3">Déjà inscrit ? <a href="{% url "signin" %}">Connectez-vous</a></p>
-            <p class="text-center mt-3"><a href="{% url "home" %}">Retour</a></p>
+            <p class="text-center mt-3">Déjà inscrit ? <a href="{% url 'signin' %}">Connectez-vous</a></p>
+            <p class="text-center mt-3"><a href="{% url 'home' %}">Retour</a></p>
         </form>
     </div>
 </div>
@@ -156,6 +153,20 @@ role_selecte.addEventListener("change",function(){
         autre_champ.classList.add("section_auteur")
     }
 })
+
+(function () {
+    'use strict';
+    var forms = document.querySelectorAll('.needs-validation');
+    Array.prototype.slice.call(forms).forEach(function (form) {
+        form.addEventListener('submit', function (event) {
+            if (!form.checkValidity()) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+        }, false);
+    });
+})();
 </script>
 
 </body>
