@@ -8,7 +8,9 @@ https://docs.djangoproject.com/en/5.1/howto/deployment/wsgi/
 """
 
 import os
+import sys
 
+sys.path.insert(0, '/home/tonnomdutilisateur/projet_BD/Gestion_BD')
 from django.core.wsgi import get_wsgi_application
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'Gestion_BD.settings')
