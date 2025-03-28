@@ -1,1 +1,2 @@
-web: gunicorn Gestion_BD.wsgi --log-file-
+
+web: gunicorn Gestion_BD.wsgi:application --log-level info
