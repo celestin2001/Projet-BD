@@ -1,4 +1,5 @@
 
-web: gunicorn Gestion_BD.wsgi:application --workers=3
+web: waitress-serve --listen=*:8080 Gestion_BD.wsgi:application
+
 
 
