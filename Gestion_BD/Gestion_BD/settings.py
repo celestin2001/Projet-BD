@@ -16,13 +16,15 @@ SECRET_KEY = "django-insecure-c&7t#9g=*9(b2*_h3$zb!$vko0xffi0+=omr=dalbeyrefk87t
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['Celestin2001.pythonanywhere.com']
-CSRF_TRUSTED_ORIGINS = [
-    "https://5610-197-149-245-198.ngrok-free.app",
-    "https://*.ngrok.io"  # Permet toutes les URLs Ngrok
-]
+# Celestin2001.pythonanywhere.com'
+X_FRAME_OPTION = 'ALLOWALL'
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://5610-197-149-245-198.ngrok-free.app",
+#     "https://*.ngrok.io"  # Permet toutes les URLs Ngrok
+# ]
 
 # CELERY_BROKER_URL = 'redis://localhost:6379/0'  # URL de Redis
 # CELERY_ACCEPT_CONTENT = ['json']
