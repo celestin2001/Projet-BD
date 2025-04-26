@@ -20,7 +20,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['Celestin2001.pythonanywhere.com']
 # Celestin2001.pythonanywhere.com'
-X_FRAME_OPTION = 'ALLOWALL'
+X_FRAME_OPTIONS = 'ALLOWALL'
 # CSRF_TRUSTED_ORIGINS = [
 #     "https://5610-197-149-245-198.ngrok-free.app",
 #     "https://*.ngrok.io"  # Permet toutes les URLs Ngrok
