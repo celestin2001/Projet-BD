@@ -21,10 +21,10 @@ def Home(request):
    actualite = BlogPost.objects.filter(valid=True).all()
    user_authenticate = request.user.is_authenticated
    usere = request.user
-   try:
-    profil = Utilisateur.objects.get(id=usere.id)
-   except Utilisateur.DoesNotExist:
-    profil = None
+#    try:
+#     profil = Utilisateur.objects.get(id=usere.id)
+#    except Utilisateur.DoesNotExist:
+#     profil = None
    
    
    if request.method == 'POST':
@@ -61,7 +61,7 @@ def Home(request):
         events = Evenement.objects.filter(date_evenement__range=[start_next_month, end_next_month])
    else:
         events = Evenement.objects.all()
-   return render(request,'gestion_utilisateur/index.html',{'actualite':actualite,'user_authenticate':user_authenticate,'events':events,'profil':profil})
+   return render(request,'gestion_utilisateur/index.html',{'actualite':actualite,'user_authenticate':user_authenticate,'events':events})
 
 
 def Evenements(request):
