@@ -91,12 +91,51 @@ REST_FRAMEWORK = {
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'bililibdfestival$auteur_bd',  # le nom exact de ta base sur PythonAnywhere
+#         'USER': 'bililibdfestival',      # ton username PA
+#         'PASSWORD': 'bdauteur',        # le mot de passe MySQL donné par PA
+#         'HOST': 'bililibdfestival.mysql.pythonanywhere-services.com',  # très important
+#         'PORT': '3306',                  # port MySQL
+#     }
+# }
+
+
+import os
+
+# Détecter si on est en local ou en production
+IS_PRODUCTION = os.environ.get('PYTHONANYWHERE_DOMAIN') is not None
+
+if IS_PRODUCTION:
+    # Configuration pour PythonAnywhere (Production)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'bililibdfestival$auteur_bd',  # Remplace par ton vrai nom de base
+            'USER': 'bililibdfestival',
+            'PASSWORD': 'bdauteur',
+            'HOST': 'bililibdfestival.mysql.pythonanywhere-services.com',
+            'PORT': '3306',
+        }
     }
-}
+else:
+    # Configuration locale (Développement avec SQLite)
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
