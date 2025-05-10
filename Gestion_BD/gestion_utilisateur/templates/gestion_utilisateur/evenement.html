@@ -54,65 +54,202 @@
             padding: 15px;
             border-radius: 8px;
         }
+
+        .event-card {
+      background-color: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    .event-img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+    }
+    .event-date {
+      font-size: 14px;
+      color: #888;
+      text-transform: uppercase;
+    }
+    .event-title {
+      font-weight: bold;
+      font-size: 28px;
+    }
+    .event-description {
+      color: #555;
+    }
+    .btn-detail {
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      line-height: 40px;
+      text-align: center;
+      display: inline-block;
+    }
+
+
+    body {
+            font-family: 'popins',sans-serif;
+            background-color: #f8f9fa; /* Fond gris clair */
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .navbar {
+            background-color: #28a745 !important; /* Vert foncé pour la navbar */
+        }
+
+        .navbar-brand {
+            font-size: 2em;
+            font-weight: bold;
+            color: #f8f9fa !important;
+        }
+
+        .nav-link {
+            color: #e9ecef !important; /* Gris très clair pour les liens */
+            transition: color 0.3s ease-in-out;
+        }
+
+        .nav-link:hover {
+            color: #fff !important;
+        }
+
+        .events-header {
+            background-color: #e9ecef; /* Fond gris très clair pour l'en-tête */
+            padding: 60px 0;
+            text-align: center;
+        }
+
+        .events-title {
+            font-size: 3em;
+            font-weight: bold;
+            color: #28a745; /* Titre vert */
+            margin-bottom: 20px;
+            animation: fadeInUp 1s ease-in-out;
+        }
+
+        .events-subtitle {
+            font-size: 1.3em;
+            color: #495057; /* Gris moyen pour le sous-titre */
+            margin-bottom: 40px;
+            animation: fadeInUp 1.2s ease-in-out;
+        }
+
+        .event-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .event-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        .event-img-container {
+            overflow: hidden;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            height: 200px; /* Hauteur fixe pour les images */
+        }
+
+        .event-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.4s ease-in-out;
+        }
+
+        .event-card:hover .event-img {
+            transform: scale(1.03);
+        }
+
+        .event-body {
+            padding: 20px;
+        }
+
+        .event-title {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .event-meta {
+            color: #6c757d; /* Gris moyen pour les informations méta */
+            font-size: 0.95em;
+            margin-bottom: 15px;
+        }
+
+        .event-excerpt {
+            color: #495057;
+            margin-bottom: 20px;
+        }
+
+        .event-link {
+            display: inline-block;
+            background-color: #28a745; /* Bouton vert */
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .event-link:hover {
+            background-color: #1e7e34; /* Vert plus foncé au survol */
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: #f8f9fa;
+            padding: 30px 0;
+            text-align: center;
+            font-size: 0.85em;
+            margin-top: 60px;
+        }
+
+        .footer a {
+            color: #e9ecef;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
+        /* Animations d'entrée */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 
 </head>
 <body>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3">
-        <div class="container-fluid">
-            <!-- Logo de l'entreprise -->
-            <a class="navbar-brand" href="#">
-                <img src="logo.png" alt="Logo" width="120" height="40">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item ">
-                        <a class="nav-link active" href="{% url 'home' %}">Actualités</a>
-                        
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link active" href="{% url 'evenement' %}">Evenements</a>
-                        
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link " href="{% url 'auteur' %}">Auteur</a>
-                        
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Qui nous sommes</a>
-                    </li>
-                    {% if not user_authenticate %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'signup' %}">S’inscrire</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-primary text-white px-3" href="{% url 'signin' %}">Identifier vous</a>
-                    </li>
-                    {% endif %}
-                   
-
-                    <!-- start profile  -->
-                     {% if user_authenticate %}
-                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'deconnexion' %}">Se deconnecter</a>
-                    </li>
-                     {% endif %}
-                     {% if profil.role == "auteur" and profil.valid_auteur %}
-                     <li class="nav-item">
-                         <a class="nav-link" href="{% url 'profil_auteur' %}">Profil</a>
-                     </li>
-                 {% endif %}
-                    <!-- end profile  -->
-                </ul>
-            </div>
+    {% include "gestion_content/header.html" %}
+    
+    <header class="events-header mt-5">
+        <div class="container">
+            <h1 class="events-title">Les Rendez-vous Incontournables de la BD</h1>
+            <p class="events-subtitle">Salons, festivals, dédicaces... Ne manquez aucun événement majeur !</p>
         </div>
-    </nav>
-
+    </header>
+   <hr><hr><hr>
 
     <!-- search avanced start -->
    
@@ -222,26 +359,26 @@
                      <li>Aucun événement trouvé.</li>
                     {% endfor %} -->
 
-                    {% for event in events %}
+                    <!-- {% for event in events %}
 <div class="container">
     <div class="row justify-content-center mb-5">
         <div class="col-12 col-md-8"> <!-- Largeur différente selon l'écran -->
-            <div class="card">
+            <!-- <div class="card">
                 <div class="card-header">
                     <div class="d-flex align-items-center">
-                        <div>
+                        <div> -->
                             <!-- <img class="img-fluid mr-2" src="{{actu.author.profil_picture.url}}" alt=""
                                  style="width: 50px; height: 50px; border-radius: 150px; border: 1px solid black;"> -->
-                        </div>
-                        <div>
+                        <!-- </div>
+                        <div> -->
                             <!-- <strong>{{actu.author.username}}</strong><em> | {{actu.author.role}}</em> -->
-                            <div><small>{{actu.created_at}}</small></div>
+                            <!-- <div><small>{{actu.created_at}}</small></div>
                         </div>
                     </div>
-                </div>
+                </div> -->
 
                 <!-- Image qui s'adapte aux écrans -->
-                <img class="card-img-top img-fluid" src="{{event.image.url}}" alt="Card image cap">
+                <!-- <img class="card-img-top img-fluid" src="{{event.image.url}}" alt="Card image cap">
 
                 <div class="card-body">
                     <h5 class="card-title">{{event.titre_evenement}} </h5>
@@ -256,41 +393,41 @@
                      <li>Aucun événement trouvé.</li>
                     
                  {% endfor %}
-
-                
-
-                
-            
-            
-             
         </div>
-    </div>
+    </div>  -->
 
-
-    <!-- Hero Section -->
-<!-- Button trigger modal -->
-
-  
-  <!-- Modal -->
-  <!-- <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+</div>
+    <div class="container my-5">
+        <div class="row g-4 align-items-start">
+          
+          <!-- Colonne gauche : Image -->
+          {% for event in events %}
+          <div class="col-md-6">
+            <div class="event-card">
+                <img class="card-img-top img-fluid" src="{{event.image.url}}" alt="Card image cap">
+            </div>
+          </div>
+      
+          <!-- Colonne droite : Texte -->
+          <div class="col-md-6 animate__animated animate__fadeInUp animate__delay-0-2s">
+            <p class="event-date mb-2"><span style="font-weight: 900;">Date</span> {{event.date_evenement}}  {{event.heure_evenement}}</p>
+            <h2 class="event-title mb-3">{{event.titre_evenement}}</h2>
+            <p class="event-description">
+                {{event.description|truncatewords:25}}
+            </p>
+            <p class="text-muted mt-3">Publié le {{event.date_publication}}</p>
+            <div class="d-flex align-items-center gap-2 mt-3">
+                <span class="fw-semibold text-uppercase">DÉTAIL</span>
+                <a href="{% url 'event_detail' event.id %}" class="rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; background-color: #22c55e;">
+                  ➜
+                </a>
+              </div>
+          </div>
+          {% empty %}
+                     <h3>Aucun événement trouvé.</h3>
+          {% endfor %}
         </div>
       </div>
-    </div>
-  </div> -->
 
 
   <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -15,7 +15,8 @@ from django.http import JsonResponse
 # from .task import send_approval_email
 from django.core.mail import send_mail
 import random
-
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 def Home(request):
    actualite = BlogPost.objects.filter(valid=True).all()
@@ -39,30 +40,16 @@ def Home(request):
             media = image,
             valid = False
         )
+        
         new.save()
-   today = timezone.localdate()  # Date du jour
-   start_week = today - timedelta(days=today.weekday())  # Début de la semaine
-   end_week = start_week + timedelta(days=6)  # Fin de la semaine
-   start_next_week = end_week + timedelta(days=1)  # Début de la semaine prochaine
-   end_next_week = start_next_week + timedelta(days=6)  # Fin de la semaine prochaine
-   start_month = today.replace(day=1)  # Début du mois
-   start_next_month = (start_month + timedelta(days=32)).replace(day=1)  # Début du mois prochain
-   end_next_month = (start_next_month + timedelta(days=31)).replace(day=1) - timedelta(days=1)  # Fin du mois suivant
+  
+   
+   return render(request,'gestion_utilisateur/index.html',{'actualite':actualite,'user_authenticate':user_authenticate})
 
-   filter_type = request.GET.get("filter", "this_week")
-
-   if filter_type == "this_week":
-        events = Evenement.objects.filter(date_evenement__range=[start_week, end_week])
-   elif filter_type == "next_week":
-        events = Evenement.objects.filter(date_evenement__range=[start_next_week, end_next_week])
-   elif filter_type == "this_month":
-        events = Evenement.objects.filter(date_evenement__range=[start_month, start_next_month - timedelta(days=1)])
-   elif filter_type == "next_month":
-        events = Evenement.objects.filter(date_evenement__range=[start_next_month, end_next_month])
-   else:
-        events = Evenement.objects.all()
-   return render(request,'gestion_utilisateur/index.html',{'actualite':actualite,'user_authenticate':user_authenticate,'events':events})
-
+# detail actualité
+def detail_actualite(request,my_id):
+    detail = get_object_or_404(BlogPost,id=my_id)
+    return render(request,'gestion_utilisateur/detail_actualite.html',{"detail":detail})
 
 def Evenements(request):
    user_authenticate = request.user.is_authenticated
@@ -107,6 +94,12 @@ def Evenements(request):
 
    return render(request, "gestion_utilisateur/evenement.html", {"events": events, "filter_type": filter_type,'user_authenticate':user_authenticate,'profil':profil})
 
+def detailEvenement(request,my_id):
+    
+    
+     detail_event = get_object_or_404(Evenement, id=my_id)
+     return render(request,'gestion_utilisateur/detail_evenement.html',{'detail_event':detail_event})
+
 def signup(request):
     erreur = ""
     genrese = Genre.objects.all()
@@ -124,7 +117,7 @@ def signup(request):
         profil = request.FILES.get('profil')
         # role = request.POST.get('role')
         annee_experience = request.POST.get('annee_experience')
-        pays = request.POST.get('pays')
+        pays = request.POST.get('nationalite')
         # genre = request.POST.getlist('genre')
         user_exist = Utilisateur.objects.filter(username=username)
         if user_exist:
@@ -194,9 +187,9 @@ def signin(request):
             
             return redirect('home')
         else:
-            errors="informations incorectes"
-            return render(request,'gestion_utilisateur/connexion.html',{'errors':errors})
-    return render(request,'gestion_utilisateur/connexion.html',{'errors':errors})
+            messages.error(request,"votre email ou mot de passe est incorecte")
+            return render(request,'gestion_utilisateur/connexion.html')
+    return render(request,'gestion_utilisateur/connexion.html')
 
 @login_required
 def deconnexion(request):
@@ -392,20 +385,45 @@ def signin_auteur(request):
 
 #     return render(request, "events.html", {"events": events, "filter_type": filter_type})
 
-def detail_evenement(request,my_id):
-    detail_event = get_object_or_404(Evenement,id=my_id)
-    user_authenticate = request.user.is_authenticated
-    usere = request.user
-    try:
-     profil = Utilisateur.objects.get(id=usere.id)
-    except Utilisateur.DoesNotExist:
-     profil = None
-    events = Evenement.objects.all()[:8]
-    context = {
-        'detail_event':detail_event,
-        'events':events,
-            'profil':profil,
-            'user_authenticate':user_authenticate
-    }
-    return render(request,'gestion_utilisateur/detail_evenement.html',context)
-    
+def inscription_evenement(request, my_id):
+    event = get_object_or_404(Evenement, id=my_id)
+
+    if request.method == 'POST':
+        prenom = request.POST.get('prenom')
+        nom = request.POST.get('nom')
+        email = request.POST.get('email')
+        tel = request.POST.get('tel')
+        date = request.POST.get('date')
+
+        participant = ParticipationEvenement.objects.create(
+            prenom=prenom,
+            nom=nom,
+            email=email,
+            telephone=tel,
+            date_participation=date,
+            evenement=event
+        )
+
+        # Email personnalisé
+        subject = f"Confirmation d'inscription au {event.titre_evenement}"
+        from_email = 'noreply@monsite.com'
+        to_email = [email]
+
+        context = {
+            'prenom': prenom,
+            'nom': nom,
+            'event': event,
+            'date': date,
+        }
+
+        html_content = render_to_string('gestion_utilisateur/event_email.html', context)
+
+        msg = EmailMultiAlternatives(subject, '', from_email, to_email)
+        msg.attach_alternative(html_content, "text/html")
+        msg.send()
+
+        # 🎉 Affichage de l'alerte
+        messages.success(request, "Votre inscription a bien été prise en compte. Un mail  vous a été envoyé pour plus de précision!")
+        return redirect('event_detail', my_id=my_id)
+
+    return render(request, 'gestion_utilisateur/inscription_evenement.html', {'event': event})

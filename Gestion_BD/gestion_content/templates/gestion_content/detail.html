@@ -218,143 +218,23 @@ body {
     gap: 10px;
 }
 .icon-text i {
-    color: #c00;
+    color: green;
 }
     </style>
 </head>
 <body>
     
        <!-- Navbar -->
-       <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3">
-        <div class="container-fluid">
-            <!-- Logo de l'entreprise -->
-            <a class="navbar-brand" href="#">
-                <img src="logo.png" alt="Logo" width="120" height="40">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item ">
-                        <a class="nav-link active" href="{% url 'home' %}">Actualités</a>
-                        
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link active" href="{% url 'evenement' %}">Evenements</a>
-                        
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link " href="{% url 'auteur' %}">Auteur</a>
-                        
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Qui nous sommes</a>
-                    </li>
-                    {% if not user_authenticate %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'signup' %}">S’inscrire</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-primary text-white px-3" href="{% url 'signin' %}">Identifier vous</a>
-                    </li>
-                    {% endif %}
-                   
-
-                    <!-- start profile  -->
-                     {% if user_authenticate %}
-                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'deconnexion' %}">Se deconnecter</a>
-                    </li>
-                     {% endif %}
-                     {% if profil.role == "auteur" and profil.valid_auteur %}
-                     <li class="nav-item">
-                         <a class="nav-link" href="{% url 'profil_auteur' %}">Profil</a>
-                     </li>
-                 {% endif %}
-                    <!-- end profile  -->
-                </ul>
-            </div>
-        </div>
-    </nav>
-    <div class="mb-3 mx-5" id="texte">
-      <h2 class="fw-bold  " id="typed-text">Rechercher des auteurs de bandes dessinées</h2>
-      <p class="text-muted h5 ">Découvrez des artistes et des auteurs talentueux dans l'industrie de la bande dessinée</p>
-    </div>
+       {% include "gestion_content/header.html" %}
    
-    
+   
+    <hr><hr><hr>
     <!-- recherche avance -->
-    <nav class="navbar navbar-expand-lg px-3 shadow p-5 mb-2 mx-5 bg-body-tertiary rounded" id="nav_recherche">
-        <div class="container-fluid">
-           
-            <form class="d-flex flex-grow-1 mx-3" method="GET" {% url 'home' %}>
-                <div class="input-group me-2">
-                    <span class="input-group-text"><i class="fas fa-search"></i></span>
-                    <input class="form-control search-input" type="search" name="q" placeholder="Rechercher des auteurs...">
-                </div>
-            
-                <!-- Filtre par genre -->
-                <select class="form-select me-2" name="genre">
-                    {% for genre  in genres  %}
-                    <option value="">{{genre.name}}</option>
-                    {% endfor %}
-                    {% comment %} <option value="manga">Manga</option>
-                    <option value="comics">Comics</option>
-                    <option value="bande-dessinée">Bande dessinée</option>
-                    <option value="manhwa">Manhwa</option> {% endcomment %}
-                </select>
-            
-                <!-- Filtre par pays -->
-                <select class="form-select me-2" name="pays">
-                    <option selected value="">filtrer par pays</option>
-                    <option value="france">France</option>
-                    <option value="japon">Japon</option>
-                    <option value="usa">USA</option>
-                    <option value="corée">Corée du Sud</option>
-                </select>
-            
-                <button type="submit" class="btn btn-primary">Filtrer</button>
-            </form>
-        </div>
-    </nav>
+    
 
     <!-- fin recherche avance -->
 
-    {% comment %} <center>
-        <button type="button" class="btn btn-primary  d-flex mb-5  " data-toggle="modal" data-target="#exampleModal">
-            Publier une oeuvre
-          </button>
-    </center> {% endcomment %}
-
-    {% comment %} <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">publication</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                <form action="" method="post" enctype="multipart/form-data">
-                    {% csrf_token %}
     
-                    <input class="form-control mb-3" type="text" placeholder="Titre de publication" name="titre">
-                    <textarea class="form-control mb-3" name="contenue" id="" cols="15" rows="5" placeholder="Saisisser le text de votre publication ici ..."></textarea>
-                    <div>
-                        <label for="">choisir une image</label>
-                        <input class="form-control" type="file" placeholder="choisir" name="image">
-                    </div>
-                    <div class="modal-footer d-flex justify-content-center">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-primary">Publier</button>
-                    </div>
-                </form>
-                </div>
-                
-          </div>
-        </div>
-    </div> {% endcomment %}
    
     <div class="container mt-5">
       <div class="section-green">

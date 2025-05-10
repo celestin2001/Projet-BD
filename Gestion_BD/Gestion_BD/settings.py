@@ -16,10 +16,10 @@ SECRET_KEY = "django-insecure-c&7t#9g=*9(b2*_h3$zb!$vko0xffi0+=omr=dalbeyrefk87t
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['auteur-bd.bilili-bd.com', 'bilili-bd.com', 'localhost']
-
+ALLOWED_HOSTS = ['*']
+#'auteur-bd.bilili-bd.com', 'bilili-bd.com', 'localhost'
 # Celestin2001.pythonanywhere.com'
 X_FRAME_OPTIONS = 'ALLOWALL'
 # CSRF_TRUSTED_ORIGINS = [
@@ -120,11 +120,11 @@ if IS_PRODUCTION:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'bililibdfestival$auteur_bd',  # Remplace par ton vrai nom de base
-            'USER': 'bililibdfestival',
-            'PASSWORD': 'bdauteur',
-            'HOST': 'bililibdfestival.mysql.pythonanywhere-services.com',
-            'PORT': '3306',
+            'NAME': 'bililibdfestival$auteur_bd',  #  nom de ma base de données sur PythonAnywhere
+            'USER': 'bililibdfestival',     # mon nom d'utilisateur PythonAnywhere
+            'PASSWORD': 'bdauteur',       # mot de passe MySQL donné par PythonAnywhere
+            'HOST': 'bililibdfestival.mysql.pythonanywhere-services.com', # hôte MySQL
+            'PORT': '3306',             # port MySQL
         }
     }
 else:

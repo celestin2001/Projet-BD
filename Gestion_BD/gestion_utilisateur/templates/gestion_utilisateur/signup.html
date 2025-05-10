@@ -25,26 +25,43 @@
         .section_auteur{
             display: none;
         }
+        .login-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #28a745; /* Titre vert */
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .btn-login,.btn-login:hover {
+            background-color: #28a745; /* Bouton vert */
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            width: 100%;
+           
+        }
 
 
     </style>
 </head>
 <body>
-    <div class="text-center">
-        <h2>Inscription Auteur</h2>
-        <h4 class="text-center mb-4">Rejoignez notre communauté d'auteurs de bandes dessinées</h4>
-    </div>
+   
 
     {% if messages %}
-    <div class="alert alert-danger text-center">
+   
         {% for message in messages %}
-            <p style="color: red;">{{ message }}</p>
+            <h2 style="color: red;" class="text-center mt">{{ message }}</h2>
         {% endfor %}
-    </div>
+ 
 {% endif %}
 
   <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="form-container">
+        <h2 class="login-title">Inscription</h2>
         <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
             {% csrf_token %}
             <div class="row">
@@ -117,9 +134,7 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-dark w-100">
-                <i class="bi bi-person-plus"></i> S'inscrire en tant qu'auteur
-            </button>
+            <button type="submit" class="btn btn-login">Se connecter</button>
 
             <p class="text-center mt-3">Déjà inscrit ? <a href="{% url 'signin' %}">Connectez-vous</a></p>
             <p class="text-center mt-3"><a href="{% url 'home' %}">Retour</a></p>

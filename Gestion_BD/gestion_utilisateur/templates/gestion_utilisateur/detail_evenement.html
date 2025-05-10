@@ -11,67 +11,40 @@
 
     <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
     <title>Document</title>
+
+    <style>
+          .hero {
+      background: url('https://source.unsplash.com/1200x400/?conference,event') center/cover no-repeat;
+      height: 300px;
+      border-radius: 12px;
+    }
+    .date-badge {
+      background-color: #ffc107;
+      color: #000;
+      font-weight: bold;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+    }
+    .btn-back {
+      background-color: #f1f1f1;
+      border: none;
+      font-weight: bold;
+    }
+    .btn-back:hover {
+      background-color: #e0e0e0;
+    }
+    </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm p-3">
-        <div class="container-fluid">
-            <!-- Logo de l'entreprise -->
-            <a class="navbar-brand" href="#">
-                <img src="logo.png" alt="Logo" width="120" height="40">
-            </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item ">
-                        <a class="nav-link active" href="{% url 'home' %}">Actualités</a>
-                        
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link active" href="{% url 'evenement' %}">Evenements</a>
-                        
-                    </li>
-                    <li class="nav-item ">
-                        <a class="nav-link " href="{% url 'auteur' %}">Auteur</a>
-                        
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Qui nous sommes</a>
-                    </li>
-                    {% if not user_authenticate %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'signup' %}">S’inscrire</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link btn btn-primary text-white px-3" href="{% url 'signin' %}">Identifier vous</a>
-                    </li>
-                    {% endif %}
-                  
-
-                    <!-- start profile  -->
-                     {% if user_authenticate %}
-                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'deconnexion' %}">Se deconnecter</a>
-                    </li>
-                     {% endif %}
-                     {% if profil.role == "auteur" and profil.valid_auteur %}
-                     <li class="nav-item">
-                         <a class="nav-link" href="{% url 'profil_auteur' %}">Profil</a>
-                     </li>
-                 {% endif %}
-                    <!-- end profile  -->
-                </ul>
-            </div>
-        </div>
-    </nav>
+    {% include "gestion_content/header.html" %}
 
    
         
         
       
      
-    <div class= " container mt-5">
+    <!-- <div class= " container mt-5">
         <h4 class="fw-bold  mt-5 mb-4 " id="typed-text">{{detail_event.titre_evenement}}</h4>
 
             <img class="card-img-top img-fluid float-start me-3 img-thumbnail col-sm-12 " style="width: 50%"  src="{{detail_event.image.url}}" alt="Card image cap">
@@ -93,9 +66,85 @@
             </div>
             {% endfor %}
           </div>
-       </div>
+       </div> -->
+
+       {% if messages %}
+       {% for message in messages %}
+         <div class="alert alert-success " role="alert" id="alert" style="
+         display: none;
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #465ef8d2;
+        color: white;
+        padding: 15px 30px;
+        border-radius: 10px;
+        font-size: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        z-index: 9999;
+        text-align: center;
+     ">
+           <p>{{ message }}</p>
+         </div>
+       {% endfor %}
+     {% endif %}
+     <hr><hr><hr><hr>
+       <div class="container my-5">
+
+        <!-- Bouton de retour -->
+        <div class="mb-4">
+          <a href="#" class="btn btn-back"><i class="bi bi-arrow-left"></i> Retour</a>
+        </div>
+    
+        <!-- Image en haut -->
+        <div class="hero mb-4" style="background: url('{{ detail_event.image.url }}') center/cover no-repeat;"></div>
+    
+        <!-- Date et heure -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <span class="date-badge">{{detail_event.date_publication}} - {{detail_event.heure_evenement}}</span>
+          <small class="text-muted">Publié le {{detail_event.date_publication}}</small>
+        </div>
+    
+        <!-- Titre -->
+        <h1 class="fw-bold mb-3 text-success">{{detail_event.titre_evenement}}</h1>
+    
+        <!-- Contenu -->
+        <p class=" ">
+            {{detail_event.description}}
+        </p>
+    
+        <!-- <p class="text-secondary">
+          L’événement se tiendra à l’Université de Labé, les 16 et 17 mai 2025. Il comprendra des conférences, des panels, 
+          des ateliers pratiques, et une session spéciale dédiée aux start-ups et aux projets innovants portés par des jeunes.
+        </p>
+    
+        <p class="text-secondary">
+          Ne manquez pas cette occasion unique de rencontrer des experts, d’élargir votre réseau et de participer 
+          activement à la transformation numérique de notre société.
+        </p> -->
+    
+        <!-- Bouton d'inscription -->
+        <div class="mt-4">
+          <a href="{% url 'inscription_event' detail_event.id %}" class="btn btn-success btn-lg rounded-pill px-4">S'inscrire à l'événement</a>
+        </div>
+    
+      </div>
     
     {% include "gestion_content/footer.html" %}
+
+    <script>
+        // Afficher l'alerte (tu peux faire cela dans ta vue Django avec un contexte aussi)
+        window.onload = function() {
+            const alertBox = document.getElementById("alert");
+            alertBox.style.display = "block";
+    
+            // Cacher après 5 secondes
+            setTimeout(() => {
+                alertBox.style.display = "none";
+            }, 5000);
+        };
+    </script>
 
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     

@@ -216,3 +216,7 @@ def profil_auteur(request):
         'user_authenticate':user_authenticate,
         'genres':genrese
     })
+
+
+def apropos(request):
+    return render(request,'gestion_content/apropos.html')

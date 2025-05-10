@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>[Titre de l'Actualité] - BD Actu</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
+
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa; /* Fond gris clair */
+            color: #333;
+            line-height: 1.7;
+        }
+
+        .navbar {
+            background-color: #28a745 !important; /* Vert foncé pour la navbar */
+        }
+
+        .navbar-brand {
+            font-size: 2em;
+            font-weight: bold;
+            color: #f8f9fa !important;
+        }
+
+        .nav-link {
+            color: #e9ecef !important; /* Gris très clair pour les liens */
+            transition: color 0.3s ease-in-out;
+        }
+
+        .nav-link:hover {
+            color: #fff !important;
+        }
+
+        .article-detail-container {
+            padding-top: 100px; /* Espacement depuis la barre de navigation */
+            padding-bottom: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            animation: fadeIn 0.8s ease-in-out;
+        }
+
+        .article-detail-title {
+            font-size: 3em;
+            font-weight: bold;
+            color: #28a745; /* Titre vert */
+            margin-bottom: 40px;
+            text-align: center;
+            max-width: 800px;
+        }
+
+        .article-detail-image {
+            width: 100%;
+            max-width: 800px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            margin-bottom: 40px;
+        }
+
+        .article-detail-description {
+            max-width: 800px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            color: #495057;
+            font-size: 1.15em;
+            line-height: 1.8;
+            text-align: justify;
+        }
+
+        .footer {
+            background-color: #343a40;
+            color: #f8f9fa;
+            padding: 30px 0;
+            text-align: center;
+            font-size: 0.85em;
+            margin-top: 60px;
+        }
+
+        .footer a {
+            color: #e9ecef;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .footer a:hover {
+            color: #fff;
+        }
+
+        /* Animation d'entrée */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    {% include "gestion_content/header.html" %}
+
+    <div class="article-detail-container">
+        <h1 class="article-detail-title">{{detail.title}}</h1>
+        <img src="{{detail.media.url}}" alt="Image de l'article" class="article-detail-image">
+        <div class="article-detail-description">
+            <p>{{detail.content}}</p>
+        
+        </div>
+    </div>
+
+    {% include "gestion_content/footer.html" %}
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
+    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.js"></script>
+</body>
+</html>

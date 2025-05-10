@@ -48,4 +48,5 @@ admin.site.register(Evenement)
 admin.site.site_title = "Plateforme DB"
 admin.site.site_header = "Auteur DB"
 admin.site.index_title = "Gestion des auteurs"
+# admin.site.register(ParticipationEvenement)
 

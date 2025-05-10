@@ -1,0 +1,254 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Auteurs de BD</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
+  <style>
+    body {
+      background-color: #fdfdfd;
+      font-family: 'Segoe UI', sans-serif;
+    }
+    .section-title {
+      margin-top: 3rem;
+      margin-bottom: 2rem;
+      text-align: center;
+      color: #333;
+    }
+    .rounded-img {
+      border-radius: 15px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .bg-banner {
+      background: url('{% static "gestion_content/images/naruto.jpg" %}') center/cover no-repeat;
+      height: 300px;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-shadow: 2px 2px 5px rgba(0,0,0,0.6);
+    }
+    .icon-box {
+      font-size: 2rem;
+      color: #28a745;
+      margin-bottom: 10px;
+    }
+    .bg-light-blue {
+      background-color: #e3f2fd;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      transition: 0.3s;
+    }
+    footer {
+      background-color: #212529;
+    }
+    .team-img {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (max-width: 576px) {
+      .navbar-brand {
+        font-size: 1.2rem;
+      }
+      .section-title {
+        font-size: 1.3rem;
+      }
+      .rounded-img {
+        margin-top: 1rem;
+      }
+    }
+
+    /* Effet de survol pour les icônes de réseaux sociaux */
+  .social-icon {
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+
+  .social-icon:hover {
+    color: #28a745; /* Changer la couleur au survol (bleu ici) */
+    transform: scale(1.1); /* Légère augmentation de taille */
+  }
+  </style>
+</head>
+<body>
+
+  {% include "gestion_content/header.html" %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+  <div class="container">
+    <a class="navbar-brand" href="#"><i class="bi bi-book-half me-2"></i>BDs Univers</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </div>
+</nav>
+
+<header class="bg-banner text-center" data-aos="fade-down" data-aos-duration="1200">
+  <h1 class="display-4 fw-bold">À propos de BDs Univers</h1>
+</header>
+
+<div class="container py-5">
+  <!-- Mission et Historique -->
+  <section>
+    <h2 class="section-title" data-aos="fade-up"><i class="bi bi-compass icon-box"></i> Mission & Historique</h2>
+    <div class="row align-items-center">
+      <div class="col-md-6" data-aos="fade-right">
+        <p>
+          Créé en 2015, <strong>BDs Univers</strong> est né d’un amour profond pour la narration visuelle.
+          Notre mission : réunir artistes et lecteurs autour de bandes dessinées originales et captivantes.
+          Plus de 500 titres ont été publiés, explorant divers genres et styles du monde entier.
+        </p>
+      </div>
+      <div class="col-md-6" data-aos="fade-left">
+        <img src="{% static "gestion_content/images/naruto.jpg" %}" alt="Histoire BD" class="img-fluid rounded-img">
+      </div>
+    </div>
+  </section>
+
+  <!-- Équipe -->
+  <section>
+    <h2 class="section-title" data-aos="fade-up"><i class="bi bi-people-fill icon-box"></i> Notre Équipe</h2>
+    <div class="row text-center">
+      <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="200">
+        <div class="card card-hover border-0 shadow-sm">
+          <img src="{% static "gestion_content/images/naruto2.png" %}" alt="Histoire BD" class="img-fluid rounded-img">
+          <div class="card-body">
+            <h5 class="card-title">Jean Dupont</h5>
+            <p class="text-muted">Fondateur & Scénariste</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="400">
+        <div class="card card-hover border-0 shadow-sm">
+          <img src="{% static "gestion_content/images/naruto2.png" %}" alt="Histoire BD" class="img-fluid rounded-img">
+          <div class="card-body">
+            <h5 class="card-title">Aïcha Koné</h5>
+            <p class="text-muted">Directrice artistique</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4" data-aos="zoom-in" data-aos-delay="600">
+        <div class="card card-hover border-0 shadow-sm">
+          <img src="{% static "gestion_content/images/naruto2.png" %}" alt="Histoire BD" class="img-fluid rounded-img">
+          <div class="card-body">
+            <h5 class="card-title">Luc Morel</h5>
+            <p class="text-muted">Responsable numérique</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bureau -->
+  <section>
+    <h2 class="section-title" data-aos="fade-up"><i class="bi bi-building icon-box"></i> Nos Bureaux</h2>
+    <p class="text-center">Notre siège est situé à <strong>Paris</strong>, avec des bureaux à <strong>Bruxelles</strong> et <strong>Montréal</strong>.</p>
+    <div class="row">
+      <div class="col-md-4 text-center" data-aos="fade-up" data-aos-delay="100">
+        <img src="OIP.jpg" class="img-fluid rounded-img mb-2" alt="Paris">
+        <p><i class="bi bi-geo-alt"></i> Paris, France</p>
+      </div>
+      <div class="col-md-4 text-center" data-aos="fade-up" data-aos-delay="300">
+        <img src="OIP.jpg" class="img-fluid rounded-img mb-2" alt="Bruxelles">
+        <p><i class="bi bi-geo-alt"></i> Bruxelles, Belgique</p>
+      </div>
+      <div class="col-md-4 text-center" data-aos="fade-up" data-aos-delay="500">
+        <img src="OIP.jpg" class="img-fluid rounded-img mb-2" alt="Montréal">
+        <p><i class="bi bi-geo-alt"></i> Montréal, Canada</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Partenaires -->
+  <!-- Partenaires -->
+<section>
+    <h2 class="section-title" data-aos="fade-up"><i class="bi bi-handshake icon-box"></i> Partenaires</h2>
+    <div class="row text-center">
+      <div class="col-md-3 col-6 mb-3" data-aos="zoom-in">
+        <img src="OIP.jpg" class="img-fluid" alt="Studio Graphix">
+        <p><strong>Studio Graphix</strong></p>
+        <div>
+          <a href="#" class="text-dark me-2"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-dark me-2"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="text-dark"><i class="bi bi-instagram"></i></a>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3" data-aos="zoom-in" data-aos-delay="200">
+        <img src="OIP.jpg" class="img-fluid" alt="Librairie BD">
+        <p><strong>Librairie Le Dragon</strong></p>
+        <div>
+          <a href="#" class="text-dark me-2"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-dark me-2"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="text-dark"><i class="bi bi-instagram"></i></a>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3" data-aos="zoom-in" data-aos-delay="400">
+        <img src="OIP.jpg" class="img-fluid" alt="Festival BD">
+        <p><strong>Festival Angoulême</strong></p>
+        <div>
+          <a href="#" class="text-dark me-2"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-dark me-2"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="text-dark"><i class="bi bi-instagram"></i></a>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3" data-aos="zoom-in" data-aos-delay="600">
+        <img src="OIP.jpg" class="img-fluid" alt="Partenaire Canada">
+        <p><strong>ComiCulture Canada</strong></p>
+        <div>
+          <a href="#" class="text-dark me-2"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-dark me-2"><i class="bi bi-twitter"></i></a>
+          <a href="#" class="text-dark"><i class="bi bi-instagram"></i></a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+
+  <!-- Nous contacter -->
+  <section class="bg-light-blue p-4 rounded mt-5" data-aos="fade-up">
+    <h2 class="section-title"><i class="bi bi-envelope-paper-heart icon-box"></i> Nous Contacter</h2>
+    <form>
+      <div class="row g-3">
+        <div class="col-md-6">
+          <input type="text" class="form-control" placeholder="Votre nom" required>
+        </div>
+        <div class="col-md-6">
+          <input type="email" class="form-control" placeholder="Votre email" required>
+        </div>
+        <div class="col-12">
+          <textarea class="form-control" rows="4" placeholder="Votre message..." required></textarea>
+        </div>
+      </div>
+      <div class="text-center mt-3">
+        <button type="submit" class="btn btn-success"><i class="bi bi-send"></i> Envoyer</button>
+      </div>
+    </form>
+  </section>
+</div>
+
+{% include "gestion_content/footer.html" %}
+
+
+   
+    
+<!-- Ajout des icônes FontAwesome -->
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+
+{% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> {% endcomment %}
+<script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
+<script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>AOS.init();</script>
+</body>
+</html>

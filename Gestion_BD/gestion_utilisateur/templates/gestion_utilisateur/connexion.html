@@ -1,88 +1,138 @@
 {% load static %}
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Formulaire d'Inscription</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
+    <title>Connexion - BD Actu</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
-    
     <style>
         body {
-            background-color: #f8f9fa;
-            margin: 0px;
-        }
-        .form-container {
-            width: 1000px; /* Augmentation de la largeur */
-            background: white;
-            padding: 50px;
-            border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        .section_auteur{
-            display: none;
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa; /* Fond gris clair */
+            color: #333;
+            line-height: 1.6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh; /* Centrer verticalement sur l'écran */
         }
 
+        .login-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 400px;
+            animation: fadeInUp 0.8s ease-in-out;
+        }
 
+        .login-title {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #28a745; /* Titre vert */
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border: 1px solid #ced4da;
+            border-radius: 8px;
+            padding: 12px 15px;
+            font-size: 1em;
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .form-control:focus {
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); /* Ombre verte au focus */
+        }
+
+        .btn-login {
+            background-color: #28a745; /* Bouton vert */
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .btn-login:hover {
+            background-color: #1e7e34; /* Vert plus foncé au survol */
+        }
+
+        .login-links {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 0.9em;
+            color: #6c757d;
+        }
+
+        .login-links a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .login-links a:hover {
+            color: #0056b3;
+        }
+
+        /* Animation d'entrée */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 </head>
 <body>
-   
-    <div class="text-center mt-5">
-        <h2>Connexion</h2>
-        <h4 class="text-center mb-4">Connectez Vous pour plus de nouvelles</h4>
-    </div>
-    <hr><hr><hr>
-     {% if errors %}
-       <h4 class="text-center mt-5" style="color: red;">{{errors}}</h4>
-     {% endif %}
-       
 
-<div class="container d-flex justify-content-center align-items-center vh-100">
-   
-    <div class="form-container">
-        <!-- <div class="text-center">
-            <h3 class="text-white">se connecter avec</h3>
-        </div> -->
-    
+    <div class="login-container">
         
-
-        <form method="post" enctype="multipart/form-data">
+        {% if messages %}
+   
+        {% for message in messages %}
+            <h2 style="color: red;" class="text-center mt">{{ message }}</h2>
+        {% endfor %}
+ 
+{% endif %}
+        <h4 class="login-title">Connexion</h4>
+        <form method="post">
             {% csrf_token %}
-        
-                <div class=" mb-3">
-                    <label class="form-label">email</label>
-                    <input type="text" class="form-control" placeholder="Entrez votre votre email" name="email">
-                </div>
-                <div class=" mb-3">
-                    <label class="form-label">mot de passe</label>
-                    <input type="password" class="form-control" placeholder="entrez votre mot de passe" name="password">
-                </div>
-           
-          
-            <button type="submit" class="btn btn-dark w-100">
-                <i class="bi bi-person-plus"></i> Se connecter
-            </button>
-
-            <p class="text-center mt-3">Pas de compte ? <a href="{% url 'signup' %}">S'incrire</a></p>
-            <p class="text-center mt-3"><a href="{% url "home" %}">Retour</a></p>
+            <div class="form-group">
+                <label for="email">Adresse e-mail</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Votre e-mail">
+            </div>
+            <div class="form-group">
+                <label for="password">Mot de passe</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Votre mot de passe">
+            </div>
+            <button type="submit" class="btn btn-login">Se connecter</button>
         </form>
-    
-</div>
+        <div class="login-links">
+            <a href="#">Mot de passe oublié ?</a> | <a href="{% url "signup" %}">Créer un compte</a>
+        </div>
+    </div>
 
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
-    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
-
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.js"></script>
 </body>
 </html>

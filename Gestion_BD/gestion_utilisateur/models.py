@@ -97,7 +97,21 @@ class Evenement(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='media/',blank=True,null=True)
     date_evenement = models.DateField()
-    date_fin = models.DateField(null=True,blank=True)
+    date_fin_evenement = models.DateField(null=True, blank=True)
+    lieu_evenement = models.CharField(max_length=255, null=True, blank=True)
+    date_publication = models.DateField(auto_now=True)
+    heure_evenement = models.TimeField(null=True, blank=True)
+
+class ParticipationEvenement(models.Model):
+    evenement = models.ForeignKey(Evenement,on_delete=models.CASCADE)
+    prenom = models.CharField(max_length=100)
+    nom = models.CharField(max_length=100)
+    email = models.EmailField()
+    telephone = models.CharField(max_length=20)
+    date_participation = models.DateTimeField(blank=True,null=True)
+
+    def __str__(self):
+        return f"{self.prenom} {self.nom}"
 
 
    
