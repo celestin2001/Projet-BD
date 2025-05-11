@@ -36,7 +36,7 @@ class Utilisateur(AbstractUser):
 
 
     role = models.CharField(max_length=120, choices=Role_choice,default='lecteur')
-    annee_experience = models.CharField(max_length=120, choices=Annee_Experience,blank=True, null=True)
+   
     bio = models.TextField()
     email = models.EmailField(unique=True)
     profil_picture = models.ImageField(upload_to='media/',blank=True,null=True)
