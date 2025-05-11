@@ -18,7 +18,7 @@ SECRET_KEY = "django-insecure-c&7t#9g=*9(b2*_h3$zb!$vko0xffi0+=omr=dalbeyrefk87t
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['auteur-bd.bilili-bd.com', 'bilili-bd.com']
 #'auteur-bd.bilili-bd.com', 'bilili-bd.com', 'localhost'
 # Celestin2001.pythonanywhere.com'
 X_FRAME_OPTIONS = 'ALLOWALL'
