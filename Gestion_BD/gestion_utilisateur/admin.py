@@ -28,7 +28,7 @@ class CustomUserAdmin(UserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('username', 'email', 'password', 'role', 'pays'),
+            'fields': ('username','last_name', 'email', 'password', 'role', 'pays'),
         }),
         ('Informations supplémentaires', {
             'fields': ('annee_experience', 'bio', 'valid_auteur'),
@@ -36,7 +36,7 @@ class CustomUserAdmin(UserAdmin):
         }),
     )
 
-    search_fields = ('username', 'email', 'pays', 'role')
+    search_fields = ('username','last_name', 'email', 'pays', 'role')
 
     class Media:
         js = ('gestion_utilisateur/static/gestion_utilisateur/js/hide_fields.js',)  # Inclure le script JS pour cacher les champs
