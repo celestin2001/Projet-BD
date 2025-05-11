@@ -8,12 +8,7 @@ class Utilisateur(AbstractUser):
         ('lecteur','lecteur')
         
     ]
-    Annee_Experience = [
-        ('0-2 ans','0-2 ans'),
-        ('3-5 ans','3-5 ans'),
-        ('5-10 ans','5-10 ans'),
-        ('plus de 10 ans','plus de 10 ans')
-    ]
+  
     
     PAYS_AFRICAINS = [
     ("Algérie", "Algérie"), ("Angola", "Angola"), ("Bénin", "Bénin"), ("Botswana", "Botswana"), 
