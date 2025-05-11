@@ -264,7 +264,7 @@ def signin_auteur(request):
         bio = request.POST.get('bio')
         # profil = request.FILES.get('profil')
         role = request.POST.get('role')
-        annee_experience = request.POST.get('annee_experience')
+       
         pays = request.POST.get('pays')
         # image=request.FILES.get('image')
        
@@ -272,7 +272,7 @@ def signin_auteur(request):
         
         user.bio = bio
         user.role = "auteur"
-        user.annee_experience = annee_experience
+       
         user.pays = pays
         user.save()
         return redirect('home')
