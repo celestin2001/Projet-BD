@@ -103,7 +103,6 @@ def detailEvenement(request,my_id):
 def signup(request):
     erreur = ""
     genrese = Genre.objects.all()
-    annee_experience = Utilisateur.Annee_Experience
     pays = Utilisateur.PAYS_AFRICAINS
     role = Utilisateur.Role_choice
     if request.method == 'POST':
@@ -164,7 +163,7 @@ def signup(request):
           #       send_approval_email.delay(user.id)
             return redirect('home')
     return render(request,'gestion_utilisateur/signup.html',{'genres':genrese,
-                        "annee_experience": annee_experience,"role":role,'pays':pays,"erreur":erreur})
+                        "role":role,'pays':pays,"erreur":erreur})
 
 
 # def auteur(request):
