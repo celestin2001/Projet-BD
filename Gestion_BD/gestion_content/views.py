@@ -113,6 +113,10 @@ def detail_auteur(request, auteur_id):
         'profil':profil
     })
 
+def detail_auteur2(request):
+   return render(request,'gestion_content/detail2.html')
+   
+
 def detail(request):
 
  return render(request,'gestion_content/detail_text.html')

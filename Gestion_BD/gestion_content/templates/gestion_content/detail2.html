@@ -7,16 +7,15 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
-        /* Styles CSS (inchangés par rapport à la version précédente) */
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa;
+            background-color: #f8f9fa; /* Fond gris clair */
             color: #333;
             line-height: 1.7;
         }
 
         .navbar {
-            background-color: #28a745 !important;
+            background-color: #28a745 !important; /* Vert foncé pour la navbar */
         }
 
         .navbar-brand {
@@ -26,7 +25,7 @@
         }
 
         .nav-link {
-            color: #e9ecef !important;
+            color: #e9ecef !important; /* Gris très clair pour les liens */
             transition: color 0.3s ease-in-out;
         }
 
@@ -35,7 +34,7 @@
         }
 
         .author-detail-header {
-            background-color: #e9ecef;
+            background-color: #e9ecef; /* Fond gris très clair pour l'en-tête */
             padding: 80px 0;
             text-align: center;
         }
@@ -43,7 +42,7 @@
         .author-name {
             font-size: 3em;
             font-weight: bold;
-            color: #28a745;
+            color: #28a745; /* Titre vert */
             margin-bottom: 20px;
             animation: fadeInUp 1s ease-in-out;
         }
@@ -81,14 +80,14 @@
         .author-covers-title {
             font-size: 2em;
             font-weight: bold;
-            color: #28a745;
+            color: #28a745; /* Titre vert */
             text-align: center;
             margin-bottom: 30px;
         }
 
         .author-covers-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Grille responsive */
             gap: 20px;
             max-width: 960px;
             margin: 0 auto 40px;
@@ -113,34 +112,6 @@
             display: block;
         }
 
-        .author-bibliography-title {
-            font-size: 2em;
-            font-weight: bold;
-            color: #28a745; /* Titre vert pour la bibliographie */
-            text-align: center;
-            margin-bottom: 20px;
-            margin-top: 50px; /* Espacement depuis la grille des couvertures */
-        }
-
-        .author-bibliography-list {
-            max-width: 800px;
-            margin: 0 auto 40px;
-            padding-left: 20px;
-            list-style-type: none; /* Supprimer les puces par défaut */
-            animation: fadeInUp 1.8s ease-in-out;
-        }
-
-        .bibliography-item {
-            margin-bottom: 10px;
-            color: #495057;
-            font-size: 1.05em;
-        }
-
-        .bibliography-item strong {
-            font-weight: bold;
-            color: #333;
-        }
-
         .footer {
             background-color: #343a40;
             color: #f8f9fa;
@@ -160,7 +131,7 @@
             color: #fff;
         }
 
-        /* Animations d'entrée (inchangées) */
+        /* Animations d'entrée */
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -185,20 +156,21 @@
 <body>
 
     {% include "gestion_content/header.html" %}
+   
 
     <header class="author-detail-header mt-5">
         <div class="container">
-            <h1 class="author-name">{{auteur.last_name}}</h1>
+            <h1 class="author-name">[Nom de l'Auteur]</h1>
             <div class="author-photo-container">
-                <img src="{{auteur.profil_picture.url}}" alt="Photo de [Nom de l'Auteur]" class="author-photo">
+                <img src="chemin/vers/photo-de-l-auteur.jpg" alt="Photo de [Nom de l'Auteur]" class="author-photo">
             </div>
         </div>
     </header>
 
     <main class="container py-5">
         <div class="author-bio">
-            <p>{{auteur.bio}}</p>
-            
+            <p>[Biographie de l'auteur. Un texte riche et informatif sur son parcours, ses influences, son style, etc.]</p>
+            <p>[Vous pouvez ajouter d'autres paragraphes pour approfondir la biographie.]</p>
         </div>
 
         <h2 class="author-covers-title">Couvertures emblématiques</h2>
@@ -213,16 +185,9 @@
                 <img src="chemin/vers/couverture-3.jpg" alt="Couverture de [Titre 3]" class="cover-image">
             </div>
             </div>
+    </main>
 
-        <h2 class="author-bibliography-title">Bibliographie</h2>
-        <ul class="author-bibliography-list">
-            <li class="bibliography-item"><strong>[Titre de la BD 1]</strong> (Année de publication)</li>
-            <li class="bibliography-item"><strong>[Titre de la BD 2]</strong> (Année de publication) - [Mention éventuelle du rôle (scénariste, dessinateur, coloriste)]</li>
-            <li class="bibliography-item"><strong>[Titre de la BD 3]</strong> (Année de publication)</li>
-            </ul>
-        </main>
-
-        {% include "gestion_content/footer.html" %}
+    {% include "gestion_content/footer.html" %}
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
