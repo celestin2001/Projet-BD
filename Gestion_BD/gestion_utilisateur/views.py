@@ -255,7 +255,7 @@ def deconnexion(request):
 
 def signin_auteur(request):
     user=request.user
-    annee_experience = Utilisateur.Annee_Experience
+
     pays = Utilisateur.PAYS_AFRICAINS
     if request.method =='POST':
    
@@ -277,7 +277,7 @@ def signin_auteur(request):
         return redirect('home')
         
     return render(request,'gestion_utilisateur/inscription_auteur.html',{"user":user,
-                                "annee_experience": annee_experience,'pays':pays})
+                               'pays':pays})
 
 # def change_password(request):
 #     errors=''
