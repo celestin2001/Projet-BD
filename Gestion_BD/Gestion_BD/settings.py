@@ -120,7 +120,7 @@ if IS_PRODUCTION:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
-            'NAME': 'bililibdfestival$auteur_bd',  #  nom de ma base de données sur PythonAnywhere
+            'NAME': 'bililibdfestival$bililifestival',  #  nom de ma base de données sur PythonAnywhere
             'USER': 'bililibdfestival',     # mon nom d'utilisateur PythonAnywhere
             'PASSWORD': 'bdauteur',       # mot de passe MySQL donné par PythonAnywhere
             'HOST': 'bililibdfestival.mysql.pythonanywhere-services.com', # hôte MySQL
