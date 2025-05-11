@@ -112,16 +112,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Années d'expérience</label>
-                        <select class="form-select" name="annee_experience" required>
-                            <option value="" selected disabled>Sélectionnez une option</option>
-                            {% for value, label in annee_experience %}
-                            <option value="{{ value }}">{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                        <div class="invalid-feedback">Veuillez sélectionner une expérience.</div>
-                    </div>
+                
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Pays d'origine</label>
                         <select class="form-select" name="nationalite" required>

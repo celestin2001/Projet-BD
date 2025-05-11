@@ -116,7 +116,6 @@ def signup(request):
         bio = request.POST.get('bio')
         profil = request.FILES.get('profil')
         # role = request.POST.get('role')
-        annee_experience = request.POST.get('annee_experience')
         pays = request.POST.get('nationalite')
         # genre = request.POST.getlist('genre')
         user_exist = Utilisateur.objects.filter(username=username)
@@ -153,7 +152,7 @@ def signup(request):
             # password_confirme=password_confirme,
             token = token,
             
-            annee_experience = annee_experience,
+            
             pays = pays,
             
             # genres = genre
