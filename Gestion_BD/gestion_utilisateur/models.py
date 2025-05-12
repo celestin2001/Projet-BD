@@ -11,23 +11,23 @@ class Utilisateur(AbstractUser):
   
     
     PAYS_AFRICAINS = [
-    ("Algérie", "Algérie"), ("Angola", "Angola"), ("Bénin", "Bénin"), ("Botswana", "Botswana"), 
-    ("Burkina Faso", "Burkina Faso"), ("Burundi", "Burundi"), ("Cameroun", "Cameroun"), 
-    ("Cap-Vert", "Cap-Vert"), ("République Centrafricaine", "République Centrafricaine"), 
-    ("Tchad", "Tchad"), ("Comores", "Comores"), ("Congo-Brazzaville", "Congo-Brazzaville"), 
-    ("Congo-Kinshasa", "Congo-Kinshasa"), ("Djibouti", "Djibouti"), ("Égypte", "Égypte"), 
-    ("Guinée Équatoriale", "Guinée Équatoriale"), ("Érythrée", "Érythrée"), ("Eswatini", "Eswatini"), 
-    ("Éthiopie", "Éthiopie"), ("Gabon", "Gabon"), ("Gambie", "Gambie"), ("Ghana", "Ghana"), 
-    ("Guinée", "Guinée"), ("Guinée-Bissau", "Guinée-Bissau"), ("Côte d'Ivoire", "Côte d'Ivoire"), 
-    ("Kenya", "Kenya"), ("Lesotho", "Lesotho"), ("Libéria", "Libéria"), ("Libye", "Libye"), 
-    ("Madagascar", "Madagascar"), ("Malawi", "Malawi"), ("Mali", "Mali"), ("Mauritanie", "Mauritanie"), 
-    ("Maurice", "Maurice"), ("Maroc", "Maroc"), ("Mozambique", "Mozambique"), ("Namibie", "Namibie"), 
-    ("Niger", "Niger"), ("Nigéria", "Nigéria"), ("Rwanda", "Rwanda"), ("Sao Tomé-et-Principe", "Sao Tomé-et-Principe"), 
-    ("Sénégal", "Sénégal"), ("Seychelles", "Seychelles"), ("Sierra Leone", "Sierra Leone"), 
-    ("Somalie", "Somalie"), ("Afrique du Sud", "Afrique du Sud"), ("Soudan du Sud", "Soudan du Sud"), 
-    ("Soudan", "Soudan"), ("Tanzanie", "Tanzanie"), ("Togo", "Togo"), ("Tunisie", "Tunisie"), 
-    ("Ouganda", "Ouganda"), ("Zambie", "Zambie"), ("Zimbabwe", "Zimbabwe")
-]
+        ("dz", "Algérie"), ("ao", "Angola"), ("bj", "Bénin"), ("bw", "Botswana"),
+        ("bf", "Burkina Faso"), ("bi", "Burundi"), ("cm", "Cameroun"),
+        ("cv", "Cap-Vert"), ("cf", "République Centrafricaine"),
+        ("td", "Tchad"), ("km", "Comores"), ("cg", "Congo-Brazzaville"),
+        ("cd", "Congo-Kinshasa"), ("dj", "Djibouti"), ("eg", "Égypte"),
+        ("gq", "Guinée Équatoriale"), ("er", "Érythrée"), ("sz", "Eswatini"),
+        ("et", "Éthiopie"), ("ga", "Gabon"), ("gm", "Gambie"), ("gh", "Ghana"),
+        ("gn", "Guinée"), ("gw", "Guinée-Bissau"), ("ci", "Côte d'Ivoire"),
+        ("ke", "Kenya"), ("ls", "Lesotho"), ("lr", "Libéria"), ("ly", "Libye"),
+        ("mg", "Madagascar"), ("mw", "Malawi"), ("ml", "Mali"), ("mr", "Mauritanie"),
+        ("mu", "Maurice"), ("ma", "Maroc"), ("mz", "Mozambique"), ("na", "Namibie"),
+        ("ne", "Niger"), ("ng", "Nigéria"), ("rw", "Rwanda"), ("st", "Sao Tomé-et-Principe"),
+        ("sn", "Sénégal"), ("sc", "Seychelles"), ("sl", "Sierra Leone"),
+        ("so", "Somalie"), ("za", "Afrique du Sud"), ("ss", "Soudan du Sud"),
+        ("sd", "Soudan"), ("tz", "Tanzanie"), ("tg", "Togo"), ("tn", "Tunisie"),
+        ("ug", "Ouganda"), ("zm", "Zambie"), ("zw", "Zimbabwe")
+    ]
 
 
     role = models.CharField(max_length=120, choices=Role_choice,default='lecteur')
@@ -41,6 +41,7 @@ class Utilisateur(AbstractUser):
     token = models.CharField(max_length=120)
     pays = models.CharField(max_length=100, choices=PAYS_AFRICAINS, default="Cameroun",null=True)
     valid_auteur = models.BooleanField(default=False)
+    vedette = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'  #  l'email pour l'authentification
     REQUIRED_FIELDS = ['username']

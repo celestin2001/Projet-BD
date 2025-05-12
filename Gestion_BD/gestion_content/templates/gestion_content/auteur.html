@@ -1,191 +1,222 @@
-{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auteurs de BD</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Auteurs de BD Animés</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-
-    <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css"/>
     <style>
-        
-     
-
         body {
-      background-color: #f0fdf4;
-    }
-          .hero {
+            background-color: #f0fdf4;
+        }
+        .hero {
             background-color: white;
             border-radius: 10px;
             padding: 30px;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
             margin-bottom: 40px;
-          }
-          .author-card {
+        }
+        .featured-authors {
+            background-color: #e9ecef;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 40px;
+        }
+        .featured-author-card {
+            border: none;
+            border-radius: 10px;
+            overflow: hidden; /* Important pour l'effet de fondu de l'image */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.3s ease;
+        }
+        .featured-author-card:hover {
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+        }
+        .featured-author-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: opacity 0.5s ease-in-out; /* Effet de fondu au survol (optionnel) */
+        }
+        .featured-author-card:hover img {
+            opacity: 0.9; /* Légère atténuation au survol (optionnel) */
+        }
+        .featured-author-info {
+            padding: 15px;
+            text-align: center;
+        }
+        .featured-author-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+        .featured-author-flag {
+            font-size: 1.3rem;
+            margin-right: 5px;
+        }
+        .author-card {
             border: none;
             border-radius: 10px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
-          }
-          .author-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-          }
-          .author-card img {
+        }
+        .author-card:hover {
+            transform: translateY(-3px); /* Mouvement subtil */
+            box-shadow: 0 5px 12px rgba(0, 0, 0, 0.08); /* Ombre plus douce */
+        }
+        .author-card img {
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
             height: 300px;
             object-fit: cover;
-          }
-          .author-name {
+            transition: transform 0.3s ease-in-out; /* Léger zoom au survol (optionnel) */
+        }
+        .author-card:hover img {
+            transform: scale(1.03); /* Léger zoom au survol (optionnel) */
+        }
+        .author-name {
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1rem;
             text-align: center;
             margin-top: 10px;
-          }
-          .btn-view {
+        }
+        .btn-view {
             background-color: #22c55e;
             color: white;
             border: none;
             width: 100%;
             margin-top: 10px;
             transition: background-color 0.3s ease;
-          }
-          .btn-view:hover {
+        }
+        .btn-view:hover {
             background-color: #16a34a;
-          }
-
+        }
     </style>
-
 </head>
-<body >
+<body>
 
-
-    <!-- Navbar -->
     {% include "gestion_content/header.html" %}
-
-
-
-  <hr><hr><hr>
-
 <div class="container py-5">
     <div class="hero text-center animate__animated animate__fadeInUp">
-      <h2 class="text-success fw-bold">Le monde vibrant de la bande dessinée</h2>
-      <p class="mt-3">
-        La bande dessinée est un art qui combine illustrations et narration pour créer des histoires captivantes. Des comics américains aux mangas japonais en passant par les albums franco-belges, chaque style possède ses propres codes et traditions.
-      </p>
-      <p>
-        Découvrez sur cette page les auteurs qui contribuent à la richesse de cet univers. Qu’ils soient confirmés ou émergents, ces artistes partagent leur vision et leur créativité à travers leurs œuvres graphiques.
-      </p>
+        <h2 class="text-success fw-bold">Le monde vibrant de la bande dessinée</h2>
+        <p class="mt-3">
+            La bande dessinée est un art qui combine illustrations et narration pour créer des histoires captivantes. Des comics américains aux mangas japonais en passant par les albums franco-belges, chaque style possède ses propres codes et traditions.
+        </p>
+        <p>
+            Découvrez sur cette page les auteurs qui contribuent à la richesse de cet univers. Qu’ils soient confirmés ou émergents, ces artistes partagent leur vision et leur créativité à travers leurs œuvres graphiques.
+        </p>
     </div>
-  
-    <h3 class="fw-bold text-success mb-4 animate__animated animate__fadeInLeft">Tous les auteurs</h3>
-  
-    <div class="row g-4">
-        {% for auteur in auteurs %}
-      <div class="col-md-3 animate__animated animate__zoomIn">
-        <div class="card author-card">
-          <a href="{% url 'detail_auteur' auteur.id %}" class="text-decoration-none">
-            {% if auteur.profil_picture %}
-              <img src="{{ auteur.profil_picture.url }}" class="card-img-top"  alt="{{ auteur.username }}">
-         
-            {% else %}
-              <img src="{% static 'gestion_content/images/prof.png' %}" class="card-img-top" alt="{{ auteur.username }}">
-            {% endif %}
-          </a>
-          <div class="card-body text-center">
-            <div class="author-name">{{ auteur.username }}</div>
-           <a href="{% url 'detail_auteur' auteur.id %}">
-            <button class="btn btn-view" style="color: white; background-color: #16a34a;">Voir plus</button>
-           </a>
-          </div>
+
+    <div class="featured-authors py-4 animate__animated animate__fadeIn">
+        <h3 class="fw-bold text-info mb-4 animate__animated animate__fadeInLeft">Auteurs en Vedette</h3>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            {% for auteur_v in auteur_vedette %}
+            <div class="col animate__animated animate__fadeInDown animate__delay-0.5s">
+                <div class="card featured-author-card h-100">
+                    <img src="{{auteur_v.profil_picture.url}}" class="card-img-top" alt="{{ auteur_v.last_name }}">
+                    <div class="featured-author-info">
+                        <h5 class="featured-author-name"><span class="flag-icon flag-icon-{{ auteur_v.pays|lower|slice:":2" }} featured-author-flag"></span>{{auteur_v.last_name}}</h5>
+                        <p class="card-text small text-muted">Auteur de la série à succès "Les Aventuriers du Temps".</p>
+                        <button class="btn btn-sm btn-outline-info">Voir le profil</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
         </div>
-      </div>
-      {% endfor %}
     </div>
-  </div>
+   <div class="mb-4">
+    <form method="GET" action="{% url 'auteur' %}" class="row gx-2 gy-2 align-items-center">
+        <div class="col-md">
+            <input class="form-control" type="search" placeholder="Rechercher par nom d'auteur..." name="q" aria-label="Rechercher par nom d'auteur" id="search-by-name">
+        </div>
+        <div class="col-md">
+            <select class="form-select" name="pays" aria-label="Filtrer par pays">
+                <option value="">Tous les pays</option>
+                {% for code, nom in pays_list %}
+                <option value="{{ code }}" {% if request.GET.pays == code %}selected{% endif %}>{{ nom }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="col-auto">
+            <button class="btn btn-outline-success" type="submit">Rechercher</button>
+        </div>
+    </form>
+</div>
+    <h3 class="fw-bold text-success mb-4 animate__animated animate__fadeInLeft">Tous les auteurs</h3>
 
-  <nav aria-label="Pagination" class="d-flex justify-content-center mt-4">
-    <ul class="pagination pagination-sm">
-        {% if auteurs.has_previous %}
-        <li class="page-item">
-            <a class="page-link" href="?page=1">«</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?page={{ auteurs.previous_page_number }}">Précédent</a>
-        </li>
-        {% endif %}
+    <div class="row g-4" id="authors-list">
+        {% for auteur in auteurs %}
+      <div class="col-md-3 animate__animated animate__fadeIn animate__delay-{% if forloop.counter0|divisibleby:4 %}0s{% elif forloop.counter0|add:1|divisibleby:4 %}0.2s{% elif forloop.counter0|add:2|divisibleby:4 %}0.4s{% elif forloop.counter0|add:3|divisibleby:4 %}0.6s{% endif %}">
+    <div class="card author-card">
+        <img src="{{auteur.profil_picture.url}}" class="card-img-top" alt="{{ auteur.last_name }}">
+        <div class="card-body text-center">
+            <div class="author-name"><span class="flag-icon flag-icon-{{ auteur.pays }} featured-author-flag"></span>{{auteur.last_name}}</div>
+            <a href="{% url 'detail_auteur' auteur.id %}">
+                <button class="btn btn-view btn-success">Voir plus</button>
+            </a>
+        </div>
+    </div>
+</div>
+        {% empty %}
+        <h3 class="text-center">aucun auteur pour le moment</h3>
+        {% endfor %}
+    </div>
+    <nav aria-label="Pagination" class="d-flex justify-content-center mt-4">
+        <ul class="pagination pagination-sm">
+            {% if auteurs.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page=1">«</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ auteurs.previous_page_number }}">Précédent</a>
+            </li>
+            {% endif %}
 
-        <li class="page-item disabled">
-            <span class="page-link">Page {{ auteurs.number }} sur {{ auteurs.paginator.num_pages }}</span>
-        </li>
+            <li class="page-item disabled">
+                <span class="page-link">Page {{ auteurs.number }} sur {{ auteurs.paginator.num_pages }}</span>
+            </li>
 
-        {% if auteurs.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ auteurs.next_page_number }}">Suivant</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="?page={{ auteurs.paginator.num_pages }}">»</a>
-        </li>
-        {% endif %}
-    </ul>
-</nav>
-        
-       {% if user.role == "lecteur" %}
-       <div class="d-flex justify-content-center align-items-center ">
-        <a href="{% url 'signin_auteur' %}" class="text-center">
-            <button class="btn  d-flex align-items-center gap-2 px-4 py-2 rounded" style="background-color: black; color: white;">
-                <i class="bi bi-person-plus"></i> S'inscrire en tant qu'auteur
-                
-            </button>
-        </a>
-      </div>
-       {% endif %}
-        
-    <!-- Auteurs en vedette -->
-   
+            {% if auteurs.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ auteurs.next_page_number }}">Suivant</a>
+            </li>
+            <li class="page-item">
+                <a class="page-link" href="?page={{ auteurs.paginator.num_pages }}">»</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% include "gestion_content/footer.html" %}
 
-    <!-- start footer -->
-   {% include "gestion_content/footer.html" %}
+<script>
+    function filterAuthors() {
+        const searchTerm = document.getElementById('search-by-country').value.toLowerCase();
+        const authorCards = document.querySelectorAll('#authors-list .col-md-3');
 
+        authorCards.forEach(card => {
+            const countrySpan = card.querySelector('.flag-icon');
+            const authorNameDiv = card.querySelector('.author-name');
+            let countryCode = '';
+            let authorName = '';
 
-   
-                        
-    <!-- Ajout des icônes FontAwesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    
+            if (countrySpan) {
+                countryCode = countrySpan.classList[1]?.substring(10)?.toLowerCase() || '';
+            }
+            if (authorNameDiv) {
+                authorName = authorNameDiv.textContent?.toLowerCase() || '';
+            }
 
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> {% endcomment %}
-    <script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
-    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+            if (countryCode.includes(searchTerm) || authorName.includes(searchTerm)) {
+                card.style.display = ''; // Show the author card
+            } else {
+                card.style.display = 'none'; // Hide the author card
+            }
+        });
+    }
+</script>
 
-
-    <script>
-
-     
-
-     $(document).ready(function(){
-        $("#nav_recherche").hide();
-        $("#texte").hide();
-     $("#recherche").click(function(){
-        $("#nav_recherche").slideToggle();
-        $("#texte").fadeIn();
-        $("#header").hide();
-     });
-});
-      </script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
-
-
-

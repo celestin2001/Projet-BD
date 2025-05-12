@@ -6,11 +6,13 @@ from .form import NotationForm
 from django.db.models import Avg,Q
 from django.core.paginator import Paginator
 from django.core.mail import EmailMessage
+from django.contrib.auth import get_user_model
 
 
 def Auteur(request):
     # Récupérer tous les auteurs
     auteurs_list = Utilisateur.objects.filter(role="auteur")
+    auteur_vedette = Utilisateur.objects.filter(vedette=True)
     usere = request.user
     try:
      profil = Utilisateur.objects.get(id=usere.id)
@@ -40,6 +42,18 @@ def Auteur(request):
    
     # Récupération des genres et pays pour le formulaire
     genres = Genre.objects.all()
+    
+    User = get_user_model()
+    pays_mapping = dict(User.PAYS_AFRICAINS) 
+
+    for auteur in auteurs:
+     if auteur.pays in [nom for code, nom in User.PAYS_AFRICAINS]:
+        code_pays = [code for code, nom in User.PAYS_AFRICAINS if nom == auteur.pays][0]
+        auteur.pays = code_pays
+        auteur.save()
+        print(f"Mis à jour: {auteur.last_name} - {auteur.pays}")
+    else:
+        print(f"Non trouvé dans la liste: {auteur.last_name} - {auteur.pays}")
     # pays_list = Utilisateur.objects.values_list('pays', flat=True).distinct()
 
     return render(request, 'gestion_content/auteur.html', {
@@ -48,7 +62,8 @@ def Auteur(request):
         'pays_list': pays_list,
         'user_authenticate': request.user.is_authenticated,
         'user': request.user,
-        'profil':profil
+        'profil':profil,
+        "auteur_vedette":auteur_vedette
     })
 
 

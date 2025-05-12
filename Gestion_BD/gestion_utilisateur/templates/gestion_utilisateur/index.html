@@ -244,6 +244,37 @@
     .carousel-fade .active.carousel-item-right {
         transform: translate3d(0, 0, 0);
     }
+    @media screen and (max-width: 768px) {
+  .carousel-item img {
+    height: 50vh; /* Réduit la hauteur sur petits écrans */
+    border-radius: 10px; /* Coins moins arrondis pour économiser de l'espace */
+    filter: brightness(85%); /* Image un peu plus claire sur petits écrans */
+  }
+}
+        @media (max-width: 768px) {
+            .section-title {
+                font-size: 1.8em;
+            }
+
+            /* .article-card {
+                margin-bottom: 20px;
+            } */
+
+            .article-title {
+                font-size: 1.4em;
+            }
+
+            .read-more-btn {
+                padding: 8px 16px;
+            }
+            .hero-title {
+                font-size: 2.5em;
+            }
+            .hero-subtitle {
+                font-size: 1.2em;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -288,7 +319,7 @@
         <h2 class="section-title animate__animated animate__fadeIn">Dernières Actualités</h2>
         <div class="row">
           {% for actu in actualite %}
-            <div class="col-md-6 animate__animated animate__fadeInUp animate__delay-0-2s">
+            <div class="col-md-4 animate__animated animate__fadeInUp animate__delay-0-2s">
                 <div class="article-card">
                     <div class="article-img-container">
                         <img src="{{actu.media.url}}" alt="Image de l'article 1" class="article-img">
