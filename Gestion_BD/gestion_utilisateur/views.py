@@ -421,7 +421,7 @@ def inscription_evenement(request, my_id):
         msg.send()
 
         # 🎉 Affichage de l'alerte
-        messages.success(request, "Votre inscription a bien été prise en compte. Un mail  vous a été envoyé pour plus de précision!")
+        messages.success(request, "Votre inscription a bien été prise en compte. Un mail  vous a été envoyé pour plus de précision !")
         return redirect('event_detail', my_id=my_id)
 
     return render(request, 'gestion_utilisateur/inscription_evenement.html', {'event': event})
