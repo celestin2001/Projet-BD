@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render,redirect
 from Gestion_BD.settings import EMAIL_HOST_USER
 from gestion_content.models import *
@@ -7,64 +8,67 @@ from django.db.models import Avg,Q
 from django.core.paginator import Paginator
 from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
-
+from django.db.models import Count
+from django.template.loader import render_to_string
 
 def Auteur(request):
-    # Récupérer tous les auteurs
-    auteurs_list = Utilisateur.objects.filter(role="auteur")
-    auteur_vedette = Utilisateur.objects.filter(vedette=True)
-    usere = request.user
-    try:
-     profil = Utilisateur.objects.get(id=usere.id)
-    except Utilisateur.DoesNotExist:
-     profil = None
-    genres = Genre.objects.all()
+    # Récupérer les 6 auteurs vedettes
+    auteurs_vedettes_principaux = get_user_model().objects.filter(role="auteur", vedette=True)[:6]
+    vedettes_ids = [auteur.id for auteur in auteurs_vedettes_principaux]
+
+    # Récupérer 1 ou 2 auteurs par pays (en excluant les vedettes principales)
+    auteurs_par_pays = get_user_model().objects.filter(role="auteur").exclude(id__in=vedettes_ids).values('pays').annotate(count=Count('id')).order_by('pays')
+    auteurs_par_pays_list = []
+    for pays_data in auteurs_par_pays:
+        auteurs_du_pays = get_user_model().objects.filter(role="auteur", pays=pays_data['pays']).exclude(id__in=vedettes_ids).order_by('?')[:2]
+        auteurs_par_pays_list.extend(auteurs_du_pays)
+
+    # Tous les auteurs (pour le filtrage)
+    tous_les_auteurs = get_user_model().objects.filter(role="auteur").exclude(id__in=vedettes_ids)
+
+    # Filtrage : Exclure les vedettes principales si demandé
+    exclude_vedettes = request.GET.get('exclude_vedettes')
+    if exclude_vedettes == 'true':
+        tous_les_auteurs = tous_les_auteurs.exclude(vedette=True)
+
+    # Filtrer par pays
+    pays_filtre = request.GET.get('pays', '')
+    if pays_filtre:
+        tous_les_auteurs = tous_les_auteurs.filter(pays=pays_filtre)
+
     # Récupération des paramètres de recherche
-    q = request.GET.get('q', '')  # Recherche par nom d'auteur ou username
-    genre_id = request.GET.get('genre', '')
-    pays = request.GET.get('pays', '')
-    pays_list = Utilisateur.PAYS_AFRICAINS 
-    # Appliquer les filtres AVANT la pagination
+    q = request.GET.get('q', '')
     if q:
-        auteurs_list = auteurs_list.filter(Q(username=q) | Q(email__icontains=q))
+        tous_les_auteurs = tous_les_auteurs.filter(username__icontains=q) | tous_les_auteurs.filter(email__icontains=q)
 
-    if genre_id:
-        auteurs_list = auteurs_list.filter(genres__id=genre_id)
-
-    if pays:
-        auteurs_list = auteurs_list.filter(pays=pays)
-
-    # Pagination après les filtres
-    paginator = Paginator(auteurs_list, 30)
+    # Pagination (peut-être déjà présent ou non)
+    paginator = Paginator(tous_les_auteurs, 30)
     page_number = request.GET.get('page')
-    auteurs = paginator.get_page(page_number)
-    # Récupérer les genres et pays pour le formulaire
-   
-    # Récupération des genres et pays pour le formulaire
+    auteurs_paginated = paginator.get_page(page_number)
+
     genres = Genre.objects.all()
-    
     User = get_user_model()
-    pays_mapping = dict(User.PAYS_AFRICAINS) 
+    pays_list = dict(User.PAYS_AFRICAINS)
+    usere = request.user
+    profil = None
+    if usere.is_authenticated:
+        try:
+            profil = get_user_model().objects.get(id=usere.id)
+        except get_user_model().DoesNotExist:
+            profil = None
 
-    for auteur in auteurs:
-     if auteur.pays in [nom for code, nom in User.PAYS_AFRICAINS]:
-        code_pays = [code for code, nom in User.PAYS_AFRICAINS if nom == auteur.pays][0]
-        auteur.pays = code_pays
-        auteur.save()
-        print(f"Mis à jour: {auteur.last_name} - {auteur.pays}")
-    else:
-        print(f"Non trouvé dans la liste: {auteur.last_name} - {auteur.pays}")
-    # pays_list = Utilisateur.objects.values_list('pays', flat=True).distinct()
-
-    return render(request, 'gestion_content/auteur.html', {
-        'auteurs': auteurs,
+    context = {
+        'auteurs_filtrés': auteurs_paginated, # La liste filtrée (et potentiellement paginée)
         'genres': genres,
         'pays_list': pays_list,
         'user_authenticate': request.user.is_authenticated,
         'user': request.user,
-        'profil':profil,
-        "auteur_vedette":auteur_vedette
-    })
+        'profil': profil,
+        'auteurs_vedettes_principaux': auteurs_vedettes_principaux,
+        'auteurs_par_pays_list': auteurs_par_pays_list,
+    }
+
+    return render(request, 'gestion_content/auteur.html', context)
 
 
 def detail_auteur(request, auteur_id):
@@ -81,41 +85,55 @@ def detail_auteur(request, auteur_id):
 
     # Récupérer toutes les œuvres de cet auteur avec la moyenne des notations
     oeuvres = Work.objects.filter(author=auteur).annotate(moyenne_note=Avg('notation__rating'))
-
-
+    auteur_oeuvre = Work.objects.filter(author=auteur)
+    print(auteur_oeuvre)
     # Récupérer toutes les notations liées aux œuvres de cet auteur
     notations = Notation.objects.filter(work__in=oeuvres).select_related('user', 'work')
     # notif = Notation.objects.all().count()
     # social_links = auteur.social_links if auteur.social_links else {}
-    print(notations)
+    
    
     # print(notations.all().count())
     # Gestion du formulaire de notation sans utiliser Django Forms
     if request.method == 'POST':
-        comment = request.POST.get('comment')
-        rating = request.POST.get('rating')
+        form_type = request.POST.get('form_type')
 
-        if comment and rating:
-            # Récupérer une œuvre aléatoire de l'auteur pour l'associer à la notation
-            work = oeuvres.first()
-            if work:
-                Notation.objects.create(
-                    user=request.user,
-                    work=work,
-                    rating=int(rating),
-                    comment=comment
-                )
-        
-        return redirect('detail_auteur', auteur_id=auteur_id)
-    
-    if notations:
-        for each_notif in notations:
-          totatl_notif = totatl_notif + each_notif.rating
-    
-    notation = Notation.objects.filter(work__in=oeuvres).count()
-    print(notation)
-    if notation !=0:
-       nb_notif = totatl_notif/notation
+        if form_type == 'notation':
+            comment = request.POST.get('comment')
+            rating = request.POST.get('rating')
+            if comment and rating:
+                work = oeuvres.first()
+                if work:
+                    Notation.objects.create(
+                        user=request.user,
+                        work=work,
+                        rating=int(rating),
+                        comment=comment
+                    )
+            return redirect('detail_auteur', auteur_id=auteur_id)
+
+        elif form_type == 'ajout_oeuvre':
+            titre = request.POST.get('titre')
+            contenue = request.POST.get('description')  # correspond à "name='description'" dans le HTML
+            image = request.FILES.get('image')
+            # genre = request.POST.get('genre')  # à adapter si tu l'ajoutes dans le formulaire
+            date = request.POST.get('annee')  # correspond à "name='annee'" dans le HTML
+
+            # try:
+            #     genre_instance = Genre.objects.get(id=genre)
+            # except Genre.DoesNotExist:
+            #     genre_instance = None
+
+            oeuvre = Work.objects.create(
+                title=titre,
+                description=contenue,
+                author=auteur,
+                # genres=genre_instance,
+                cover_image=image,
+                publication_date=date
+            )
+            return redirect('detail_auteur', auteur_id=auteur_id)
+
     
     
     return render(request, 'gestion_content/detail.html', {
@@ -125,7 +143,9 @@ def detail_auteur(request, auteur_id):
         # 'social_links':social_links,
         'nb_notif':nb_notif,
         'user_authenticate':user_authenticate,
-        'profil':profil
+        'profil':profil,
+        'user': request.user,
+        'auteur_oeuvre':auteur_oeuvre,
     })
 
 def detail_auteur2(request):
@@ -239,3 +259,4 @@ def profil_auteur(request):
 
 def apropos(request):
     return render(request,'gestion_content/apropos.html')
+

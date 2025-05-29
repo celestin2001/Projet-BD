@@ -2,523 +2,420 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auteurs de BD</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Événements - Maison Africaine de la BD</title>
+
+  <!-- FullCalendar -->
+    {% comment %} lien Bootstrap lien cdn en ligne {% endcomment %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
+  <script src="{% static "gestion_content/js/index.global.min.js" %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/locales/fr.js"></script>
 
-    <style>
-        .search-input:focus {
-            border-color: black !important;
-            box-shadow: 0 0 2px black !important;
-            outline: none;
+
+
+  <style>
+    :root {
+            --primary-blue: #007bff; /* Bleu principal */
+            --light-blue: #e3f2fd; /* Bleu clair pour les fonds/bordures */
+            --dark-blue: #0056b3; /* Bleu foncé pour les accents */
+            --text-color: #333; /* Couleur de texte par défaut */
+            --link-color: var(--primary-blue); /* Couleur des liens */
+            --link-hover-color: var(--dark-blue); /* Couleur des liens au survol */
+            --filter-bg: var(--light-blue); /* Fond des filtres */
+            --bs-primary: #007bff; /* Couleur bleue Bootstrap par défaut. Vous pouvez changer cette valeur pour votre bleu spécifique. */
+            --header-bg-color: #007bff; /* Couleur bleue pour le menu principal */
+            --content-max-width: 1250px; /* Exemple de largeur maximale du contenu */
+             --shadow-color: rgba(0, 0, 0, 0.1);
+            
         }
-
-        .card {
-            border-radius: 15px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-        }
-
-        .card img {
-            height: 200px;
-            object-fit: cover;
-        }
-
-        .star-rating {
-            color: gold;
-            font-size: 1.2rem;
-        }
-        .accordion-button {
-            font-weight: bold;
-            color: #fff;
-            background: #007bff;
-            border-radius: 8px;
-        }
-        .accordion-button:not(.collapsed) {
-            background: #0056b3;
-            color: #fff;
-        }
-        .accordion-body {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
-        }
-
-        .event-card {
-      background-color: white;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .event-img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-    }
-    .event-date {
-      font-size: 14px;
-      color: #888;
-      text-transform: uppercase;
-    }
-    .event-title {
-      font-weight: bold;
-      font-size: 28px;
-    }
-    .event-description {
-      color: #555;
-    }
-    .btn-detail {
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 20px;
-      line-height: 40px;
-      text-align: center;
-      display: inline-block;
-    }
-
-
     body {
-            font-family: 'popins',sans-serif;
-            background-color: #f8f9fa; /* Fond gris clair */
-            color: #333;
-            line-height: 1.6;
+      font-family: sans-serif;
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+
+    h1 {
+      text-align: center;
+      color: #007bff;
+      margin-bottom: 20px;
+    }
+
+    #calendar {
+      max-width: 74%;
+      margin: 0 auto;
+      background: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    #eventSearch {
+      display: block;
+      margin: 0 auto 20px;
+      padding: 10px;
+      max-width: 400px;
+      width: 90%;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    #eventModal {
+      display: none;
+      position: fixed;
+      top: 15%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      max-width: 450px;
+      max-height: 70%;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    #eventModal img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .tooltip {
+      position: absolute;
+      z-index: 9999;
+      background: #343a40;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 5px;
+      font-size: 13px;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      #calendar {
+        width: 100%;
+        padding: 5px;
+      }
+    }
+    .tooltip {
+  position: absolute;
+  z-index: 9999;
+  background-color: #ffffff;
+  color: #000;
+  border-radius: 8px;
+  padding: 10px 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-size: 14px;
+  max-width: 250px;
+  transition: opacity 0.2s;
+  pointer-events: none;
+  white-space: normal;
+  border: 1px solid #ddd;
+}
+
+.tooltip::after {
+  content: "";
+  position: absolute;
+  bottom: 100%;
+  left: 20px;
+  margin-left: -5px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent transparent #ffffff transparent;
+}
+
+
+        .navbar-dark {
+            background-color: var(--header-bg-color) !important;
+            width: 100%; /* Le menu prend toute la largeur de son parent */
+           
         }
 
-        .navbar {
-            background-color: #28a745 !important; /* Vert foncé pour la navbar */
+        .navbar-dark .container {
+            padding-left: 40px; /* Réduit la marge gauche par défaut de Bootstrap */
+            padding-right: 15px; /* Réduit la marge droite par défaut de Bootstrap */
+            max-width: 100%; /* Assure que le conteneur prend toute la largeur disponible */
         }
 
-        .navbar-brand {
-            font-size: 2em;
-            font-weight: bold;
-            color: #f8f9fa !important;
+        .navbar-dark .navbar-nav {
+            width: 100%; /* Prend toute la largeur du conteneur */
+            justify-content: center; /* Centre les éléments du menu */
         }
 
-        .nav-link {
-            color: #e9ecef !important; /* Gris très clair pour les liens */
-            transition: color 0.3s ease-in-out;
+        .navbar-dark .navbar-nav .nav-item {
+            border-right: 1px solid white; /* Ajoute un séparateur blanc à droite de chaque élément */
         }
 
-        .nav-link:hover {
-            color: #fff !important;
+        .navbar-dark .navbar-nav .nav-item:last-child {
+            border-right: none; /* Supprime le séparateur du dernier élément */
         }
 
-        .events-header {
-            background-color: #e9ecef; /* Fond gris très clair pour l'en-tête */
-            padding: 60px 0;
-            text-align: center;
+        .navbar-dark .navbar-nav .nav-link {
+            color: white !important;
+            padding: 0.5rem 1rem !important; /* Ajuste le padding pour la taille des liens */
         }
 
-        .events-title {
-            font-size: 3em;
-            font-weight: bold;
-            color: #28a745; /* Titre vert */
-            margin-bottom: 20px;
-            animation: fadeInUp 1s ease-in-out;
+        .navbar-dark .navbar-nav .nav-link:hover,
+        .navbar-dark .navbar-nav .nav-link:focus {
+            color: rgba(255, 255, 255, 0.8) !important;
         }
+        #* Footer */
+     .custom-footer {
+background-color: #007bff;; /* Utilise la variable pour le bleu principal */
+    color: #fff; 
+    padding: 30px 0;
+    width: 100%;
+    animation: slideUp 1s ease-out both;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+    font-size: 0.9rem;
+    font-family: sans-serif;
+}
 
-        .events-subtitle {
-            font-size: 1.3em;
-            color: #495057; /* Gris moyen pour le sous-titre */
-            margin-bottom: 40px;
-            animation: fadeInUp 1.2s ease-in-out;
-        }
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
-        .event-card {
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            margin-bottom: 30px;
-            overflow: hidden;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-        }
+.logo-left {
+    width: 80px; /* Reduced logo size */
+    margin-bottom: 10px;
+    filter: grayscale(70%);
+    transition: filter 0.3s ease, transform 0.2s ease;
+}
 
-        .event-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
-        }
+.logo-left:hover {
+    filter: grayscale(0%);
+    transform: scale(1.05);
+}
 
-        .event-img-container {
-            overflow: hidden;
-            border-top-left-radius: 8px;
-            border-top-right-radius: 8px;
-            height: 200px; /* Hauteur fixe pour les images */
-        }
+.social-icon-link {
+    color: #555;
+    text-decoration: none;
+    margin: 0 5px;
+    font-size: 1.2rem; /* Slightly larger social icons */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
 
-        .event-img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-            transition: transform 0.4s ease-in-out;
-        }
+.social-icon-link:hover {
+    color: var(--primary-blue); /* Use your primary blue */
+    transform: scale(1.1);
+}
 
-        .event-card:hover .event-img {
-            transform: scale(1.03);
-        }
+.social-icon {
+    /* Styles for Font Awesome icons */
+}
 
-        .event-body {
-            padding: 20px;
-        }
+.wordpress-link {
+    color: #555;
+    text-decoration: none;
+    margin: 0 5px;
+    font-size: 1.2rem; /* Slightly larger WordPress icons */
+    transition: color 0.3s ease, transform 0.2s ease;
+}
 
-        .event-title {
-            font-size: 1.8em;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-        }
+.wordpress-link:hover {
+    color: #21759b; /* WordPress blue */
+    transform: scale(1.1);
+}
 
-        .event-meta {
-            color: #6c757d; /* Gris moyen pour les informations méta */
-            font-size: 0.95em;
-            margin-bottom: 15px;
-        }
+.logo-wordpress {
+    /* Styles for Font Awesome WordPress icons */
+}
 
-        .event-excerpt {
-            color: #495057;
-            margin-bottom: 20px;
-        }
+.icon-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 0.5rem; /* Reduced margin */
+}
 
-        .event-link {
-            display: inline-block;
-            background-color: #28a745; /* Bouton vert */
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: background-color 0.3s ease-in-out;
-        }
+.link-bar {
+    font-size: 0.75rem; /* Smaller link bar text */
+}
 
-        .event-link:hover {
-            background-color: #1e7e34; /* Vert plus foncé au survol */
-        }
+.link-bar a {
+    color: #555;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
 
-        .footer {
-            background-color: #343a40;
-            color: #f8f9fa;
-            padding: 30px 0;
-            text-align: center;
-            font-size: 0.85em;
-            margin-top: 60px;
-        }
+.link-bar a:hover {
+    color: var(--primary-blue);
+}
 
-        .footer a {
-            color: #e9ecef;
-            text-decoration: none;
-            transition: color 0.3s ease-in-out;
-        }
+.logo-center {
+    max-width: 100px; /* Reduced center logo size */
+    height: auto;
+    filter: grayscale(70%);
+    transition: filter 0.3s ease, transform 0.2s ease;
+}
 
-        .footer a:hover {
-            color: #fff;
-        }
+.logo-center:hover {
+    filter: grayscale(0%);
+    transform: scale(1.05);
+}
 
-        /* Animations d'entrée */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-    </style>
-
+  </style>
 </head>
 <body>
-
-    <!-- Navbar -->
     {% include "gestion_content/header.html" %}
-    
-    <header class="events-header mt-5">
-        <div class="container">
-            <h1 class="events-title">Les Rendez-vous Incontournables de la BD</h1>
-            <p class="events-subtitle">Salons, festivals, dédicaces... Ne manquez aucun événement majeur !</p>
-        </div>
-    </header>
-   <hr><hr><hr>
-
-    <!-- search avanced start -->
-   
-
-    <!-- fin recherche avance -->
-    {% comment %} <div id="carouselExample" class="carousel slide mt-4" data-bs-ride="carousel">
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <img src="{% static "gestion_content/images/db3.jpg" %}" class="d-block w-100" alt="Nature">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>La beauté de la nature</h5>
-                    <p>Découvrez la splendeur du monde qui nous entoure.</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="{% static "gestion_content/images/db3.jpg" %}" class="d-block w-100" alt="City">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Les lumières de la ville</h5>
-                    <p>Un spectacle fascinant entre modernité et tradition.</p>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <img src="{% static "gestion_content/images/bd1.png" %}" class="d-block w-100" alt="Ocean">
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>Le mystère de l'océan</h5>
-                    <p>Un monde infini sous les vagues.</p>
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Précédent</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Suivant</span>
-        </button>
-    </div> {% endcomment %}
-
-    {% comment %} accordion actualite et evenement {% endcomment %}
-
-    <div class="container mt-5">
+  <div class="container mt-3" style="max-width: 1240px;">
         
-        <!-- <div class="mb-3 mx-5 text-center" id="texte">
-            <h2 class="fw-bold  " id="typed-text">Evénements à venir</h2>
-            <p class="text-muted h5 ">Nous avons hâte de vous voir lors d'un prochain événément! sur cette page, vous pouvez
-               
-          
-        </div> -->
-            <!-- Actualité -->
+    </div>
+  <h1>Calendrier des Événements</h1>
+<p class="text-center text-muted mb-4" style="font-size: 1.1rem;">
+  Découvrez tous les événements à venir organisés par la Maison Africaine de la BD. Naviguez mois par mois pour ne rien manquer !
+</p>
+  <input type="text" id="eventSearch" placeholder="Rechercher un événement...">
+  <div id="calendar"></div>
 
-             <!-- Événement -->
-              <div class="mx-5 text-center">
-             <h2 class="fw-bold text-center " id="typed-text">Evénements à venir</h2>
-             <p class="text-muted h5 text-center ">Nous avons hâte de vous voir lors d'un prochain événément! sur cette page, vous pouvez
-                faire avancer la recherche par période, 
-            </p>
-        </div>
-            
+  <!-- Modale -->
+  <div id="eventModal">
+    <img id="modalImage" src="" alt="Image de l'événement">
+    <h3 id="modalTitle"></h3>
+    <p><strong>Lieu :</strong> <span id="modalLocation"></span></p>
+    <p><strong>Date début :</strong> <span id="modalStart"></span></p>
+    <p><strong>Date fin :</strong> <span id="modalEnd"></span></p>
+    <button class="btn btn-primary" onclick="document.getElementById('eventModal').style.display='none'" style="margin-top:10px;">Fermer la modale</button>
 
-             <!-- Liste déroulante pour filtrer les événements -->
-              
-            <h4 class="text-center">Filtrer par </h4>
-             <select id="filter-select" class="form-select me-2" onchange="filterEvents()">
-                <option value="tous" {% if filter_type == "tous" %}selected{% endif %}>📅 tous nos evenements</option>
-                 <option value="this_week" {% if filter_type == "this_week" %}selected{% endif %}>📅 Cette semaine</option>
-                 <option value="this_month" {% if filter_type == "this_month" %}selected{% endif %}>📆 Ce mois-ci</option>
-                 <option value="this_year" {% if filter_type == "this_year" %}selected{% endif %}>➡️ cette année</option>
+    <p><strong>Description :</strong></p>
+    <p id="modalDescription"></p>
+  </div>
+  <!-- start footer -->
+    <footer class="custom-footer mt-4 " style="background-color: #007bff;color: #fff; 
+      padding: 30px 0;
+      width: 100%;
+     animation: slideUp 1s ease-out both;
+     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+      font-size: 0.9rem;
+     font-family: sans-serif;">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-4 text-center mb-4 mb-md-0">
+                <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left">
 
-             </select>
-         
-     
-         
-            
-           
-                
-                    <hr><hr><hr><hr>
-                 
-                      {% if user_authenticate  %}
-                
-                    {% endif %}
-                    <!-- {% for event in events %}
-                      <div class="d-flex justify-content-center mb-5">
-                        <div class="card" style="width: 60%">
-                            <div class="card-header" >
-                                <div class="d-flex" style="align-items: center;">
-                                    <div>
-                                        {% comment %} <img class="img-fluid mr-2" src="{{event.image.url}}" alt="" style="width: 50px; height: 50px; border-radius: 150px; border: 1px solid black;"> {% endcomment %}
-                                    </div>
-                                    <div>
-                                        {% comment %} <strong>{{actu.author.username}}</strong><em> | {{actu.author.role}}</em> {% endcomment %}
-                                        <div><small>Du {{event.date_evenement}} Au {{event.date_fin}}</small></div>
-                                    </div>
-                                
-                                </div>
-                            </div>
-                            <img class="card-img-top" src="{{event.image.url}}" alt="Card image cap">
-                            <div class="card-body">
-                            <h5 class="card-title">{{event.titre_evenement}} </h5>
-                            <p class="card-text">{{event.description|truncatewords:10}}</p>
-                            <a href="{% url 'event_detail' event.id %}" class="btn btn-primary">Voir détails</a>
-                        </div>
-                        </div>
-                        
+                <div class="icon-row my-3">
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square social-icon"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram social-icon"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok social-icon"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link social-icon"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-youtube social-icon"></i></a>
+                </div>
+
+                <div class="icon-row">
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress logo-wordpress"></i></a>
+                    <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress logo-wordpress"></i></a>
+                </div>
+
+                <div class="mt-3">
+                    <div class="link-bar">
+                        <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a> / <a href="#" target="_blank" rel="noopener noreferrer"><span class="text-decoration-underline">insta</span></a> / <a href="#" target="_blank" rel="noopener noreferrer">Tik Tok</a> / <a href="#" target="_blank" rel="noopener noreferrer">Link</a> / <a href="#" target="_blank" rel="noopener noreferrer"><span class="text-decoration-underline">Youtube</span></a>
                     </div>
-                    {% empty %}
-                     <li>Aucun événement trouvé.</li>
-                    {% endfor %} -->
+                </div>
+            </div>
 
-                    <!-- {% for event in events %}
-<div class="container">
-    <div class="row justify-content-center mb-5">
-        <div class="col-12 col-md-8"> <!-- Largeur différente selon l'écran -->
-            <!-- <div class="card">
-                <div class="card-header">
-                    <div class="d-flex align-items-center">
-                        <div> -->
-                            <!-- <img class="img-fluid mr-2" src="{{actu.author.profil_picture.url}}" alt=""
-                                 style="width: 50px; height: 50px; border-radius: 150px; border: 1px solid black;"> -->
-                        <!-- </div>
-                        <div> -->
-                            <!-- <strong>{{actu.author.username}}</strong><em> | {{actu.author.role}}</em> -->
-                            <!-- <div><small>{{actu.created_at}}</small></div>
-                        </div>
-                    </div>
-                </div> -->
-
-                <!-- Image qui s'adapte aux écrans -->
-                <!-- <img class="card-img-top img-fluid" src="{{event.image.url}}" alt="Card image cap">
-
-                <div class="card-body">
-                    <h5 class="card-title">{{event.titre_evenement}} </h5>
-                    <p class="card-text">{{event.description|truncatewords:10}}</p>
-                    <a href="{% url 'event_detail' event.id %}" class="btn btn-primary">Voir détails</a>
+            <div class="col-md-8 text-center">
+                <div class="center-logos d-flex justify-content-center gap-4 flex-wrap">
+                    <img src="texte.jfif" alt="Logo Maduta" class="logo-center">
+                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo Maison de la BD" class="logo-center">
                 </div>
             </div>
         </div>
     </div>
-</div>
-            {% empty %}
-                     <li>Aucun événement trouvé.</li>
-                    
-                 {% endfor %}
-        </div>
-    </div>  -->
+</footer>
+  <!-- Script -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendar');
+      const tooltip = document.createElement('div');
+      tooltip.className = 'tooltip';
+      document.body.appendChild(tooltip);
 
-</div>
-    <div class="container my-5">
-        <div class="row g-4 align-items-start">
-          
-          <!-- Colonne gauche : Image -->
-          {% for event in events %}
-          <div class="col-md-6">
-            <div class="event-card">
-                <img class="card-img-top img-fluid" src="{{event.image.url}}" alt="Card image cap">
-            </div>
-          </div>
-      
-          <!-- Colonne droite : Texte -->
-          <div class="col-md-6 animate__animated animate__fadeInUp animate__delay-0-2s">
-            <p class="event-date mb-2"><span style="font-weight: 900;">Date</span> {{event.date_evenement}}  {{event.heure_evenement}}</p>
-            <h2 class="event-title mb-3">{{event.titre_evenement}}</h2>
-            <p class="event-description">
-                {{event.description|truncatewords:25}}
-            </p>
-            <p class="text-muted mt-3">Publié le {{event.date_publication}}</p>
-            <div class="d-flex align-items-center gap-2 mt-3">
-                <span class="fw-semibold text-uppercase">DÉTAIL</span>
-                <a href="{% url 'event_detail' event.id %}" class="rounded-circle d-flex justify-content-center align-items-center" style="width: 40px; height: 40px; background-color: #22c55e;">
-                  ➜
-                </a>
-              </div>
-          </div>
-          {% empty %}
-                     <h3>Aucun événement trouvé.</h3>
+      const calendar = new FullCalendar.Calendar(calendarEl, {
+        locale: 'fr',
+        initialDate: '{% now "Y-m-d" %}',
+        initialView: 'dayGridMonth',
+        headerToolbar: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+        },
+        events: [
+          {% for e in evenements %}
+          {
+            title: '{{ e.titre_evenement|escapejs }}',
+            start: '{{ e.date_evenement|date:"Y-m-d" }}{% if e.heure_evenement %}T{{ e.heure_evenement|time:"H:i:s" }}{% endif %}',
+            {% if e.date_fin_evenement %}
+            end: '{{ e.date_fin_evenement|date:"Y-m-d" }}',
+            {% endif %}
+            color: '#007bff',
+            extendedProps: {
+              location: '{{ e.lieu_evenement|escapejs }}',
+              description: '{{ e.description|escapejs }}',
+              image: '{% if e.image %}{{ e.image.url }}{% else %}{% static "images/default.jpg" %}{% endif %}',
+              heure: '{{ e.heure_evenement|time:"H:i" }}',
+              date_debut: '{{ e.date_evenement|date:"d/m/Y" }}',
+              date_fin: '{% if e.date_fin_evenement %}{{ e.date_fin_evenement|date:"d/m/Y" }}{% else %}Non précisée{% endif %}'
+            }
+          }{% if not forloop.last %},{% endif %}
           {% endfor %}
-        </div>
-      </div>
+        ],
+        eventClick: function (info) {
+          const e = info.event.extendedProps;
+          document.getElementById('modalTitle').textContent = info.event.title;
+          document.getElementById('modalLocation').textContent = e.location || 'Non spécifié';
+          document.getElementById('modalStart').textContent = `${e.date_debut} à ${e.heure}`;
+          document.getElementById('modalEnd').textContent = e.date_fin;
+          document.getElementById('modalDescription').textContent = e.description || 'Aucune description';
+          document.getElementById('modalImage').src = e.image || '';
+          document.getElementById('eventModal').style.display = 'block';
+        },
+        eventMouseEnter: function (info) {
+          const e = info.event.extendedProps;
+       tooltip.innerHTML = `
+          <div><strong style="font-size: 15px;">${info.event.title}</strong></div>
+                 <div style="margin-top: 4px;">
+    📍 ${e.location || 'Lieu non précisé'}<br>
+    🕓 ${e.date_debut} → ${e.date_fin}
+              </div>
+               `;
+          tooltip.style.display = 'block';
+          tooltip.style.left = info.jsEvent.pageX + 10 + 'px';
+          tooltip.style.top = info.jsEvent.pageY - 60 + 'px';
+        },
+        eventMouseLeave: function () {
+          tooltip.style.display = 'none';
+        }
+      });
 
+      calendar.render();
 
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">publication</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-            <form action="" method="post" enctype="multipart/form-data">
-                {% csrf_token %}
+      // Recherche dynamique
+      document.getElementById('eventSearch').addEventListener('input', function (e) {
+        const search = e.target.value.toLowerCase();
+        calendar.getEvents().forEach(ev => {
+          const match = ev.title.toLowerCase().includes(search) ||
+                        (ev.extendedProps.location && ev.extendedProps.location.toLowerCase().includes(search));
+          ev.setProp('display', match ? 'auto' : 'none');
+        });
+      });
+    });
 
-                <input class="form-control mb-3" type="text" placeholder="Titre de publication" name="titre">
-                <textarea class="form-control mb-3" name="contenue" id="" cols="15" rows="5" placeholder="Saisisser le text de votre publication ici ..."></textarea>
-                <div>
-                    <label for="">choisir une image</label>
-                    <input class="form-control" type="file" placeholder="choisir" name="image">
-                </div>
-                <div class="modal-footer d-flex justify-content-center">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Annuler</button>
-                    <button type="submit" class="btn btn-primary">Publier</button>
-                </div>
-            </form>
-            </div>
-            
-      </div>
-    </div>
-</div>
-
-
-{% comment %} <select id="pays" name="pays">
-    <option value="GN">🇬🇳 Guinée</option>
-    <option value="CI">🇨🇮 Côte d'Ivoire</option>
-    <option value="SN">🇸🇳 Sénégal</option>
-    <option value="CM">🇨🇲 Cameroun</option>
-    <option value="ZA">🇿🇦 Afrique du Sud</option>
-    <option value="EG">🇪🇬 Égypte</option>
-</select>
-
-<img src="https://flagcdn.com/w40/gn.png" alt="Drapeau de la Guinée" width="40">
-<img src="https://flagcdn.com/w40/sn.png" alt="Drapeau du Sénégal" width="40">
-<img src="https://flagcdn.com/w40/ma.png" alt="Drapeau du Maroc" width="40">
-<img src="https://flagcdn.com/w40/dz.png" alt="Drapeau de l'Algérie" width="40"> {% endcomment %}
-
-
-        
-    <!-- Auteurs en vedette -->
-
-    
-   
-
-    <!-- start footer -->
-   {% include "gestion_content/footer.html" %}
-
-
-   
-    
-    <!-- Ajout des icônes FontAwesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    
-
-    {% comment %} <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> {% endcomment %}
-    <script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
-    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
-
-
-    <script>
-     $(document).ready(function(){
-        $("#nav_recherche").hide();
-        $("#texte").hide();
-     $("#recherche").click(function(){
-        $("#nav_recherche").fadeIn();
-        $("#texte").fadeIn();
-        $("#header").hide();
-     });
-});
-
-function filterEvents() {
-    let filterValue = document.getElementById("filter-select").value;
-    window.location.href = "?filter=" + filterValue;
-}
-      </script>
-
+  </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
-
-
-

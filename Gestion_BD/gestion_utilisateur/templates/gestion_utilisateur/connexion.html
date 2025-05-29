@@ -5,35 +5,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - BD Actu</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
     <style>
+        :root {
+            --primary-blue: #007bff; /* Bleu principal */
+            --light-blue-bg: #e0f2f7; /* Bleu clair pour le fond de la page */
+            --dark-blue: #0056b3; /* Bleu foncé pour les accents et hover */
+            --text-color: #333; /* Couleur de texte par défaut */
+        }
+
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f8f9fa; /* Fond gris clair */
-            color: #333;
+            background-color: var(--light-blue-bg); /* Fond bleu clair */
+            color: var(--text-color);
             line-height: 1.6;
             display: flex;
             align-items: center;
             justify-content: center;
             min-height: 100vh; /* Centrer verticalement sur l'écran */
+            position: relative; /* Nécessaire pour le positionnement fixe du bouton de retour */
+            flex-direction: column; /* Permet au contenu de s'organiser en colonne, si besoin pour les messages */
         }
 
         .login-container {
             background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 12px; /* Rayon de bordure plus doux */
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Ombre élégante */
             padding: 40px;
             width: 100%;
-            max-width: 400px;
+            max-width: 450px; /* Légèrement plus large pour les formulaires de connexion */
             animation: fadeInUp 0.8s ease-in-out;
+            margin: 20px auto; /* Centre et ajoute une marge */
         }
 
         .login-title {
             font-size: 2.5em;
             font-weight: bold;
-            color: #28a745; /* Titre vert */
+            color: var(--primary-blue); /* Titre en bleu principal */
             margin-bottom: 30px;
             text-align: center;
         }
@@ -44,23 +55,23 @@
 
         .form-control {
             border: 1px solid #ced4da;
-            border-radius: 8px;
+            border-radius: 8px; /* Rayon de bordure plus doux */
             padding: 12px 15px;
             font-size: 1em;
             transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
 
         .form-control:focus {
-            border-color: #28a745;
-            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25); /* Ombre verte au focus */
+            border-color: var(--primary-blue); /* Bordure bleue au focus */
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Ombre bleue au focus */
         }
 
         .btn-login {
-            background-color: #28a745; /* Bouton vert */
+            background-color: var(--primary-blue); /* Bouton en bleu principal */
             color: #fff;
-            padding: 12px 20px;
+            padding: 12px 25px; /* Augmenter le padding pour correspondre à l'inscription */
             border: none;
-            border-radius: 8px;
+            border-radius: 8px; /* Rayon de bordure plus doux */
             font-size: 1.1em;
             cursor: pointer;
             width: 100%;
@@ -68,24 +79,24 @@
         }
 
         .btn-login:hover {
-            background-color: #1e7e34; /* Vert plus foncé au survol */
+            background-color: var(--dark-blue); /* Bleu plus foncé au survol */
         }
 
         .login-links {
             margin-top: 20px;
             text-align: center;
             font-size: 0.9em;
-            color: #6c757d;
+            color: var(--text-color); /* Couleur de texte par défaut */
         }
 
         .login-links a {
-            color: #007bff;
+            color: var(--primary-blue); /* Liens en bleu principal */
             text-decoration: none;
             transition: color 0.3s ease-in-out;
         }
 
         .login-links a:hover {
-            color: #0056b3;
+            color: var(--dark-blue); /* Bleu plus foncé au survol */
         }
 
         /* Animation d'entrée */
@@ -99,29 +110,88 @@
                 transform: translateY(0);
             }
         }
+
+        /* Styles pour le bouton de retour à l'accueil (fixe et plus grand) */
+        .back-to-home-link {
+            position: fixed; /* Rendre le bouton fixe */
+            top: 20px; /* Descend de 20px du haut */
+            left: 20px; /* 20px du côté gauche */
+            z-index: 1000; /* Assure qu'il est au-dessus des autres éléments */
+            
+            display: inline-flex;
+            align-items: center;
+            justify-content: center; /* Centrer le contenu horizontalement */
+            
+            background-color: var(--primary-blue); /* Fond bleu */
+            color: #fff; /* Texte blanc */
+            padding: 15px 25px; /* Augmenter le padding pour l'agrandir */
+            border-radius: 50px; /* Bouton ovale / pill shape */
+            text-decoration: none;
+            font-size: 1.2em; /* Taille de police plus grande */
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre pour le faire ressortir */
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .back-to-home-link:hover {
+            background-color: var(--dark-blue); /* Bleu plus foncé au survol */
+            transform: translateY(-3px); /* Léger soulèvement au survol */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Ombre plus prononcée au survol */
+            color: #fff; /* Assure que le texte reste blanc */
+        }
+        .back-to-home-link i {
+            margin-right: 10px; /* Espace entre l'icône et le texte */
+            font-size: 1.5em; /* Agrandir l'icône aussi */
+        }
+
+        /* Styles pour les messages de Django (adaptés de la page d'inscription) */
+        .message-alert {
+            margin-top: 80px; /* Plus de marge pour ne pas être sous le bouton de retour */
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            width: 90%;
+            max-width: 450px; /* Ajusté à la largeur du formulaire de connexion */
+            margin-bottom: 20px; /* Espace en dessous du message */
+        }
+        .message-alert.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message-alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
     </style>
 </head>
 <body>
+    <a href="{% url 'home' %}" class="back-to-home-link">
+        <i class="fas fa-arrow-left"></i> Retour à l'accueil
+    </a>
+    
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message-alert {% if message.tags == 'success' %}success{% else %}error{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
 
     <div class="login-container">
-        
-        {% if messages %}
-   
-        {% for message in messages %}
-            <h2 style="color: red;" class="text-center mt">{{ message }}</h2>
-        {% endfor %}
- 
-{% endif %}
         <h4 class="login-title">Connexion</h4>
         <form method="post">
             {% csrf_token %}
-            <div class="form-group">
+            <div class="form-group mb-3"> {# Utilisation de mb-3 pour Bootstrap 5 #}
                 <label for="email">Adresse e-mail</label>
-                <input type="email" class="form-control" id="email" name="email" placeholder="Votre e-mail">
+                <input type="email" class="form-control" id="email" name="email" placeholder="Votre e-mail" required>
+                <div class="invalid-feedback">Veuillez entrer votre adresse e-mail.</div>
             </div>
-            <div class="form-group">
+            <div class="form-group mb-3"> {# Utilisation de mb-3 pour Bootstrap 5 #}
                 <label for="password">Mot de passe</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Votre mot de passe">
+                <input type="password" class="form-control" id="password" name="password" placeholder="Votre mot de passe" required>
+                <div class="invalid-feedback">Veuillez entrer votre mot de passe.</div>
             </div>
             <button type="submit" class="btn btn-login">Se connecter</button>
         </form>
@@ -130,9 +200,23 @@
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
+    <script>
+        // Validation Bootstrap 5
+        (function () {
+            'use strict';
+            var forms = document.querySelectorAll('form'); // Cible toutes les formes
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
 </body>
 </html>

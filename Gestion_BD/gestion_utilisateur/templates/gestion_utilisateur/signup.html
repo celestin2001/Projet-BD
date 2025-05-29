@@ -7,86 +7,187 @@
     <title>Formulaire d'Inscription</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
     <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
     <style>
+        :root {
+            --primary-blue: #007bff; /* Bleu principal */
+            --light-blue-bg: #e0f2f7; /* Bleu clair pour le fond de la page */
+            --dark-blue: #0056b3; /* Bleu foncé pour les accents et hover */
+            --text-color: #333; /* Couleur de texte par défaut */
+        }
+
         body {
-            background-color: #f8f9fa;
+            background-color: var(--light-blue-bg); /* Fond bleu clair pour toute la page */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh; /* Prend toute la hauteur de la fenêtre */
+            margin: 0;
+            flex-direction: column; /* Permet au contenu de s'organiser en colonne */
+            font-family: Arial, sans-serif; /* Police plus agréable */
+            position: relative; /* Nécessaire pour le positionnement fixe du bouton de retour */
         }
         .form-container {
-            width: 1000px; /* Augmentation de la largeur */
+            width: 90%; /* Adapte la largeur à l'écran */
+            max-width: 600px; /* Largeur maximale pour une seule colonne */
             background: white;
-            padding: 50px;
+            padding: 40px;
             border-radius: 12px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Ombre élégante */
             animation: fadeInUp 0.8s ease-in-out;
+            margin: 20px auto; /* Centre et ajoute une marge */
         }
-        .section_auteur{
-            display: none;
+        .section_auteur {
+            display: none; /* Cache la section auteur par défaut */
         }
         .login-title {
-            font-size: 2.5em;
+            font-size: 2.2em;
             font-weight: bold;
-            color: #28a745; /* Titre vert */
+            color: var(--primary-blue); /* Titre en bleu */
             margin-bottom: 30px;
             text-align: center;
         }
 
-        .btn-login,.btn-login:hover {
-            background-color: #28a745; /* Bouton vert */
+        .btn-submit { /* Nom plus générique pour le bouton de soumission */
+            background-color: var(--primary-blue); /* Bouton en bleu */
             color: #fff;
-            padding: 12px 20px;
+            padding: 12px 25px;
             border: none;
             border-radius: 8px;
             font-size: 1.1em;
             cursor: pointer;
-            width: 100%;
-           
+            width: 100%; 
+            transition: background-color 0.3s ease; /* Transition douce au survol */
+        }
+        .btn-submit:hover {
+            background-color: var(--dark-blue); /* Bleu plus foncé au survol */
+            color: #fff;
         }
 
+        /* Styles pour le bouton de retour à l'accueil (maintenant fixe et plus grand) */
+        .back-to-home-link {
+            position: fixed; /* Rendre le bouton fixe */
+            top: 20px; /* Descend de 20px du haut */
+            left: 20px; /* 20px du côté gauche */
+            z-index: 1000; /* Assure qu'il est au-dessus des autres éléments */
+            
+            display: inline-flex;
+            align-items: center;
+            justify-content: center; /* Centrer le contenu horizontalement */
+            
+            background-color: var(--primary-blue); /* Fond bleu */
+            color: #fff; /* Texte blanc */
+            padding: 15px 25px; /* Augmenter le padding pour l'agrandir */
+            border-radius: 50px; /* Bouton ovale / pill shape */
+            text-decoration: none;
+            font-size: 1.2em; /* Taille de police plus grande */
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Ombre pour le faire ressortir */
+            transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .back-to-home-link:hover {
+            background-color: var(--dark-blue); /* Bleu plus foncé au survol */
+            transform: translateY(-3px); /* Léger soulèvement au survol */
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3); /* Ombre plus prononcée au survol */
+            color: #fff; /* Assure que le texte reste blanc */
+        }
+        .back-to-home-link i {
+            margin-right: 10px; /* Espace entre l'icône et le texte */
+            font-size: 1.5em; /* Agrandir l'icône aussi */
+        }
 
+        /* Styles pour les messages de Django */
+        .message-alert {
+            margin-top: 80px; /* Plus de marge pour ne pas être sous le bouton de retour */
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-weight: bold;
+            width: 90%;
+            max-width: 600px; /* Ajusté à la largeur du formulaire */
+            margin-bottom: 20px; /* Espace en dessous du message */
+        }
+        .message-alert.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message-alert.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Styles pour la photo de profil */
+        .profile-pic-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-pic-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-blue);
+            margin-bottom: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .profile-pic-label {
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        .form-control-file {
+            text-align: center;
+        }
     </style>
 </head>
 <body>
-   
+    <a href="{% url 'home' %}" class="back-to-home-link">
+        <i class="fas fa-arrow-left"></i> Retour à l'accueil
+    </a>
 
-    {% if messages %}
-   
-        {% for message in messages %}
-            <h2 style="color: red;" class="text-center mt">{{ message }}</h2>
-        {% endfor %}
- 
-{% endif %}
+    <div class="container d-flex justify-content-center align-items-center flex-column">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message-alert {% if message.tags == 'success' %}success{% else %}error{% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
 
-  <div class="container d-flex justify-content-center align-items-center vh-100">
-    <div class="form-container">
-        <h2 class="login-title">Inscription</h2>
-        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-            {% csrf_token %}
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Nom d'utilisateur</label>
-                    <input type="text" class="form-control" placeholder="Entrez votre nom d'utilisateur" name="username" required>
+        <div class="form-container">
+            <h2 class="login-title">Inscription</h2>
+            <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="username" class="form-label">Nom d'utilisateur</label>
+                    <input type="text" class="form-control" id="username" placeholder="Entrez votre nom d'utilisateur" name="username" required>
                     <div class="invalid-feedback">Veuillez entrer un nom d'utilisateur.</div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" class="form-control" placeholder="jean.dupont@example.com" name="email" required>
+                
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" placeholder="jean.dupont@example.com" name="email" required>
                     <div class="invalid-feedback">Veuillez entrer un email valide.</div>
                 </div>
-            </div>
+                <div class="mb-3">
+                        <label for="date_de_naissance" class="form-label">Date de naissance</label>
+                        <input type="date" class="form-control" id="date_de_naissance" name="date_de_naissance" required>
+                        <div class="invalid-feedback">Veuillez entrer votre date de naissance.</div>
+                    </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Nom complet</label>
-                    <input type="text" class="form-control" placeholder="Jean Dupont" name="lastname" required>
+                <div class="mb-3">
+                    <label for="lastname" class="form-label">Nom complet</label>
+                    <input type="text" class="form-control" id="lastname" placeholder="Jean Dupont" name="lastname" required>
                     <div class="invalid-feedback">Veuillez entrer votre nom complet.</div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Rôle</label>
-                    <select class="form-select" name="role" id="role" required>
+                
+                <div class="mb-3">
+                    <label for="role" class="form-label">Rôle</label>
+                    <select class="form-select" id="role" name="role" required>
                         <option value="" selected disabled>S'inscrire en tant que</option>
                         {% for valeur, labele in role %}
                         <option value="{{ valeur }}">{{ labele }}</option>
@@ -94,28 +195,22 @@
                     </select>
                     <div class="invalid-feedback">Veuillez sélectionner un rôle.</div>
                 </div>
-            </div>
 
-            <div class="row">
-                <div class="col-md-6 mb-3">
-                    <label class="form-label">Mot de passe</label>
-                    <input type="password" class="form-control" name="password" minlength="6" required>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Mot de passe</label>
+                    <input type="password" class="form-control" id="password" name="password" minlength="6" required>
                     <div class="invalid-feedback">Le mot de passe doit avoir au moins 6 caractères.</div>
                 </div>
-            </div>
 
-            <!-- Section uniquement pour auteur -->
-            <div class="section_auteur">
-                <div class="mb-3">
-                    <label class="form-label">Biographie</label>
-                    <textarea class="form-control" rows="3" placeholder="Parlez-nous de votre parcours..." name="bio"></textarea>
-                </div>
+                <div class="section_auteur">
+                    <div class="mb-3">
+                        <label for="bio" class="form-label">Biographie</label>
+                        <textarea class="form-control" id="bio" rows="3" placeholder="Parlez-nous de votre parcours..." name="bio"></textarea>
+                    </div>
 
-                <div class="row">
-                
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">Pays d'origine</label>
-                        <select class="form-select" name="nationalite" required>
+                    <div class="mb-3">
+                        <label for="nationalite" class="form-label">Pays d'origine</label>
+                        <select class="form-select" id="nationalite" name="nationalite">
                             <option value="" selected disabled>Sélectionnez une option</option>
                             {% for value, label in pays %}
                             <option value="{{ value }}">{{ label }}</option>
@@ -123,58 +218,146 @@
                         </select>
                         <div class="invalid-feedback">Veuillez sélectionner un pays.</div>
                     </div>
+                    
+                    
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Téléphone</label>
+                        <input type="tel" class="form-control" id="phone" placeholder="Ex: +1234567890" name="phone" required>
+                        <div class="invalid-feedback">Veuillez entrer votre numéro de téléphone.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ville" class="form-label">Ville de résidence</label>
+                        <input type="text" class="form-control" id="ville" placeholder="Votre ville" name="ville" required>
+                        <div class="invalid-feedback">Veuillez entrer votre ville de résidence.</div>
+                    </div>
+
+                    <div class="mb-3 profile-pic-container">
+                        <label for="profile_pic" class="form-label profile-pic-label">Photo de profil</label>
+                        <img id="profile_pic_preview" class="profile-pic-preview" src="{% static 'path/to/default_profile_pic.png' %}" alt="Prévisualisation photo de profil">
+                        <input type="file" class="form-control" id="profile_pic" name="profile_pic" accept="image/*">
+                        <div class="invalid-feedback">Veuillez télécharger une photo de profil.</div>
+                    </div>
                 </div>
-            </div>
 
-            <button type="submit" class="btn btn-login">Se connecter</button>
+                <button type="submit" class="btn btn-submit">S'inscrire</button>
 
-            <p class="text-center mt-3">Déjà inscrit ? <a href="{% url 'signin' %}">S'inscrire</a></p>
-            <p class="text-center mt-3"><a href="{% url 'home' %}">Retour</a></p>
-        </form>
+                <p class="text-center mt-3">Déjà inscrit ? <a href="{% url 'signin' %}" class="text-decoration-none">Se connecter</a></p>
+            </form>
+        </div>
     </div>
-</div>
 
-{% include "gestion_content/footer.html" %}
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
+
+    <script>
+        var roleSelect = document.getElementById("role");
+        var auteurSection = document.querySelector(".section_auteur");
+        var nationaliteSelect = document.getElementById("nationalite");
+        var bioTextarea = document.getElementById("bio");
+        var dateNaissanceInput = document.getElementById("date_de_naissance"); // ID corrigé
+        var phoneInput = document.getElementById("phone"); // ID corrigé
+        var villeInput = document.getElementById("ville"); // ID corrigé
+        var profilePicInput = document.getElementById("profile_pic"); // ID corrigé
+        var profilePicPreview = document.getElementById("profile_pic_preview");
+
+        // Assurez-vous que le chemin par défaut existe ou mettez une image générique
+        // par exemple, une icône d'utilisateur si vous n'avez pas de default_profile_pic.png
+        // REMPLACEZ 'path/to/default_profile_pic.png' par votre vrai chemin !
+        profilePicPreview.src = "{% static 'path/to/default_profile_pic.png' %}"; 
 
 
-   
-    
-<!-- Ajout des icônes FontAwesome -->
-<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+        // Fonction pour gérer la visibilité et la validation des champs auteur
+        function toggleAuteurFields() {
+            if (roleSelect.value === "auteur") {
+                auteurSection.style.display = "block";
+                nationaliteSelect.setAttribute("required", "true");
+                bioTextarea.setAttribute("required", "true");
+                dateNaissanceInput.setAttribute("required", "true");
+                phoneInput.setAttribute("required", "true");
+                villeInput.setAttribute("required", "true");
+                profilePicInput.setAttribute("required", "true"); // Rendre la photo obligatoire
+            } else {
+                auteurSection.style.display = "none";
+                nationaliteSelect.removeAttribute("required");
+                bioTextarea.removeAttribute("required");
+                dateNaissanceInput.removeAttribute("required");
+                phoneInput.removeAttribute("required");
+                villeInput.removeAttribute("required");
+                profilePicInput.removeAttribute("required");
 
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
-<script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
-
-<script>
-var role_selecte = document.getElementById("role")
-var autre_champ = document.querySelector(".section_auteur")
-role_selecte.addEventListener("change",function(){
-    var role = this.value;
-    if(role === "auteur"){
-      autre_champ.classList.remove("section_auteur")
-    }
-    if(role ==='lecteur'){
-        autre_champ.classList.add("section_auteur")
-    }
-})
-
-(function () {
-    'use strict';
-    var forms = document.querySelectorAll('.needs-validation');
-    Array.prototype.slice.call(forms).forEach(function (form) {
-        form.addEventListener('submit', function (event) {
-            if (!form.checkValidity()) {
-                event.preventDefault();
-                event.stopPropagation();
+                // Réinitialiser les valeurs des champs quand ils sont cachés pour éviter l'envoi de données vides
+                nationaliteSelect.value = ""; 
+                bioTextarea.value = "";
+                dateNaissanceInput.value = ""; // AJOUTÉ : Réinitialisation du champ date
+                phoneInput.value = ""; // AJOUTÉ : Réinitialisation du champ téléphone
+                villeInput.value = ""; // AJOUTÉ : Réinitialisation du champ ville
+                profilePicInput.value = ""; // Réinitialise le champ de fichier
+                profilePicPreview.src = "{% static 'path/to/default_profile_pic.png' %}"; // Réinitialise l'aperçu
             }
-            form.classList.add('was-validated');
-        }, false);
-    });
-})();
-</script>
+        }
 
+        // Fonction pour la prévisualisation de la photo de profil
+        profilePicInput.addEventListener("change", function () {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    profilePicPreview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            } else {
+                profilePicPreview.src = "{% static 'path/to/default_profile_pic.png' %}"; // Réinitialise si aucun fichier
+            }
+        });
+
+        // Écouteur d'événement pour le changement de rôle
+        roleSelect.addEventListener("change", toggleAuteurFields);
+
+        // Appeler la fonction au chargement de la page pour gérer l'état initial
+        document.addEventListener('DOMContentLoaded', toggleAuteurFields);
+
+
+        // Validation Bootstrap personnalisée
+        (function () {
+            'use strict';
+            var forms = document.querySelectorAll('.needs-validation');
+            Array.prototype.slice.call(forms).forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    // Ciblez spécifiquement les champs "required" dans la section auteur si elle est visible
+                    if (roleSelect.value === "auteur") {
+                        // Vérifiez explicitement si les champs de la section auteur sont valides
+                        const auteurRequiredFields = [
+                            nationaliteSelect,
+                            bioTextarea,
+                            dateNaissanceInput,
+                            phoneInput,
+                            villeInput,
+                            profilePicInput
+                        ];
+                        let allAuteurFieldsValid = true;
+                        auteurRequiredFields.forEach(field => {
+                            if (field.hasAttribute('required') && !field.checkValidity()) {
+                                allAuteurFieldsValid = false;
+                            }
+                        });
+
+                        if (!form.checkValidity() || !allAuteurFieldsValid) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                    } else { // Si ce n'est pas un auteur, vérifiez juste la validité du formulaire général
+                        if (!form.checkValidity()) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        })();
+    </script>
 </body>
 </html>

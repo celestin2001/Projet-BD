@@ -5,7 +5,11 @@ from django.contrib.auth.models import AbstractUser
 class Utilisateur(AbstractUser):
     Role_choice = [
         ('auteur','auteur'),
-        ('lecteur','lecteur')
+        ('editeur','editeur'),
+        ('libraire','libraire'),
+        ('organisateur_Evènement','organisateur_Evènement'),  
+        ('autre','autre'),
+       
         
     ]
   
@@ -30,7 +34,7 @@ class Utilisateur(AbstractUser):
     ]
 
 
-    role = models.CharField(max_length=120, choices=Role_choice,default='lecteur')
+    role = models.CharField(max_length=120, choices=Role_choice,default='auteur')
    
     bio = models.TextField()
     email = models.EmailField(unique=True)
@@ -42,6 +46,9 @@ class Utilisateur(AbstractUser):
     pays = models.CharField(max_length=100, choices=PAYS_AFRICAINS, default="Cameroun",null=True)
     valid_auteur = models.BooleanField(default=False)
     vedette = models.BooleanField(default=False)
+    date_naissance = models.DateField(null=True, blank=True)
+    telephone = models.CharField(max_length=20, null=True, blank=True)
+    ville_residence = models.CharField(max_length=100, null=True, blank=True)
 
     USERNAME_FIELD = 'email'  #  l'email pour l'authentification
     REQUIRED_FIELDS = ['username']
@@ -83,6 +90,7 @@ class BlogPost(models.Model):
     author = models.ForeignKey(Utilisateur, on_delete=models.SET_NULL, null=True, related_name='blog_posts')
     created_at = models.DateTimeField(auto_now_add=True)
     media = models.ImageField(upload_to='media/',blank=True,null=True)
+    url_actu = models.URLField(null=True,blank=True)
     valid = models.BooleanField(default=False)
 
     def __str__(self):

@@ -19,8 +19,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 def Home(request):
-   actualite = BlogPost.objects.filter(valid=True).all()
+   actualite = BlogPost.objects.filter(valid=True).all()[:2]
    user_authenticate = request.user.is_authenticated
+   
    usere = request.user
 #    try:
 #     profil = Utilisateur.objects.get(id=usere.id)
@@ -51,48 +52,26 @@ def detail_actualite(request,my_id):
     detail = get_object_or_404(BlogPost,id=my_id)
     return render(request,'gestion_utilisateur/detail_actualite.html',{"detail":detail})
 
-def Evenements(request):
-   user_authenticate = request.user.is_authenticated
-   evenements = Evenement.objects.all()
-   usere = request.user
-   try:
-    profil = Utilisateur.objects.get(id=usere.id)
-   except Utilisateur.DoesNotExist:
-    profil = None
-  
+def evenements(request):
+    evenements = Evenement.objects.all()
+    print(evenements)
+    return render(request, 'gestion_utilisateur/evenement.html',{"evenements":evenements})
 
-   today = timezone.localdate()  # Date du jour
-   start_week = today - timedelta(days=today.weekday())  # Début de la semaine
-   end_week = start_week + timedelta(days=6)  # Fin de la semaine
-   start_next_week = end_week + timedelta(days=1)  # Début de la semaine prochaine
-   end_next_week = start_next_week + timedelta(days=6)  # Fin de la semaine prochaine
-   start_month = today.replace(day=1)  # Début du mois
-   start_next_month = (start_month + timedelta(days=32)).replace(day=1)  # Début du mois prochain
-   end_next_month = (start_next_month + timedelta(days=31)).replace(day=1) - timedelta(days=1)  # Fin du mois suivant
-   start_year = today.replace(month=1, day=1)  # Début de l'année en cours
-   end_year = today.replace(month=12, day=31) 
-
-   filter_type = request.GET.get("filter", "tous")
-
-   if filter_type == "this_week":
-        events = Evenement.objects.filter(date_evenement__range=[start_week, end_week])
-   if filter_type == "tous":
-        events = Evenement.objects.all()
-   elif filter_type == "next_week":
-        events = Evenement.objects.filter(date_evenement__range=[start_next_week, end_next_week])
-   elif filter_type == "this_year":  # Ajout du filtre par année
-        events = Evenement.objects.filter(date_evenement__range=[start_year, end_year])
-   elif filter_type == "this_month":
-        events = Evenement.objects.filter(date_evenement__range=[start_month, start_next_month - timedelta(days=1)])
-   elif filter_type == "next_month":
-        events = Evenement.objects.filter(date_evenement__range=[start_next_month, end_next_month])
-   
-       
-   if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        events_data = list(events.values('id', 'title', 'date', 'description'))
-        return JsonResponse({"events": events_data})
-
-   return render(request, "gestion_utilisateur/evenement.html", {"events": events, "filter_type": filter_type,'user_authenticate':user_authenticate,'profil':profil})
+# def evenements_json(request):
+#     evenements = Evenement.objects.all()
+#     events_list = []
+#     for evenement in evenements:
+#         event = {
+#             'title': evenement.titre_evenement,
+#             'start': evenement.date_evenement.isoformat(),
+#             'end': evenement.date_fin_evenement.isoformat() if evenement.date_fin_evenement else evenement.date_evenement.isoformat(),
+#             'description': evenement.description,
+#             'lieu': evenement.lieu_evenement,
+#             'heure': evenement.heure_evenement.strftime('%H:%M') if evenement.heure_evenement else None,
+#             'className': 'evenement-bleu',
+#         }
+#         events_list.append(event)
+#     return JsonResponse(events_list, safe=False)
 
 def detailEvenement(request,my_id):
     
@@ -111,10 +90,11 @@ def signup(request):
         # firstname = request.POST.get('firsname')
         lastname = request.POST.get('lastname')
         password = request.POST.get('password')
-        # password_confirme = request.POST.get('password_confirme')
+        date_naissance = request.POST.get('date_naissance')
+        ville_residence = request.POST.get('ville_residence')
         bio = request.POST.get('bio')
-        profil = request.FILES.get('profil')
-        # role = request.POST.get('role')
+        profil_picture = request.FILES.get('profile_pic')
+        telephone = request.POST.get('telephone')
         pays = request.POST.get('nationalite')
         # genre = request.POST.getlist('genre')
         user_exist = Utilisateur.objects.filter(username=username)
@@ -147,11 +127,11 @@ def signup(request):
             # first_name=firstname,
             last_name=lastname,
             bio = bio,
-            profil_picture = profil,
-            # password_confirme=password_confirme,
+            profil_picture = profil_picture,
             token = token,
-            
-            
+            date_naissance = date_naissance,
+            ville_residence = ville_residence,
+            telephone = telephone,
             pays = pays,
             
             # genres = genre
