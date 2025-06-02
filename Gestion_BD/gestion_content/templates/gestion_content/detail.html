@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="fr">
@@ -6,27 +5,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auteur-BD</title>
-   
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
     <style>
-        /* 111111111111111111 */
         :root {
-        --primary-blue: #007bff; /* Bleu principal */
-        --light-blue: #e3f2fd; /* Bleu clair pour les fonds/bordures */
-        --dark-blue: #0056b3; /* Bleu foncé pour les accents */
-        --text-color: #333; /* Couleur de texte par défaut */
-        --link-color: var(--primary-blue); /* Couleur des liens */
-        --link-hover-color: var(--dark-blue); /* Couleur des liens au survol */
-        --filter-bg: var(--light-blue); /* Fond des filtres */
-        --bs-primary: #007bff; /* Couleur bleue Bootstrap par défaut. Vous pouvez changer cette valeur pour votre bleu spécifique. */
-        --header-bg-color: #007bff; /* Couleur bleue pour le menu principal */
-        --shadow-color: rgba(0, 0, 0, 0.1); /* Couleur d'ombre subtile */
-    }
+            --primary-blue: #007bff; /* Bleu principal */
+            --light-blue: #e3f2fd; /* Bleu clair pour les fonds/bordures */
+            --dark-blue: #0056b3; /* Bleu foncé pour les accents */
+            --text-color: #333; /* Couleur de texte par défaut */
+            --link-color: var(--primary-blue); /* Couleur des liens */
+            --link-hover-color: var(--dark-blue); /* Couleur des liens au survol */
+            --filter-bg: var(--light-blue); /* Fond des filtres */
+            --bs-primary: #007bff; /* Couleur bleue Bootstrap par défaut. Vous pouvez changer cette valeur pour votre bleu spécifique. */
+            --header-bg-color: #007bff; /* Couleur bleue pour le menu principal */
+            --shadow-color: rgba(0, 0, 0, 0.1); /* Couleur d'ombre subtile */
+        }
         .custom-card {
             border: 1px solid #ddd; /* Bordure fine et élégante */
             border-radius: 15px; /* Coins arrondis */
@@ -35,8 +31,6 @@
             overflow: hidden;
             width: 22rem;
         }
-
-        
 
         /* Style de l'image */
         .custom-card img {
@@ -72,11 +66,8 @@
         .btn-custom:hover {
             background: #f1f1f1;
         }
-              /* FIN 111111111111111111 */
-/* 
-              22222222222222222222 */
-
-              body {
+        
+        body {
             background-color: #f8f9fa;
         }
 
@@ -122,27 +113,30 @@
             font-size: 14px;
         }
 
-        /* FIN 222222222222222222 */
-
-        /* 333333333333333333 */
-
-  /* Conteneur principal */
-  .bibliographie-section {
+        /* Conteneur principal */
+        .bibliographie-section {
             margin-top: 30px;
         }
 
-        /* Style des cartes */
-        /* .bibliographie-card {
+        .bibliographie-card {
             border: 1px solid rgba(0, 0, 0, 0.1);
             border-radius: 12px;
             padding: 15px;
-            display: flex;
+            display: flex; /* Use flexbox for alignment */
             align-items: center;
             gap: 10px;
             background: white;
             transition: 0.3s;
             height: 100%;
-        } */
+        }
+
+        .bibliographie-card img {
+            width: 100px; /* Set a fixed width for the image in the bib card */
+            height: 150px; /* Adjust height proportionally */
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
 
         .bibliographie-card:hover {
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -153,25 +147,21 @@
             color: #666;
         }
 
-        /* .bibliographie-card .title {
+        .bibliographie-card .title {
             font-weight: bold;
             font-size: 16px;
-        } */
+        }
 
         .bibliographie-card .year {
             color: #888;
             font-size: 14px;
         }
-/* 333333333333333333 */
-
-
-
 
         /* css formulaire de note */
-          .rating {
+        .rating {
             display: flex;
             flex-direction: row-reverse;
-            justify-content: start;
+            justify-content: start; /* Align stars to the left */
         }
         .rating input {
             display: none;
@@ -204,378 +194,353 @@
         .submit-btn:hover {
             background-color: #038110e2;
         }
-        .form-container,.avis {
-    border: 1px solid #ddd; /* Bordure grise */
-    border-radius: 8px; /* Coins arrondis */
-    padding: 16px; /* Espacement interne */
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Légère ombre */
-}
+        .form-container, .avis {
+            border: 1px solid #ddd; /* Bordure grise */
+            border-radius: 8px; /* Coins arrondis */
+            padding: 16px; /* Espacement interne */
+            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1); /* Légère ombre */
+        }
 
-.profile-card,.avis {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-}
+        .profile-card, .avis {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
 
-.section-title {
-    border-bottom: 2px solid #c00;
-    padding-bottom: 5px;
-    font-weight: bold;
-    margin-top: 20px;
-}
-.icon-text {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-.icon-text i {
-    color: #007bff;
-}
+        .section-title {
+            border-bottom: 2px solid #c00;
+            padding-bottom: 5px;
+            font-weight: bold;
+            margin-top: 20px;
+        }
+        .icon-text {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .icon-text i {
+            color: var(--primary-blue); /* Using the primary blue variable */
+        }
+
+        header.bg-light {
+            background-color: #fff !important; /* Fond blanc pur pour plus de contraste */
+            border-bottom: 1px solid var(--light-blue); /* Bordure inférieure discrète */
+        }
+
+        header .navbar-brand img {
+            background-color: transparent !important; /* Logo sans fond blanc */
+            width: auto; /* Allow width to scale */
+            height: 150px; /* Default height */
+            max-height: 150px; /* Ensure it doesn't get too tall */
+            object-fit: contain; /* Ensure the image fits within the bounds */
+        }
+
+        /* Adjust logo size for smaller screens */
+        @media (max-width: 767.98px) { /* For small screens (less than md breakpoint) */
+            header .navbar-brand img {
+                height: 80px; /* Smaller height for mobile */
+                max-height: 80px;
+            }
+        }
 
 
-header.bg-light {
-    background-color: #fff !important; /* Fond blanc pur pour plus de contraste */
-    border-bottom: 1px solid var(--light-blue); /* Bordure inférieure discrète */
-    /* padding-top: 1rem;
-    padding-bottom: 1rem; */
-}
+        header .btn-outline-primary {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
 
-header .navbar-brand img {
-    background-color: transparent !important; /* Logo sans fond blanc */
-     /* Ajuster la hauteur du logo si nécessaire */
-}
+        header .btn-outline-primary:hover {
+            background-color: var(--primary-blue);
+            color: white;
+        }
 
-header .btn-outline-primary {
-    border-color: var(--primary-blue);
-    color: var(--primary-blue);
-}
+        /* Navigation affinée */
+        .navbar-dark {
+            background-color: #007bff;
+        }
 
-header .btn-outline-primary:hover {
-    background-color: var(--primary-blue);
-    color: white;
-}
+        .navbar-dark .navbar-nav .nav-item {
+            border-right: 1px solid rgba(255, 255, 255, 0.2); /* Séparateur plus subtil */
+        }
 
-/* Navigation affinée */
-.navbar-dark {
-    background-color: #007bff;
-}
+        .navbar-dark .navbar-nav .nav-item:last-child {
+            border-right: none;
+        }
 
-.navbar-dark .navbar-nav .nav-item {
-  border-right: 1px solid white; /* Séparateur plus subtil */
-}
-
-.navbar-dark .navbar-nav .nav-item:last-child {
-    border-right: none;
-}
-
-.navbar-dark .navbar-nav .nav-link {
-   color: white !important;
-          
+        .navbar-dark .navbar-nav .nav-link {
+            color: white !important;
             font-weight: 600;
-    font-family: 'Times New Roman', Times, serif;* Empêche le texte de passer à la ligne */
-    /* Affiche "..." pour indiquer le texte caché */
-}
+            font-family: 'Times New Roman', Times, serif;
+            white-space: nowrap; /* Prevent text from wrapping */
+            overflow: hidden; /* Hide overflowing text */
+            text-overflow: ellipsis; /* Display "..." for hidden text */
+        }
 
-.navbar-dark .navbar-nav .nav-link:hover,
-.navbar-dark .navbar-nav .nav-link:focus,
-.navbar-dark .navbar-nav .nav-link.active {
-    color: white !important;
-}
-.custom-footer {
-background-color: #007bff;; /* Utilise la variable pour le bleu principal */
-    color: #fff; /* Texte blanc pour contraste */
-    padding: 30px 0;
-    width: 100%;
-    animation: slideUp 1s ease-out both;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 0.9rem;
-    font-family: sans-serif;
-}
+        .navbar-dark .navbar-nav .nav-link:hover,
+        .navbar-dark .navbar-nav .nav-link:focus,
+        .navbar-dark .navbar-nav .nav-link.active {
+            color: white !important;
+        }
+        .custom-footer {
+            background-color: var(--primary-blue); /* Utilise la variable pour le bleu principal */
+            color: #fff; /* Texte blanc pour contraste */
+            padding: 30px 0;
+            width: 100%;
+            animation: slideUp 1s ease-out both;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+            font-family: sans-serif;
+        }
 
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
 
-.logo-left {
-    width: 80px; /* Reduced logo size */
-    margin-bottom: 10px;
-    filter: grayscale(70%);
-    transition: filter 0.3s ease, transform 0.2s ease;
-}
+        .logo-left {
+            width: 80px; /* Reduced logo size */
+            margin-bottom: 10px;
+            filter: grayscale(70%);
+            transition: filter 0.3s ease, transform 0.2s ease;
+        }
 
-.logo-left:hover {
-    filter: grayscale(0%);
-    transform: scale(1.05);
-}
+        .logo-left:hover {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
 
-.social-icon-link {
-    color: #555;
-    text-decoration: none;
-    margin: 0 5px;
-    font-size: 1.2rem; /* Slightly larger social icons */
-    transition: color 0.3s ease, transform 0.2s ease;
-}
+        .social-icon-link {
+            color: #555;
+            text-decoration: none;
+            margin: 0 5px;
+            font-size: 1.2rem; /* Slightly larger social icons */
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
 
-.social-icon-link:hover {
-    color: var(--primary-blue); /* Use your primary blue */
-    transform: scale(1.1);
-}
+        .social-icon-link:hover {
+            color: var(--primary-blue); /* Use your primary blue */
+            transform: scale(1.1);
+        }
 
-.social-icon {
-    /* Styles for Font Awesome icons */
-}
+        .social-icon {
+            /* Styles for Font Awesome icons */
+        }
 
-.wordpress-link {
-    color: #555;
-    text-decoration: none;
-    margin: 0 5px;
-    font-size: 1.2rem; /* Slightly larger WordPress icons */
-    transition: color 0.3s ease, transform 0.2s ease;
-}
+        .wordpress-link {
+            color: #555;
+            text-decoration: none;
+            margin: 0 5px;
+            font-size: 1.2rem; /* Slightly larger WordPress icons */
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
 
-.wordpress-link:hover {
-    color: #21759b; /* WordPress blue */
-    transform: scale(1.1);
-}
+        .wordpress-link:hover {
+            color: #21759b; /* WordPress blue */
+            transform: scale(1.1);
+        }
 
-.logo-wordpress {
-    /* Styles for Font Awesome WordPress icons */
-}
+        .logo-wordpress {
+            /* Styles for Font Awesome WordPress icons */
+        }
 
-.icon-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 0.5rem; /* Reduced margin */
-}
+        .icon-row {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 0.5rem; /* Reduced margin */
+        }
 
-.link-bar {
-    font-size: 0.75rem; /* Smaller link bar text */
-}
+        .link-bar {
+            font-size: 0.75rem; /* Smaller link bar text */
+        }
 
-.link-bar a {
-    color: #555;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
+        .link-bar a {
+            color: #fff; /* Changed to white for better contrast on blue footer */
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
 
-.link-bar a:hover {
-    color: var(--primary-blue);
-}
+        .link-bar a:hover {
+            color: var(--light-blue); /* Lighter blue on hover */
+        }
 
-.logo-center {
-    max-width: 100px; /* Reduced center logo size */
-    height: auto;
-    filter: grayscale(70%);
-    transition: filter 0.3s ease, transform 0.2s ease;
-}
+        .logo-center {
+            max-width: 100px; /* Reduced center logo size */
+            height: auto;
+            filter: grayscale(70%);
+            transition: filter 0.3s ease, transform 0.2s ease;
+        }
 
-.logo-center:hover {
-    filter: grayscale(0%);
-    transform: scale(1.05);
-}
+        .logo-center:hover {
+            filter: grayscale(0%);
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
-    
-       <!-- Navbar -->
-       
-   
-   
-    <hr><hr><hr>
-    <!-- recherche avance -->
-    
 
-    <!-- fin recherche avance -->
-
-    
-   
     <div class="container mt-5">
-        <header class="bg-light mt-2 fixed-top"data-aos="fade-down" data-aos-duration="1000">
+        <header class="bg-light mt-2" data-aos="fade-down" data-aos-duration="1000">
             <div class="container">
                 <div class="row align-items-center">
                     <div class="col-md-3">
                         <a class="navbar-brand" href="#">
-                            <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="" style="background-color: white;width: auto; height: 150px;">
+                            <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="img-fluid" style="background-color: white;">
                         </a>
                     </div>
                     <div class="col-md-9 d-flex justify-content-end align-items-center">
-                        <div class="d-none d-md-block">
+                        <div>
                             <a href="#" class="btn btn-outline-primary btn-sm me-2" style="font-weight: 600">Donateurs</a>
-                 {% if user_authenticate %}
-                                             <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm" style="font-weight: 600;
-">Se deconnecter</a>
-{% else %}
-                            <a href="{% url "signup" %}" class="btn btn-primary btn-sm me-2" style="font-weight: 600;
-    font-family: 'Times New Roman', Times, serif;">S'inscrire</a>
-                            <a href="{% url "signin" %}" class="btn btn-primary btn-sm" style="font-weight: 600;
-    font-family: 'Times New Roman', Times, serif;">Se connecter</a>
-                 {% endif %}
-
+                            {% if user_authenticate %}
+                                <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se déconnecter</a>
+                            {% else %}
+                                <a href="{% url "signup" %}" class="btn btn-primary btn-sm me-2" style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">S'inscrire</a>
+                                <a href="{% url "signin" %}" class="btn btn-primary btn-sm" style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">Se connecter</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
             </div>
         </header>
 
-       <nav class="navbar navbar-expand-lg navbar-dark fixed-top" data-aos="fade-down" data-aos-delay="200">
-    <div class="container">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="mainNav">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item">
-                    <a class="nav-link active" href="{% url 'home' %}">Accueil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'evenement' %}">Calendrier des événements du continent</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Annuaire des librairies BD du continent</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'auteur' %}">Auteurs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">BDthèque</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">Webtoon</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">À propos</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-      <div class="section-green">
-        <div class="profile-card mx-auto p-4">
-            <h4 class="fw-bold section-title">Découvrez {{auteur.username}}</h4>
-            
-            <div class="row">
-                <div class="col-md-4 text-center">
-                    {% if auteur.profil_picture %}
-                    <img src="{{auteur.profil_picture.url}}" class="d-block w-100" alt="Nature">
-                    {% else %}
-                    <img src="{% static "gestion_content/images/prof.png" %}" class="d-block w-100" alt="Nature">
-                    {% endif %}
-                </div>
-                <div class="col-md-8">
-                    <div class="mb-2 icon-text">
-                        <i class="bi bi-person-circle"></i> <span>{{auteur.role}}</span>
-                    </div>
-                    <div class="mb-2 icon-text">
-                        <i class="bi bi-flag-fill"></i> <span>{{auteur.get_pays_display}}</span>
-                    </div>
-                    <div class="mb-2 icon-text">
-                        <i class="bi bi-pencil-fill"></i> <span>12 ans d'expériences</span>
-                    </div>
-                    <p>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-                       {{auteur.bio}}
-                    </p>
-                    <!-- <div class="mt-3">
-                        <a href="#" class="text-danger text-decoration-none me-3">
-                            <i class="bi bi-globe"></i> madutabd.com
-                        </a>
-                        <a href="#" class="text-danger text-decoration-none">
-                            <i class="bi bi-facebook"></i> Facebook
-                        </a>
-                    </div> -->
+        <nav class="navbar navbar-expand-lg navbar-dark" data-aos="fade-down" data-aos-delay="200">
+            <div class="container">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="{% url "home" %}">Accueil</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "evenement" %}">Calendrier des événements du continent</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Annuaire des librairies BD du continent</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url "auteur" %}">Auteurs</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">BDthèque</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Webtoon</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">A propos</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
-    <!-- Bouton pour ouvrir la modale -->
-     {% if auteur %}
-<div class="text-end mb-3">
-<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajouterOeuvreModal">
-<i class="bi bi-plus-circle me-2"></i> Ajouter une œuvre
-</button>
-</div>
-{% endif %}
-<!-- Modale pour ajouter une œuvre -->
-<div class="modal fade" id="ajouterOeuvreModal" tabindex="-1" aria-labelledby="ajouterOeuvreModalLabel" aria-hidden="true">
-<div class="modal-dialog modal-lg">
-<div class="modal-content">
- <div class="modal-header bg-primary text-white">
- <h5 class="modal-title" id="ajouterOeuvreModalLabel">Ajouter une œuvre</h5>
-<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
- </div>
- # formulaire pour ajouter une
- <form method="POST" enctype="multipart/form-data">
- {% csrf_token %}
- <div class="modal-body">
- <div class="mb-3">
- <label for="titre" class="form-label">Titre de l’œuvre</label>
- <input type="text" class="form-control" id="titre" name="titre" required>
-</div>
- <div class="mb-3">
- <label for="annee" class="form-label">Année</label>
- <input type="date" class="form-control" id="annee" name="annee" required>
- </div>
- <div class="mb-3">
- <label for="description" class="form-label">Description</label>
- <textarea class="form-control" id="description" name="description" rows="4"></textarea>
- </div>
- <div class="mb-3">
- <label for="image" class="form-label">Image de l’œuvre</label>
- <input class="form-control" type="file" id="image" name="image">
- </div>
- </div>
- <div class="modal-footer">
- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
- <button type="submit" class="btn btn-success">Enregistrer</button>
-</div>
-<input type="hidden" name="form_type" value="ajout_oeuvre">
+        </nav>
 
-</form>
-</div>
- </div>
-</div>
+        <div class="section-green">
+            <div class="profile-card mx-auto p-4">
+                <h4 class="fw-bold section-title">Découvrez {{auteur.username}}</h4>
 
-            <h5 class="fw-bold section-title mt-4">Œuvres</h5>
-            <div class="row g-4 mt-3">
-                <!-- Carte 1 -->
-                {% for oeuvre in oeuvres %}
-                    <div class="col-lg-4 col-md-6">
-                        <div class="bibliographie-card">
-                        <img src="{{oeuvre.cover_image.url}}" class="d-block w-50" alt="Nature">  
-                            <div>
-                                <div class="title"><strong>{{ oeuvre.title }} </strong>| {{ oeuvre.publication_date }}</div>
-                                
+                <div class="row">
+                    <div class="col-md-4 text-center">
+                        {% if auteur.profil_picture %}
+                        <img src="{{auteur.profil_picture.url}}" class="d-block w-100" alt="Profile Picture">
+                        {% else %}
+                        <img src="{% static "gestion_content/images/prof.png" %}" class="d-block w-100" alt="Default Profile Picture">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="mb-2 icon-text">
+                            <i class="bi bi-person-circle"></i> <span>{{auteur.role}}</span>
+                        </div>
+                        <div class="mb-2 icon-text">
+                            <i class="bi bi-flag-fill"></i> <span>{{auteur.get_pays_display}}</span>
+                        </div>
+
+                        <p>{{auteur.bio}}</p>
+                        </div>
+                </div>
+                {% if user_authenticate %}
+                <div class="text-end mb-3">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajouterOeuvreModal">
+                        <i class="bi bi-plus-circle me-2"></i> Ajouter une œuvre
+                    </button>
+                </div>
+                {% endif %}
+
+                <div class="modal fade" id="ajouterOeuvreModal" tabindex="-1" aria-labelledby="ajouterOeuvreModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary text-white">
+                                <h5 class="modal-title" id="ajouterOeuvreModalLabel">Ajouter une œuvre</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
+                            <form method="POST" enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="titre" class="form-label">Titre de l’œuvre</label>
+                                        <input type="text" class="form-control" id="titre" name="titre" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="annee" class="form-label">Année</label>
+                                        <input type="date" class="form-control" id="annee" name="annee" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description</label>
+                                        <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="image" class="form-label">Image de l’œuvre</label>
+                                        <input class="form-control" type="file" id="image" name="image">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                                    <button type="submit" class="btn btn-success">Enregistrer</button>
+                                </div>
+                                <input type="hidden" name="form_type" value="ajout_oeuvre">
+                            </form>
                         </div>
                     </div>
-                {% empty %}
-                    <p>Aucune œuvre trouvée.</p>
-                {% endfor %}
+                </div>
 
-                            
+                <h5 class="fw-bold section-title mt-4">Œuvres</h5>
+                <div class="row g-4 mt-3">
+                    {% for oeuvre in oeuvres %}
+                        <div class="col-lg-4 col-md-6">
+                            <div class="bibliographie-card">
+                                <img src="{{oeuvre.cover_image.url}}" alt="{{ oeuvre.title }} Cover">
+                                <div>
+                                    <div class="title"><strong>{{ oeuvre.title }}</strong> | {{ oeuvre.publication_date }}</div>
+                                    <div class="description">{{ oeuvre.description|truncatechars:100 }}</div> {# Added description display #}
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p>Aucune œuvre trouvée.</p>
+                    {% endfor %}
+                </div>
             </div>
         </div>
-    </div>
+
         <div class="container mb-4 avis">
             <h3 class="fw-bold">Avis des lecteurs</h3>
-        
-        
-            <!-- Formulaire de notation -->
-             {% if user_authenticate %}
+
+            {% if user_authenticate %}
             <form method="post" class="mb-4 form-container">
                 {% csrf_token %}
                 <div class="mb-3">
                     <label class="form-label">Votre avis</label>
                     <textarea name="comment" class="form-control" placeholder="Donnez votre avis..." required></textarea>
                 </div>
-            
+
                 <div class="mb-3">
                     <label class="form-label">Note</label>
                     <div class="rating">
@@ -586,121 +551,110 @@ background-color: #007bff;; /* Utilise la variable pour le bleu principal */
                         <input type="radio" name="rating" id="star1" value="1"><label for="star1" class="fas fa-star"></label>
                     </div>
                 </div>
-            
+
                 <button type="submit" class="submit-btn">Publier</button>
                 <input type="hidden" name="form_type" value="notation">
-
             </form>
             {% endif %}
-            <!-- Un avis déjà publié -->
+
             <div class="review p-3 avis">
-                <div class="">
-                <!-- <strong>Michel Dupont</strong> -->
                 {% for notation in notations %}
-                <div class="stars">
+                <div class="mb-3">
                     <div class="d-flex justify-content-between">
-                    <strong>{{ notation.user.username }}</strong>
-                    <p>
-                        {% for i in "12345"|make_list %}
-                            {% if forloop.counter <= notation.rating %}
-                                <i class="fas fa-star" style="color:#FFD700;"></i>
-                            {% else %}
-                                <i class="far fa-star"></i>
-                            {% endif %}
-                        {% endfor %}
-                    </p>
-                </div>
+                        <strong>{{ notation.user.username }}</strong>
+                        <p>
+                            {% for i in "12345"|make_list %}
+                                {% if forloop.counter <= notation.rating %}
+                                    <i class="fas fa-star" style="color:#FFD700;"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </p>
+                    </div>
                     <p>{{ notation.comment }}</p>
                     <small>Publié le {{ notation.created_at|date:"d M Y" }}</small>
                 </div>
-            {% empty %}
-                <p>Aucun avis pour le moment.</p>
-            {% endfor %}
-            <!-- </div>
-                <p>Un artiste extraordinaire qui a révolutionné la bande dessinée. Ses œuvres sont intemporelles.</p>
-                <small>Publié le 12 mars 2024</small>
-            </div> -->
-        </div>
-                </div>
+                {% empty %}
+                    <p>Aucun avis pour le moment.</p>
+                {% endfor %}
             </div>
         </div>
-        
     </div>
 
-  <footer class="custom-footer mt-4" style="background-color: #007bff;  color: #fff; /* Texte blanc pour contraste */
-    padding: 30px 0;
-    width: 100%;
-    height: 100%;
-    animation: slideUp 1s ease-out both;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 0.9rem;
-    font-family: sans-serif;">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-4 text-center mb-4 mb-md-0">
-                <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left">
+    <footer class="custom-footer mt-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left">
 
-                <div class="icon-row my-3">
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-youtube social-icon"></i></a>
+                    <div class="icon-row my-3">
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square social-icon"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram social-icon"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok social-icon"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link social-icon"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-youtube social-icon"></i></a>
+                    </div>
+
+                    <div class="icon-row">
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress logo-wordpress"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress logo-wordpress"></i></a>
+                    </div>
+
+                    <div class="mt-3">
+                        <div class="link-bar">
+                            <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a> / <a href="#" target="_blank" rel="noopener noreferrer"><span class="text-decoration-underline">insta</span></a> / <a href="#" target="_blank" rel="noopener noreferrer">Tik Tok</a> / <a href="#" target="_blank" rel="noopener noreferrer">Link</a> / <a href="#" target="_blank" rel="noopener noreferrer"><span class="text-decoration-underline">Youtube</span></a>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="icon-row">
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress logo-wordpress"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress logo-wordpress"></i></a>
-                </div>
-
-                <div class="mt-3">
-                    <div class="link-bar">
-                        <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a> / <a href="#" target="_blank" rel="noopener noreferrer"><span class="text-decoration-underline">insta</span></a> / <a href="#" target="_blank" rel="noopener noreferrer">Tik Tok</a> / <a href="#" target="_blank" rel="noopener noreferrer">Link</a> / <a href="#" target="_blank" rel="noopener noreferrer"><span class="text-decoration-underline">Youtube</span></a>
+                <div class="col-md-8 text-center">
+                    <div class="center-logos d-flex justify-content-center gap-4 flex-wrap">
+                        <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo Maduta" class="logo-center">
+                        <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo Maison de la BD" class="logo-center">
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-8 text-center">
-                <div class="center-logos d-flex justify-content-center gap-4 flex-wrap">
-                    <img src="texte.jfif" alt="Logo Maduta" class="logo-center">
-                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo Maison de la BD" class="logo-center">
-                </div>
-            </div>
         </div>
-    </div>
-</footer>
+    </footer>
 
-<script>
-    // Système de notation dynamique
-    const stars = document.querySelectorAll(".rating-stars i");
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
+    <script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
 
-    stars.forEach(star => {
-        star.addEventListener("click", () => {
-            let value = star.getAttribute("data-value");
-
-            stars.forEach(s => {
-                s.classList.remove("active");
+    <script>
+        // System for dynamic rating (for the stars in the review form)
+        // Ensure this script runs after the DOM is fully loaded.
+        document.addEventListener('DOMContentLoaded', function() {
+            const ratingInputs = document.querySelectorAll('.rating input');
+            ratingInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    const selectedValue = this.value;
+                    const labels = this.closest('.rating').querySelectorAll('label');
+                    labels.forEach(label => {
+                        const labelValue = label.getAttribute('for').replace('star', '');
+                        if (labelValue <= selectedValue) {
+                            label.style.color = '#FFD700'; // Gold color
+                        } else {
+                            label.style.color = '#ccc'; // Grey color
+                        }
+                    });
+                });
             });
 
-            for (let i = 0; i < value; i++) {
-                stars[i].classList.add("active");
-            }
+            // If you intend to use $("#recherche") and related elements, ensure they exist in your HTML.
+            // As per the provided code, these elements are not present, so this part of the script is likely unused.
+            // $(document).ready(function(){
+            //     $("#nav_recherche").hide();
+            //     $("#texte").hide();
+            //     $("#recherche").click(function(){
+            //         $("#nav_recherche").fadeIn();
+            //         $("#texte").fadeIn();
+            //         $("#header").hide();
+            //     });
+            // });
         });
-    });
-    $(document).ready(function(){
-        $("#nav_recherche").hide();
-        $("#texte").hide();
-     $("#recherche").click(function(){
-        $("#nav_recherche").fadeIn();
-        $("#texte").fadeIn();
-        $("#header").hide();
-     });
-});
-</script>
-
-<script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
-    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </script>
 </body>
 </html>

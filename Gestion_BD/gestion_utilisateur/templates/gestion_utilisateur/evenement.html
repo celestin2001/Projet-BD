@@ -2,420 +2,676 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Événements - Maison Africaine de la BD</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Événements - Maison Africaine de la BD</title>
 
-  <!-- FullCalendar -->
-    {% comment %} lien Bootstrap lien cdn en ligne {% endcomment %}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <script src="{% static "gestion_content/js/index.global.min.js" %}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/locales/fr.js"></script>
+    <script src="{% static "gestion_content/js/index.global.min.js" %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/locales/fr.js"></script>
 
-
-
-  <style>
-    :root {
-            --primary-blue: #007bff; /* Bleu principal */
-            --light-blue: #e3f2fd; /* Bleu clair pour les fonds/bordures */
-            --dark-blue: #0056b3; /* Bleu foncé pour les accents */
-            --text-color: #333; /* Couleur de texte par défaut */
-            --link-color: var(--primary-blue); /* Couleur des liens */
-            --link-hover-color: var(--dark-blue); /* Couleur des liens au survol */
-            --filter-bg: var(--light-blue); /* Fond des filtres */
-            --bs-primary: #007bff; /* Couleur bleue Bootstrap par défaut. Vous pouvez changer cette valeur pour votre bleu spécifique. */
-            --header-bg-color: #007bff; /* Couleur bleue pour le menu principal */
-            --content-max-width: 1250px; /* Exemple de largeur maximale du contenu */
-             --shadow-color: rgba(0, 0, 0, 0.1);
-            
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-blue: #e3f2fd;
+            --dark-blue: #0056b3;
+            --text-color: #343a40; /* Texte un peu plus foncé pour meilleur contraste */
+            --link-color: var(--primary-blue);
+            --link-hover-color: var(--dark-blue);
+            --filter-bg: var(--light-blue);
+            --bs-primary: #007bff;
+            --header-bg-color: #007bff;
+            --content-max-width: 1240px;
+            --shadow-color: rgba(0, 0, 0, 0.08); /* Ombre encore plus subtile */
+            --footer-bg-color: var(--primary-blue);
+            --footer-text-color: #f8f9fa;
+            --footer-link-color: #e9ecef;
+            --footer-link-hover-color: #ffffff;
         }
-    body {
-      font-family: sans-serif;
-      padding: 20px;
-      background-color: #f8f9fa;
-    }
 
-    h1 {
-      text-align: center;
-      color: #007bff;
-      margin-bottom: 20px;
-    }
+        body {
+            font-family: 'Montserrat', sans-serif; /* Police mise à jour */
+            background-color: #f4f7f9; /* Fond très légèrement bleuté/gris */
+            color: var(--text-color);
+            line-height: 1.6; /* Interligne de base */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
 
-    #calendar {
-      max-width: 74%;
-      margin: 0 auto;
-      background: #fff;
-      padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
+        .page-container {
+            max-width: var(--content-max-width);
+            margin: 0 auto;
+            padding: 2rem 15px; /* Padding vertical augmenté */
+        }
 
-    #eventSearch {
-      display: block;
-      margin: 0 auto 20px;
-      padding: 10px;
-      max-width: 400px;
-      width: 90%;
-      border: 1px solid #ccc;
-      border-radius: 5px;
-    }
+        h1.page-title {
+            text-align: center;
+            color: var(--primary-blue);
+            margin-bottom: 1rem; /* Marge réduite, le sous-titre suit */
+            font-weight: 700; /* Police plus affirmée */
+            font-size: 2.25rem; /* Taille ajustée */
+        }
 
-    #eventModal {
-      display: none;
-      position: fixed;
-      top: 15%;
-      left: 50%;
-      transform: translateX(-50%);
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-      max-width: 450px;
-      max-height: 70%;
-      overflow-y: auto;
-      z-index: 1000;
-    }
+        p.page-subtitle {
+            font-size: 1.1rem;
+            color: #555; /* Couleur adoucie pour le sous-titre */
+            margin-bottom: 2.5rem; /* Plus d'espace avant le contenu principal */
+            text-align: center;
+        }
 
-    #eventModal img {
-      width: 100%;
-      max-height: 200px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 10px;
-    }
+        #calendar {
+            width: 100%;
+            margin: 0 auto;
+            background: #fff;
+            padding: 25px; /* Padding uniforme */
+            border-radius: 12px; /* Coins plus arrondis */
+            box-shadow: 0 8px 25px var(--shadow-color); /* Ombre douce et diffuse */
+            border: 1px solid #dee2e6; /* Bordure légère */
+        }
 
-    .tooltip {
-      position: absolute;
-      z-index: 9999;
-      background: #343a40;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 5px;
-      font-size: 13px;
-      pointer-events: none;
-      white-space: nowrap;
-    }
+        #eventSearch {
+            display: block;
+            margin: 0 auto 2.5rem; /* Plus d'espace en bas */
+            padding: 0.75rem 1rem; /* Dimensions Bootstrap standard pour input-lg */
+            max-width: 500px; /* Max-width pour le champ de recherche */
+            width: 100%;
+            border: 1px solid #ced4da;
+            border-radius: 0.5rem; /* Coins plus arrondis */
+            font-size: 1rem;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,.075); /* Ombre intérieure subtile */
+        }
+        #eventSearch::placeholder {
+            color: #6c757d;
+        }
 
-    @media (max-width: 600px) {
-      #calendar {
-        width: 100%;
-        padding: 5px;
-      }
-    }
-    .tooltip {
-  position: absolute;
-  z-index: 9999;
-  background-color: #ffffff;
-  color: #000;
-  border-radius: 8px;
-  padding: 10px 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  font-size: 14px;
-  max-width: 250px;
-  transition: opacity 0.2s;
-  pointer-events: none;
-  white-space: normal;
-  border: 1px solid #ddd;
-}
+        #eventModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 30px; /* Padding augmenté */
+            border-radius: 10px; /* Coins arrondis */
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Ombre plus marquée pour la modale */
+            width: 90vw;
+            max-width: 550px; /* Max-width modale augmenté */
+            max-height: 90vh; /* Hauteur max augmentée */
+            overflow-y: auto;
+            z-index: 1055; /* Au-dessus de la navbar si besoin */
+        }
 
-.tooltip::after {
-  content: "";
-  position: absolute;
-  bottom: 100%;
-  left: 20px;
-  margin-left: -5px;
-  border-width: 6px;
-  border-style: solid;
-  border-color: transparent transparent #ffffff transparent;
-}
+        #eventModal img {
+            width: 100%;
+            height: 220px; /* Hauteur fixe pour l'image dans la modale */
+            object-fit: cover; /* Assure que l'image couvre sans se déformer */
+            border-radius: 8px; /* Coins arrondis pour l'image */
+            margin-bottom: 1.25rem; /* Marge sous l'image */
+            background-color: #e9ecef; /* Couleur de fond si l'image est transparente ou en chargement */
+        }
+        #eventModal h3 {
+            color: var(--primary-blue);
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            font-size: 1.75rem;
+        }
+        #eventModal p {
+            margin-bottom: 0.8rem;
+            color: #495057; /* Texte de la modale légèrement plus clair */
+        }
+        #eventModal strong {
+            color: var(--dark-blue); /* Mots en gras plus foncés */
+        }
+        #eventModal .btn-close { /* Style pour le bouton X de Bootstrap */
+            filter: grayscale(1) contrast(0%) brightness(150%); /* Bouton X blanc */
+        }
+        #eventModal .modal-footer-custom { /* Si vous voulez un pied de page à la modale */
+            padding-top: 1.5rem;
+            border-top: 1px solid #dee2e6;
+            text-align: right;
+        }
 
+        .tooltip {
+            position: absolute;
+            z-index: 1080; /* Au-dessus de la plupart des éléments */
+            background-color: #fff; /* Fond blanc */
+            color: var(--text-color);
+            border-radius: 8px;
+            padding: 12px 18px; /* Padding ajusté */
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12); /* Ombre douce */
+            font-size: 0.9rem;
+            max-width: 300px; /* Largeur max du tooltip */
+            opacity: 0;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            pointer-events: none;
+            white-space: normal;
+            border: 1px solid #e0e0e0;
+            transform: translateY(10px); /* Position de départ pour l'animation */
+        }
+        .tooltip.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .tooltip::before { /* Flèche du tooltip */
+            content: "";
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: #fff;
+            border: 1px solid #e0e0e0;
+            transform-origin: center center;
+            z-index: -1; /* Derrière le contenu du tooltip */
+        }
+        .tooltip.tooltip-top::before { /* Flèche en bas, pointant vers le haut */
+            bottom: -7px; /* Positionne la flèche en dessous */
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            border-top: none;
+            border-left: none;
+        }
+        .tooltip.tooltip-bottom::before { /* Flèche en haut, pointant vers le bas */
+            top: -7px;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            border-bottom: none;
+            border-right: none;
+        }
 
-        .navbar-dark {
+        /* Header Specific Styles (from header.html context) */
+        header.bg-light {
+            background-color: #fff !important; /* Fond blanc pur pour plus de contraste */
+            border-bottom: 1px solid var(--light-blue); /* Bordure inférieure discrète */
+            margin-top: 1rem; /* Adjust if needed based on your overall layout */
+        }
+
+        header .navbar-brand img {
+            background-color: transparent !important; /* Logo sans fond blanc */
+            width: auto; /* Allow width to scale */
+            height: 150px; /* Default height */
+            max-height: 150px; /* Ensure it doesn't get too tall */
+            object-fit: contain; /* Ensure the image fits within the bounds */
+        }
+
+        /* Adjust logo size for smaller screens */
+        @media (max-width: 767.98px) { /* For small screens (less than md breakpoint) */
+            header .navbar-brand img {
+                height: 80px; /* Smaller height for mobile */
+                max-height: 80px;
+            }
+        }
+
+        /* Navbar responsive */
+        .navbar { /* S'applique à la navbar incluse dans header.html */
             background-color: var(--header-bg-color) !important;
-            width: 100%; /* Le menu prend toute la largeur de son parent */
-           
+            max-width: var(--content-max-width);
+            margin: 0 auto; /* Centrer la navbar si elle est plus étroite que l'écran */
+            border-radius: 0 0 8px 8px; /* Coins arrondis en bas */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .navbar-dark .container {
-            padding-left: 40px; /* Réduit la marge gauche par défaut de Bootstrap */
-            padding-right: 15px; /* Réduit la marge droite par défaut de Bootstrap */
-            max-width: 100%; /* Assure que le conteneur prend toute la largeur disponible */
+        .navbar-brand img { /* If you have a logo within the navbar-brand itself */
+            max-height: 40px;
         }
 
-        .navbar-dark .navbar-nav {
-            width: 100%; /* Prend toute la largeur du conteneur */
-            justify-content: center; /* Centre les éléments du menu */
-        }
-
-        .navbar-dark .navbar-nav .nav-item {
-            border-right: 1px solid white; /* Ajoute un séparateur blanc à droite de chaque élément */
-        }
-
-        .navbar-dark .navbar-nav .nav-item:last-child {
-            border-right: none; /* Supprime le séparateur du dernier élément */
-        }
-
-        .navbar-dark .navbar-nav .nav-link {
+        .navbar .nav-link {
             color: white !important;
-            padding: 0.5rem 1rem !important; /* Ajuste le padding pour la taille des liens */
+            /* Modifié: Réduire le padding horizontal et la taille de police */
+            padding: 0.75rem 0.7rem !important; /* Padding ajusté pour plus d'espace */
+            font-size: 0.95rem; /* Taille de police légèrement réduite */
+            font-weight: 600;
+            position: relative;
+            transition: color 0.3s ease;
+            white-space: nowrap; /* Empêche le texte de passer à la ligne */
+        }
+        .navbar .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 5px; /* Ajuster pour la position du soulignement */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: #ffc107; /* Assuming a yellow accent color */
+            transition: width 0.3s ease;
         }
 
-        .navbar-dark .navbar-nav .nav-link:hover,
-        .navbar-dark .navbar-nav .nav-link:focus {
-            color: rgba(255, 255, 255, 0.8) !important;
+        .navbar .nav-link:hover,
+        .navbar .nav-link:focus,
+        .navbar .nav-item.active .nav-link { /* Style pour l'élément actif */
+            color: rgba(255, 255, 255, 0.9) !important;
         }
-        #* Footer */
-     .custom-footer {
-background-color: #007bff;; /* Utilise la variable pour le bleu principal */
-    color: #fff; 
-    padding: 30px 0;
-    width: 100%;
-    animation: slideUp 1s ease-out both;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 0.9rem;
-    font-family: sans-serif;
-}
+        .navbar .nav-link:hover::after,
+        .navbar .nav-link:focus::after,
+        .navbar .nav-item.active .nav-link::after {
+            width: 70%; /* Soulignement au survol/focus */
+        }
 
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
+        .navbar-toggler {
+            border-color: rgba(255,255,255,0.5) !important;
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
 
-.logo-left {
-    width: 80px; /* Reduced logo size */
-    margin-bottom: 10px;
-    filter: grayscale(70%);
-    transition: filter 0.3s ease, transform 0.2s ease;
-}
+        /* Séparateur vertical pour les éléments de la navbar */
+        .navbar .nav-item {
+            border-right: 1px solid white; /* Ligne verticale blanche semi-transparente */
+        }
 
-.logo-left:hover {
-    filter: grayscale(0%);
-    transform: scale(1.05);
-}
+        /* Supprimer le séparateur du dernier élément pour éviter une ligne inutile à la fin */
+        .navbar .nav-item:last-child {
+            border-right: none;
+        }
 
-.social-icon-link {
-    color: #555;
-    text-decoration: none;
-    margin: 0 5px;
-    font-size: 1.2rem; /* Slightly larger social icons */
-    transition: color 0.3s ease, transform 0.2s ease;
-}
+        /* Styles du Footer */
+        .custom-footer {
+            background-color: var(--footer-bg-color);
+            color: var(--footer-text-color);
+            padding: 50px 0; /* Padding vertical augmenté */
+            box-shadow: 0 -4px 12px var(--shadow-color); /* Ombre plus distincte */
+            font-size: 0.9rem;
+            margin-top: 4rem; /* Plus d'espace avant le footer */
+        }
+        .custom-footer .container {
+            max-width: var(--content-max-width);
+        }
+        .logo-left {
+            filter: brightness(0) invert(1);
+            max-width: 70px; /* Taille contrôlée */
+            height: auto;  /* Maintien des proportions */
+            margin-bottom: 1rem; /* Marge sous le logo */
+        }
+        .logo-left:hover {
+            filter: brightness(0) invert(1) opacity(0.85);
+            transform: scale(1.05);
+        }
+        .custom-footer .icon-row {
+            margin-bottom: 1rem; /* Espace sous les rangées d'icônes */
+        }
+        .social-icon-link, .wordpress-link {
+            color: var(--footer-link-color); /* Couleur des icônes/liens du footer */
+            font-size: 1.3rem; /* Taille des icônes sociaux */
+            margin: 0 7px; /* Espacement horizontal */
+            transition: color 0.2s ease, transform 0.2s ease;
+        }
+        .social-icon-link:hover, .wordpress-link:hover {
+            color: var(--footer-link-hover-color);
+            transform: scale(1.12) translateY(-1px); /* Effet de survol amélioré */
+        }
+        .link-bar {
+            font-size: 0.8rem;
+        }
+        .link-bar a {
+            color: var(--footer-link-color);
+            margin: 0 5px; /* Espacement ajusté */
+            text-decoration: none;
+        }
+        .link-bar a:hover {
+            color: var(--footer-link-hover-color);
+            text-decoration: underline;
+        }
+        .logo-center {
+            filter: brightness(0) invert(1);
+            max-width: 90px; /* Taille contrôlée */
+            height: auto;  /* Maintien des proportions */
+            transition: filter 0.2s ease, transform 0.2s ease;
+        }
+        .logo-center:hover {
+            filter: brightness(0) invert(1) opacity(0.85);
+            transform: scale(1.05);
+        }
+        .center-logos {
+            gap: 20px; /* Espace entre les logos centraux */
+        }
 
-.social-icon-link:hover {
-    color: var(--primary-blue); /* Use your primary blue */
-    transform: scale(1.1);
-}
+        /* Media Queries pour ajustements fins */
+        @media (max-width: 991.98px) { /* Bootstrap lg breakpoint */
+            .navbar-dark .navbar-nav {
+                align-items: flex-start; /* Aligner à gauche dans le menu hamburger */
+            }
+            .navbar .nav-item {
+                border-right: none; /* Pas de séparateur dans le menu hamburger */
+                border-bottom: 1px solid rgba(255,255,255,0.1); /* Séparateur horizontal */
+            }
+            .navbar .nav-item:last-child {
+                border-bottom: none;
+            }
+            /* Sur les écrans plus petits, la propriété white-space: nowrap peut causer des débordements
+                Quand le menu est en mode "hamburger" (colonne), on veut que le texte revienne à la ligne. */
+            .navbar .nav-link {
+                white-space: normal; /* Permettre au texte de revenir à la ligne dans le menu hamburger */
+                padding: 0.75rem 1rem !important; /* Revenir au padding standard */
+                font-size: 1rem; /* Revenir à la taille de police standard */
+            }
+        }
 
-.social-icon {
-    /* Styles for Font Awesome icons */
-}
+        @media (max-width: 767.98px) { /* Bootstrap md breakpoint */
+            #calendar {
+                padding: 15px;
+            }
+            .fc-header-toolbar {
+                flex-direction: column;
+                align-items: stretch; /* Étirer les sections pour prendre toute la largeur */
+                gap: 12px;
+            }
+            .fc-header-toolbar .fc-toolbar-chunk { /* Assurer que chaque partie de la toolbar est bien disposée */
+                display: flex;
+                justify-content: space-between;
+                margin-bottom: 5px;
+            }
+            .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) { /* Titre (center) */
+                justify-content: center;
+                order: -1; /* Mettre le titre en premier sur mobile */
+            }
 
-.wordpress-link {
-    color: #555;
-    text-decoration: none;
-    margin: 0 5px;
-    font-size: 1.2rem; /* Slightly larger WordPress icons */
-    transition: color 0.3s ease, transform 0.2s ease;
-}
+            h1.page-title {
+                font-size: 1.9rem;
+            }
+            p.page-subtitle {
+                font-size: 1rem;
+                margin-bottom: 2rem;
+            }
+            .custom-footer .col-lg-4, .custom-footer .col-lg-8 {
+                text-align: center !important;
+                margin-bottom: 2rem; /* Plus d'espace entre les sections du footer sur mobile */
+            }
+            .custom-footer .col-lg-4:last-child, .custom-footer .col-lg-8:last-child {
+                margin-bottom: 0;
+            }
+            .center-logos {
+                justify-content: center !important; /* Centrer les logos centraux sur mobile */
+            }
+        }
 
-.wordpress-link:hover {
-    color: #21759b; /* WordPress blue */
-    transform: scale(1.1);
-}
-
-.logo-wordpress {
-    /* Styles for Font Awesome WordPress icons */
-}
-
-.icon-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 0.5rem; /* Reduced margin */
-}
-
-.link-bar {
-    font-size: 0.75rem; /* Smaller link bar text */
-}
-
-.link-bar a {
-    color: #555;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.link-bar a:hover {
-    color: var(--primary-blue);
-}
-
-.logo-center {
-    max-width: 100px; /* Reduced center logo size */
-    height: auto;
-    filter: grayscale(70%);
-    transition: filter 0.3s ease, transform 0.2s ease;
-}
-
-.logo-center:hover {
-    filter: grayscale(0%);
-    transform: scale(1.05);
-}
-
-  </style>
+        @media (max-width: 575.98px) { /* Bootstrap sm breakpoint */
+            .page-container {
+                padding: 1.5rem 15px;
+            }
+            #calendar {
+                padding: 10px;
+            }
+            #eventSearch {
+                padding: 0.6rem 0.8rem;
+                font-size: 0.9rem;
+                margin-bottom: 1.5rem;
+            }
+            #eventModal {
+                padding: 20px;
+                width: 95vw; /* Encore plus de largeur sur très petits écrans */
+            }
+            #eventModal img {
+                height: 180px; /* Hauteur image modale réduite */
+            }
+            #eventModal h3 {
+                font-size: 1.5rem;
+            }
+            .fc-button {
+                padding: 0.35em 0.55em !important;
+                font-size: 0.85em !important;
+            }
+            .social-icon-link, .wordpress-link {
+                font-size: 1.2rem; /* Icônes un peu plus petites */
+                margin: 0 5px;
+            }
+        }
+    </style>
 </head>
 <body>
-    {% include "gestion_content/header.html" %}
-  <div class="container mt-3" style="max-width: 1240px;">
-        
-    </div>
-  <h1>Calendrier des Événements</h1>
-<p class="text-center text-muted mb-4" style="font-size: 1.1rem;">
-  Découvrez tous les événements à venir organisés par la Maison Africaine de la BD. Naviguez mois par mois pour ne rien manquer !
-</p>
-  <input type="text" id="eventSearch" placeholder="Rechercher un événement...">
-  <div id="calendar"></div>
 
-  <!-- Modale -->
-  <div id="eventModal">
-    <img id="modalImage" src="" alt="Image de l'événement">
-    <h3 id="modalTitle"></h3>
-    <p><strong>Lieu :</strong> <span id="modalLocation"></span></p>
-    <p><strong>Date début :</strong> <span id="modalStart"></span></p>
-    <p><strong>Date fin :</strong> <span id="modalEnd"></span></p>
-    <button class="btn btn-primary" onclick="document.getElementById('eventModal').style.display='none'" style="margin-top:10px;">Fermer la modale</button>
-
-    <p><strong>Description :</strong></p>
-    <p id="modalDescription"></p>
-  </div>
-  <!-- start footer -->
-    <footer class="custom-footer mt-4 " style="background-color: #007bff;color: #fff; 
-      padding: 30px 0;
-      width: 100%;
-     animation: slideUp 1s ease-out both;
-     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-      font-size: 0.9rem;
-     font-family: sans-serif;">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-4 text-center mb-4 mb-md-0">
-                <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left">
-
-                <div class="icon-row my-3">
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-youtube social-icon"></i></a>
+    <header class="bg-light mt-2">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <a class="navbar-brand" href="#">
+                        <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="img-fluid">
+                    </a>
                 </div>
-
-                <div class="icon-row">
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress logo-wordpress"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress logo-wordpress"></i></a>
-                </div>
-
-                <div class="mt-3">
-                    <div class="link-bar">
-                        <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a> / <a href="#" target="_blank" rel="noopener noreferrer"><span class="text-decoration-underline">insta</span></a> / <a href="#" target="_blank" rel="noopener noreferrer">Tik Tok</a> / <a href="#" target="_blank" rel="noopener noreferrer">Link</a> / <a href="#" target="_blank" rel="noopener noreferrer"><span class="text-decoration-underline">Youtube</span></a>
+                <div class="col-md-9 d-flex justify-content-end align-items-center">
+                    <div>
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2" style="font-weight: 600">Donateurs</a>
+                        {% if user_authenticate %}
+                            <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se déconnecter</a>
+                        {% else %}
+                            <a href="{% url "signup" %}" class="btn btn-primary btn-sm me-2" style="font-weight: 600;">S'inscrire</a>
+                            <a href="{% url "signin" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se connecter</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
+        </div>
+    </header>
 
-            <div class="col-md-8 text-center">
-                <div class="center-logos d-flex justify-content-center gap-4 flex-wrap">
-                    <img src="texte.jfif" alt="Logo Maduta" class="logo-center">
-                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo Maison de la BD" class="logo-center">
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "home" %}">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url "evenement" %}">Calendrier des événements du continent</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Annuaire des librairies BD du continent</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url "auteur" %}">Auteurs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">BDthèque</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Webtoon</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">A propos</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <h1 class="page-title">Calendrier des Événements</h1>
+        <p class="page-subtitle">
+            Découvrez tous les événements à venir organisés par la Maison Africaine de la BD. Naviguez mois par mois pour ne rien manquer !
+        </p>
+        <input type="text" id="eventSearch" class="form-control" placeholder="Rechercher un événement...">
+        <div id="calendar" class="mt-4"></div>
+    </div>
+
+    <div id="eventModal">
+        <button type="button" class="btn-close" aria-label="Close" onclick="document.getElementById('eventModal').style.display='none'" style="position: absolute; top: 15px; right: 15px;"></button>
+        <img id="modalImage" src="" alt="Image de l'événement">
+        <h3 id="modalTitle"></h3>
+        <p><strong>Lieu :</strong> <span id="modalLocation"></span></p>
+        <p><strong>Début :</strong> <span id="modalStart"></span></p>
+        <p><strong>Fin :</strong> <span id="modalEnd"></span></p>
+        <p><strong>Description :</strong></p>
+        <p id="modalDescription" style="white-space: pre-wrap;"></p>
+    </div>
+
+    <footer class="custom-footer">
+        <div class="container">
+            <div class="row align-items-center gy-4">
+                <div class="col-lg-4 col-md-6 text-center text-md-start">
+                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left img-fluid">
+
+                    <div class="icon-row my-3 justify-content-center justify-content-md-start">
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <div class="icon-row justify-content-center justify-content-md-start">
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
+                    </div>
+                    <div class="mt-3 link-bar text-center text-md-start">
+                        <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a> /
+                        <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a> /
+                        <a href="#" target="_blank" rel="noopener noreferrer">Tik Tok</a> <br class="d-md-none"> <a href="#" target="_blank" rel="noopener noreferrer">Link</a> /
+                        <a href="#" target="_blank" rel="noopener noreferrer">Youtube</a>
+                    </div>
+                </div>
+
+                <div class="col-lg-8 col-md-6 text-center text-md-end mt-4 mt-md-0">
+                    <p class="mb-2" style="font-size: 0.9em; color: var(--footer-link-color);">Nos partenaires :</p>
+                    <div class="center-logos d-flex justify-content-center justify-content-md-end align-items-center flex-wrap">
+                        <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Partenaire 1" class="logo-center img-fluid">
+                        <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Partenaire 2" class="logo-center img-fluid">
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col text-center" style="font-size: 0.8em; color: var(--footer-link-color, #bdc1c6);">
+                    &copy; {% now "Y" %} Maison Africaine de la BD. Tous droits réservés.
                 </div>
             </div>
         </div>
-    </div>
-</footer>
-  <!-- Script -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const calendarEl = document.getElementById('calendar');
-      const tooltip = document.createElement('div');
-      tooltip.className = 'tooltip';
-      document.body.appendChild(tooltip);
+    </footer>
 
-      const calendar = new FullCalendar.Calendar(calendarEl, {
-        locale: 'fr',
-        initialDate: '{% now "Y-m-d" %}',
-        initialView: 'dayGridMonth',
-        headerToolbar: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-        },
-        events: [
-          {% for e in evenements %}
-          {
-            title: '{{ e.titre_evenement|escapejs }}',
-            start: '{{ e.date_evenement|date:"Y-m-d" }}{% if e.heure_evenement %}T{{ e.heure_evenement|time:"H:i:s" }}{% endif %}',
-            {% if e.date_fin_evenement %}
-            end: '{{ e.date_fin_evenement|date:"Y-m-d" }}',
-            {% endif %}
-            color: '#007bff',
-            extendedProps: {
-              location: '{{ e.lieu_evenement|escapejs }}',
-              description: '{{ e.description|escapejs }}',
-              image: '{% if e.image %}{{ e.image.url }}{% else %}{% static "images/default.jpg" %}{% endif %}',
-              heure: '{{ e.heure_evenement|time:"H:i" }}',
-              date_debut: '{{ e.date_evenement|date:"d/m/Y" }}',
-              date_fin: '{% if e.date_fin_evenement %}{{ e.date_fin_evenement|date:"d/m/Y" }}{% else %}Non précisée{% endif %}'
-            }
-          }{% if not forloop.last %},{% endif %}
-          {% endfor %}
-        ],
-        eventClick: function (info) {
-          const e = info.event.extendedProps;
-          document.getElementById('modalTitle').textContent = info.event.title;
-          document.getElementById('modalLocation').textContent = e.location || 'Non spécifié';
-          document.getElementById('modalStart').textContent = `${e.date_debut} à ${e.heure}`;
-          document.getElementById('modalEnd').textContent = e.date_fin;
-          document.getElementById('modalDescription').textContent = e.description || 'Aucune description';
-          document.getElementById('modalImage').src = e.image || '';
-          document.getElementById('eventModal').style.display = 'block';
-        },
-        eventMouseEnter: function (info) {
-          const e = info.event.extendedProps;
-       tooltip.innerHTML = `
-          <div><strong style="font-size: 15px;">${info.event.title}</strong></div>
-                 <div style="margin-top: 4px;">
-    📍 ${e.location || 'Lieu non précisé'}<br>
-    🕓 ${e.date_debut} → ${e.date_fin}
-              </div>
-               `;
-          tooltip.style.display = 'block';
-          tooltip.style.left = info.jsEvent.pageX + 10 + 'px';
-          tooltip.style.top = info.jsEvent.pageY - 60 + 'px';
-        },
-        eventMouseLeave: function () {
-          tooltip.style.display = 'none';
-        }
-      });
-
-      calendar.render();
-
-      // Recherche dynamique
-      document.getElementById('eventSearch').addEventListener('input', function (e) {
-        const search = e.target.value.toLowerCase();
-        calendar.getEvents().forEach(ev => {
-          const match = ev.title.toLowerCase().includes(search) ||
-                        (ev.extendedProps.location && ev.extendedProps.location.toLowerCase().includes(search));
-          ev.setProp('display', match ? 'auto' : 'none');
-        });
-      });
-    });
-
-  </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarEl = document.getElementById('calendar');
+            const tooltipEl = document.createElement('div');
+            tooltipEl.className = 'tooltip'; // Initialement caché par opacité 0
+            document.body.appendChild(tooltipEl);
+
+            const calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'fr',
+                initialDate: '{% now "Y-m-d" %}',
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                },
+                buttonText: {
+                    today: "Aujourd'hui", month: "Mois", week: "Semaine", day: "Jour", list: "Liste"
+                },
+                events: [
+                    {% for e in evenements %}
+                    {
+                        title: '{{ e.titre_evenement|escapejs }}',
+                        start: '{{ e.date_evenement|date:"Y-m-d" }}{% if e.heure_evenement %}T{{ e.heure_evenement|time:"H:i:s" }}{% endif %}',
+                        {% if e.date_fin_evenement %}
+                        end: '{{ e.date_fin_evenement|date:"Y-m-d" }}T23:59:59', // Assurer que l'événement de plusieurs jours inclut le dernier jour
+                        {% endif %}
+                        color: '{{ e.couleur_evenement|default:"#007bff" }}', // Couleur personnalisable par événement
+                        extendedProps: {
+                            location: '{{ e.lieu_evenement|escapejs|default:"Non spécifié" }}',
+                            description: `{{ e.description|escapejs|default:"Aucune description." }}`,
+                            image: '{% if e.image %}{{ e.image.url }}{% else %}{% static "gestion_content/images/default_event.png" %}{% endif %}',
+                            heure: '{{ e.heure_evenement|time:"H:i"|default:"" }}', // "" si non précisé
+                            date_debut_formatted: '{{ e.date_evenement|date:"d/m/Y" }}',
+                            date_fin_formatted: '{% if e.date_fin_evenement %}{{ e.date_fin_evenement|date:"d/m/Y" }}{% else %}{% endif %}' // "" si non précisé
+                        }
+                    }{% if not forloop.last %},{% endif %}
+                    {% endfor %}
+                ],
+                eventClick: function (info) {
+                    const e = info.event.extendedProps;
+                    document.getElementById('modalTitle').textContent = info.event.title;
+                    document.getElementById('modalLocation').textContent = e.location;
+
+                    let startStr = e.date_debut_formatted;
+                    if (e.heure) startStr += ` à ${e.heure}`;
+                    document.getElementById('modalStart').textContent = startStr;
+
+                    document.getElementById('modalEnd').textContent = e.date_fin_formatted || 'Non précisée';
+                    document.getElementById('modalDescription').innerHTML = e.description.replace(/\n/g, '<br>');
+                    document.getElementById('modalImage').src = e.image;
+                    document.getElementById('eventModal').style.display = 'block';
+
+                    tooltipEl.classList.remove('visible');
+                    tooltipEl.style.display = 'none';
+                },
+                eventMouseEnter: function (info) {
+                    const e = info.event.extendedProps;
+                    let timeStr = e.date_debut_formatted;
+                    if (e.heure) timeStr += ` ${e.heure}`;
+                    if (e.date_fin_formatted && e.date_fin_formatted !== e.date_debut_formatted) {
+                        timeStr += ` → ${e.date_fin_formatted}`;
+                    } else if (e.date_fin_formatted && e.date_fin_formatted === e.date_debut_formatted && info.event.allDay === false && info.event.end) {
+                        // Gérer l'heure de fin si même jour et non allDay
+                        let endDate = new Date(info.event.endStr);
+                        let endTime = endDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        if (e.heure && endTime !== e.heure) { // Si heure de début et heure de fin différentes
+                             if(e.heure) timeStr = `${e.date_debut_formatted} de ${e.heure} à ${endTime}`;
+                             else timeStr += ` jusqu'à ${endTime}`;
+                        }
+                    }
+
+                    tooltipEl.innerHTML = `
+                        <div style="font-weight: 600; font-size: 1.05em; margin-bottom: 5px; color: ${info.event.backgroundColor || 'var(--primary-blue)'};">${info.event.title}</div>
+                        <div style="font-size: 0.9em;">
+                            <div><i class="fas fa-map-marker-alt me-2" style="color: #6c757d;"></i> ${e.location}</div>
+                            <div><i class="fas fa-clock me-2" style="color: #6c757d;"></i> ${timeStr}</div>
+                        </div>`;
+
+                    tooltipEl.style.display = 'block'; // Nécessaire pour calculer offsetHeight/offsetWidth
+
+                    const eventRect = info.el.getBoundingClientRect();
+                    const bodyRect = document.body.getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
+
+                    let top = eventRect.top + scrollTop - tooltipEl.offsetHeight - 12; // 12px de marge au-dessus
+                    let left = eventRect.left + scrollLeft + (eventRect.width / 2) - (tooltipEl.offsetWidth / 2);
+                    let tooltipClass = 'tooltip-top'; // Flèche en bas (tooltip au-dessus)
+
+                    if (top < scrollTop + 5) { // Si sort en haut
+                        top = eventRect.bottom + scrollTop + 12; // Positionner en dessous
+                        tooltipClass = 'tooltip-bottom'; // Flèche en haut (tooltip en dessous)
+                    }
+
+                    if (left < scrollLeft + 5) left = scrollLeft + 5;
+                    if (left + tooltipEl.offsetWidth > scrollLeft + window.innerWidth - 5) {
+                        left = scrollLeft + window.innerWidth - tooltipEl.offsetWidth - 5;
+                    }
+
+                    tooltipEl.className = 'tooltip visible ' + tooltipClass; // Appliquer la classe pour la flèche
+                    tooltipEl.style.left = left + 'px';
+                    tooltipEl.style.top = top + 'px';
+                },
+                eventMouseLeave: function () {
+                    tooltipEl.classList.remove('visible');
+                    setTimeout(() => {
+                        if(!tooltipEl.matches(':hover')) {
+                               tooltipEl.style.display = 'none';
+                        }
+                    }, 50);
+                },
+                windowResize: function(view) {
+                    // Peut-être forcer la fermeture du tooltip en cas de redimensionnement
+                    tooltipEl.classList.remove('visible');
+                    tooltipEl.style.display = 'none';
+                }
+            });
+
+            calendar.render();
+
+            document.getElementById('eventSearch').addEventListener('input', function (e) {
+                const search = e.target.value.toLowerCase().trim();
+                calendar.getEvents().forEach(ev => {
+                    const match = ev.title.toLowerCase().includes(search) ||
+                                    (ev.extendedProps.location && ev.extendedProps.location.toLowerCase().includes(search));
+                    ev.setProp('display', match || search === '' ? 'auto' : 'none');
+                });
+            });
+        });
+    </script>
 </body>
 </html>

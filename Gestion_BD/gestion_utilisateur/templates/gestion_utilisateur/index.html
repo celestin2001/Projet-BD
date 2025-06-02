@@ -5,295 +5,289 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Maison Africaine de la BD</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
-      <link rel="stylesheet" href="{% static 'gestion_content/css/bootstrap.min.css'%}">
-   
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
-          --bs-primary: #007bff; /* Couleur bleue Bootstrap par défaut. Vous pouvez changer cette valeur pour votre bleu spécifique. */
-          --header-bg-color: #007bff; /* Couleur bleue pour le menu principal */
-          
-        }
+            --bs-primary-rgb: 0, 123, 255; /* Bootstrap primary blue in RGB for opacity if needed */
+            --bs-primary: #007bff;
+            --header-bg-color: #007bff;
+            --content-max-width: 1200px; /* Centralized max width */
 
-        body {
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Centre le contenu horizontalement */
-        }
-
-        .bg-primary {
-            background-color: var(--bs-primary) !important;
-        }
-
-        .btn-primary {
-            background-color: var(--bs-primary) !important;
-            border-color: var(--bs-primary) !important;
-        }
-
-        .btn-outline-primary {
-            color: var(--bs-primary);
-            border-color: var(--bs-primary);
-        }
-
-        .text-primary {
-            color: var(--bs-primary) !important;
-        }
-
-        .bg-light {
-            background-color: #f8f9fa !important; /* Un gris clair Bootstrap par défaut */
-        }
-
-        .container {
-            max-width: var(--content-max-width); /* Limite la largeur du conteneur Bootstrap */
-            width: 100%; /* Assure que le conteneur prend toute la largeur disponible jusqu'à la largeur maximale */
-        }
-
-        /* Style pour le menu principal (bleu) */
-        .navbar-dark {
-            background-color: var(--header-bg-color) !important;
-            width: 100%; /* Le menu prend toute la largeur de son parent (le body) */
-            max-width: var(--content-max-width); /* Limite la largeur maximale du menu */
-        }
-
-        .navbar-dark .navbar-nav {
-            width: 100%;
-            justify-content: center; /* Centre les éléments du menu */
-        }
-
-        .navbar-dark .navbar-nav .nav-item {
-            border-right: 1px solid white; /* Ajoute un séparateur blanc à droite de chaque élément */
-        }
-
-        .navbar-dark .navbar-nav .nav-item:last-child {
-            border-right: none; /* Supprime le séparateur du dernier élément */
-        }
-
-        .navbar-dark .navbar-nav .nav-link {
-            color: white !important;
-            padding: 0.5rem 1rem !important;
-            font-weight: 600;
-    font-family: 'Times New Roman', Times, serif; /* Ajuste le padding pour réduire la taille */
-        }
-
-        .navbar-dark .navbar-nav .nav-link:hover,
-        .navbar-dark .navbar-nav .nav-link:focus {
-            color: rgba(255, 255, 255, 0.8) !important;
-        }
-
-        /* Style pour réduire la taille du carrousel */
-        #carouselExampleIndicators {
-            max-width: var(--content-max-width); /* Limite la largeur maximale du carrousel */
-            max-height: 400px; /* Ajustez la hauteur maximale selon vos besoins */
-            overflow: hidden; /* Empêche le contenu dépassant de déborder */
-            margin-top: 0 !important; /* Supprime la marge supérieure par défaut */
-            width: 100%; /* Le carrousel prend toute la largeur de son parent (le body) jusqu'à la largeur maximale */
-        }
-
-        #carouselExampleIndicators .carousel-inner {
-            max-height: 400px; /* Assure que l'intérieur du carrousel a aussi une hauteur maximale */
-        }
-
-        #carouselExampleIndicators .carousel-inner img {
-            object-fit: cover; /* Empêche la déformation de l'image en la rognant si nécessaire */
-            max-height: 400px; /* Limite la hauteur des images dans le carrousel */
-        }
-
-        /* Style pour le conteneur principal afin d'appliquer les marges */
-        .main-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            max-width: 1200px; /* Largeur maximale du contenu principal */
-        }
-
-        /* Applique la largeur maximale aux éléments qui doivent être centrés */
-        header, nav.navbar-dark, #carouselExampleIndicators, .container, footer {
-            max-width: var(--content-max-width);
-            width: 100%;
-        }
-        .image-container {
-      border: 10px solid white;
-      box-shadow: 5px 5px 0 rgba(0,0,0,0.1);
-      background-color: #ffffff;
-    }
-
-    .image-square {
-      width: 100%;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
-    }
-
-    .bar-wrapper {
-      position: relative;
-      height: 50px;
-      background-color: #007BFF; /* bleu */
-    }
-
-    .yellow-btn {
-      position: absolute;
-      top: -15px;
-      left: 50%;
-      transform: translateX(-50%);
-      background-color: yellow;
-      color: black;
-      border: none;
-      padding: 6px 12px;
-      font-weight: bold;
-      box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
-    }
-  /* mise en forme pour le footer */
-  .custom-footer {
-background-color: var(--primary-blue); /* Utilise la variable pour le bleu principal */
-    color: #fff; /* Texte blanc pour contraste */
-    padding: 30px 0;
-    width: 100%;
-    animation: slideUp 1s ease-out both;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 0.9rem;
-    font-family: sans-serif;
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.logo-left {
-    width: 80px; /* Reduced logo size */
-    margin-bottom: 10px;
-    filter: grayscale(70%);
-    transition: filter 0.3s ease, transform 0.2s ease;
-}
-
-.logo-left:hover {
-    filter: grayscale(0%);
-    transform: scale(1.05);
-}
-
-.social-icon-link {
-    color: #555;
-    text-decoration: none;
-    margin: 0 5px;
-    font-size: 1.2rem; /* Slightly larger social icons */
-    transition: color 0.3s ease, transform 0.2s ease;
-}
-
-.social-icon-link:hover {
-    color: var(--primary-blue); /* Use your primary blue */
-    transform: scale(1.1);
-}
-
-.social-icon {
-    /* Styles for Font Awesome icons */
-}
-
-.wordpress-link {
-    color: #555;
-    text-decoration: none;
-    margin: 0 5px;
-    font-size: 1.2rem; /* Slightly larger WordPress icons */
-    transition: color 0.3s ease, transform 0.2s ease;
-}
-
-.wordpress-link:hover {
-    color: #21759b; /* WordPress blue */
-    transform: scale(1.1);
-}
-
-.logo-wordpress {
-    /* Styles for Font Awesome WordPress icons */
-}
-
-.icon-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 0.5rem; /* Reduced margin */
-}
-
-.link-bar {
-    font-size: 0.75rem; /* Smaller link bar text */
-}
-
-.link-bar a {
-    color: #555;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.link-bar a:hover {
-    color: var(--primary-blue);
-}
-
-.logo-center {
-    max-width: 100px; /* Reduced center logo size */
-    height: auto;
-    filter: grayscale(70%);
-    transition: filter 0.3s ease, transform 0.2s ease;
-}
-
-.logo-center:hover {
-    filter: grayscale(0%);
-    transform: scale(1.05);
-}
-
-    .welcome-section {
-    margin-top: 2rem;
-    background-color: white;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Ombre plus prononcée et douce */
-    border: 1px solid #e0f2f7; /* Bordure bleue très claire */
-}
-
-.welcome-section h2 {
-    color: var(--bs-primary); /* Titre en bleu */
-    margin-bottom: 1.5rem;
-    text-align: center; /* Centre le titre */
-}
-
-.welcome-section p {
-    line-height: 1.7; /* Amélioration de la lisibilité du texte */
-    color: #555;
-    margin-bottom: 1rem;
-}
-
-.welcome-section strong {
-    color: var(--bs-primary); /* Mise en évidence en bleu */
-}
-
-
-
-  :root {
-            --primary-blue: #007bff; /* Define your primary blue color as a CSS variable */
+            /* Variables de couleur améliorées */
+            --primary-blue: #007bff;
             --light-blue: #e3f2fd;
             --darker-blue: #0056b3;
             --light-grey: #f8f9fa;
             --grey-border: #e0e0e0;
             --dark-text: #333;
             --secondary-text: #555;
+            --yellow-accent: #ffc107; /* Jaune Bootstrap pour cohérence */
         }
 
         body {
-            font-family: sans-serif;
+            font-family: 'Montserrat', sans-serif; /* Police moderne */
+            background-color: var(--light-grey); /* Un fond léger pour tout le corps */
+            overflow-x: hidden; /* Empêcher le défilement horizontal accidentel */
         }
 
-        .news-section {
-            background-color: var(--light-grey);
-            padding: 20px;
-            margin-bottom: 20px;
+        .bg-primary {
+            background-color: var(--primary-blue) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue) !important;
+            border-color: var(--primary-blue) !important;
+        }
+        .btn-primary:hover {
+            background-color: var(--darker-blue) !important;
+            border-color: var(--darker-blue) !important;
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .text-primary {
+            color: var(--primary-blue) !important;
+        }
+
+        .bg-light {
+            background-color: #f8f9fa !important;
+        }
+
+        /* Conteneur principal centré */
+        .main-content-wrapper {
+            max-width: var(--content-max-width);
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px; /* Pour éviter que le contenu ne colle aux bords sur mobile */
+            padding-right: 15px;
+            width: 100%;
+        }
+
+        /* Header Specific Styles (from header.html context) */
+        header.bg-light {
+            background-color: #fff !important; /* Fond blanc pur pour plus de contraste */
+            border-bottom: 1px solid var(--light-blue); /* Bordure inférieure discrète */
+        }
+
+        header .navbar-brand img {
+            background-color: transparent !important; /* Logo sans fond blanc */
+            width: auto; /* Allow width to scale */
+            height: 150px; /* Default height */
+            max-height: 150px; /* Ensure it doesn't get too tall */
+            object-fit: contain; /* Ensure the image fits within the bounds */
+        }
+
+        /* Adjust logo size for smaller screens */
+        @media (max-width: 767.98px) { /* For small screens (less than md breakpoint) */
+            header .navbar-brand img {
+                height: 80px; /* Smaller height for mobile */
+                max-height: 80px;
+            }
+        }
+
+        /* Navbar responsive */
+        .navbar { /* S'applique à la navbar incluse dans header.html */
+            background-color: var(--header-bg-color) !important;
+            max-width: var(--content-max-width);
+            margin: 0 auto; /* Centrer la navbar si elle est plus étroite que l'écran */
+            border-radius: 0 0 8px 8px; /* Coins arrondis en bas */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand img { /* If you have a logo within the navbar-brand itself */
+            max-height: 40px;
+        }
+
+        .navbar .nav-link {
+            color: white !important;
+            /* font-weight: 500; */
+            font-size: 15px;
+            
+            position: relative;
+            transition: color 0.3s ease;
+            /* Added for single line text */
+            white-space: nowrap; /* Prevent text wrapping */
+            overflow: hidden;    /* Hide overflow content */
+            text-overflow: ellipsis; /* Add ellipsis for hidden text */
+        }
+
+        /* Styles pour les lignes séparatrices verticales */
+        .navbar .nav-item {
+            border-right: 1px solid rgba(255, 255, 255, 0.5); /* Ligne blanche semi-transparente */
+            padding-left: 15px; /* Espace à gauche du texte pour la ligne précédente */
+        }
+
+        .navbar .nav-item:last-child {
+            border-right: none; /* Supprime la bordure sur le dernier élément */
+        }
+        /* Fin des styles pour les lignes séparatrices verticales */
+
+
+        .navbar .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 5px; /* Ajuster pour la position du soulignement */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background-color: var(--yellow-accent);
+            transition: width 0.3s ease;
+        }
+
+        .navbar .nav-link:hover,
+        .navbar .nav-link:focus,
+        .navbar .nav-item.active .nav-link { /* Style pour l'élément actif */
+            color: rgba(255, 255, 255, 0.9) !important;
+        }
+        .navbar .nav-link:hover::after,
+        .navbar .nav-link:focus::after,
+        .navbar .nav-item.active .nav-link::after {
+            width: 70%; /* Soulignement au survol/focus */
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255,255,255,0.5) !important;
+        }
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
+        }
+
+        /* Style pour le carrousel */
+        #carouselExampleIndicators {
+            max-width: var(--content-max-width);
+            width: 100%; /* Prend toute la largeur du parent */
+            max-height: 450px; /* Hauteur légèrement augmentée */
+            overflow: hidden;
+            margin-top: 1rem; /* Espace au-dessus du carrousel */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        #carouselExampleIndicators .carousel-inner,
+        #carouselExampleIndicators .carousel-item {
+            max-height: 450px;
+        }
+
+        #carouselExampleIndicators .carousel-inner img {
+            object-fit: cover;
+            width: 100%;
+            height: 450px; /* Assurer que l'image remplit la hauteur */
+        }
+
+        .welcome-section {
+            margin-top: 2rem;
+            background-color: white;
+            padding: 2.5rem; /* Plus de padding */
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--grey-border);
+        }
+
+        .welcome-section h2 {
+            color: var(--primary-blue);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 700; /* Titre plus en évidence */
+        }
+
+        .welcome-section p {
+            line-height: 1.8; /* Lisibilité améliorée */
+            color: var(--secondary-text);
+            margin-bottom: 1rem;
+            text-align: justify; /* Justifier le texte pour un look plus propre */
+        }
+
+        .welcome-section strong {
+            color: var(--primary-blue);
+            font-weight: 600;
+        }
+
+        /* Style pour les blocs d'images avec boutons jaunes */
+        .info-card-block { /* Nouveau nom pour clarté */
+            margin-bottom: 1.5rem; /* Espace en bas de chaque carte */
+        }
+        .image-container {
+            border: 5px solid white; /* Bordure plus fine */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #ffffff;
+            border-radius: 8px; /* Coins arrondis */
+            overflow: hidden; /* Pour que l'image respecte les coins arrondis */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .image-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+        }
+
+        .image-square {
+            width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+        }
+
+        .bar-wrapper {
+            position: relative;
+            height: 40px; /* Hauteur réduite */
+            background-color: var(--primary-blue);
+            border-radius: 0 0 8px 8px; /* Coins arrondis en bas pour correspondre au conteneur d'image */
+        }
+
+        .yellow-btn {
+            position: absolute;
+            top: 50%; /* Centrer verticalement */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: var(--yellow-accent);
+            color: var(--dark-text);
+            border: none;
+            padding: 8px 15px; /* Padding ajusté */
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            border-radius: 20px; /* Boutons plus arrondis */
+            white-space: nowrap; /* Empêcher le texte de passer à la ligne */
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .yellow-btn:hover {
+            background-color: #ffdb58; /* Jaune un peu plus clair au survol */
+            transform: translate(-50%, -50%) scale(1.05);
+        }
+
+        /* Section Actualités */
+        .news-section-title { /* Style pour le titre "Dernières nouvelles" */
+            color: var(--primary-blue);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-align: center; /* Ou left, selon préférence */
+        }
+
+        .news-item { /* Nouveau wrapper pour chaque actualité */
+            background-color: #fff; /* Fond blanc pour chaque article */
+            padding: 1.5rem;
+            margin-bottom: 2rem;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             border: 1px solid var(--grey-border);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .news-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
 
         .news-banner {
@@ -307,34 +301,136 @@ background-color: var(--primary-blue); /* Utilise la variable pour le bleu princ
         .news-banner img {
             display: block;
             width: 100%;
-            height: 70%;
+            max-height: 250px; /* Hauteur max pour l'image d'actu */
+            object-fit: cover; /* Assure que l'image couvre bien sans se déformer */
         }
 
         .news-title {
             color: var(--dark-text);
             font-size: 1.5rem;
             margin-bottom: 10px;
+            font-weight: 600;
         }
 
         .read-more-button {
             background-color: var(--primary-blue);
             color: white;
             border: none;
-            padding: 8px 15px;
-            border-radius: 4px;
+            padding: 10px 18px; /* Padding augmenté */
+            border-radius: 25px; /* Boutons plus arrondis */
             text-decoration: none;
             display: inline-block;
             font-size: 0.9rem;
-            transition: background-color 0.3s ease;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-transform: uppercase; /* Texte en majuscules */
         }
 
         .read-more-button:hover {
             background-color: var(--darker-blue);
+            color: white; /* Assurer que le texte reste blanc */
+            transform: scale(1.03); /* Léger agrandissement au survol */
         }
 
-        .info-box {
+        /* Styles du Footer */
+        .custom-footer {
+            background-color: var(--primary-blue);
+            color: #fff;
+            padding: 40px 0; /* Padding augmenté */
+            width: 100%; /* Le footer prend toute la largeur */
+            animation: slideUp 1s ease-out both;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+            font-size: 0.9rem;
+            margin-top: 3rem; /* Espace au-dessus du footer */
+        }
+        /* S'assurer que le contenu du footer est également centré */
+        .custom-footer .container {
+            max-width: var(--content-max-width);
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .logo-left {
+            width: 70px;
+            margin-bottom: 10px;
+            filter: brightness(0) invert(1); /* Pour rendre un logo sombre blanc sur fond bleu */
+            transition: opacity 0.3s ease, transform 0.2s ease;
+        }
+        .logo-left:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        .social-icon-link {
+            color: #f0f0f0; /* Couleur plus claire pour contraste sur bleu */
+            text-decoration: none;
+            margin: 0 8px; /* Plus d'espace */
+            font-size: 1.4rem; /* Icônes sociales plus grandes */
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+        .social-icon-link:hover {
+            color: var(--yellow-accent); /* Jaune au survol */
+            transform: scale(1.15);
+        }
+
+        .wordpress-link {
+            color: #f0f0f0;
+            text-decoration: none;
+            margin: 0 8px;
+            font-size: 1.4rem;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+        .wordpress-link:hover {
+            color: #d4eaff; /* Un bleu très clair, presque blanc */
+            transform: scale(1.15);
+        }
+
+        .icon-row {
+            display: flex;
+            justify-content: center;
+            gap: 15px; /* Plus d'espace */
+            margin-bottom: 1rem; /* Marge ajustée */
+        }
+
+        .link-bar {
+            font-size: 0.8rem; /* Taille ajustée */
+            margin-bottom: 1rem; /* Espace en dessous */
+        }
+        .link-bar a {
+            color: #e0e0e0; /* Couleur plus claire */
+            text-decoration: none;
+            margin: 0 8px; /* Plus d'espace entre les liens */
+            transition: color 0.3s ease;
+        }
+        .link-bar a:hover {
+            color: var(--yellow-accent); /* Jaune au survol */
+        }
+
+        .logo-center {
+            max-width: 90px;
+            height: auto;
+            filter: brightness(0) invert(1); /* Pour rendre un logo sombre blanc sur fond bleu */
+            transition: opacity 0.3s ease, transform 0.2s ease;
+            margin-top: 1rem; /* Espace au-dessus */
+        }
+        .logo-center:hover {
+            opacity: 0.8;
+            transform: scale(1.05);
+        }
+
+        /* Styles pour les boîtes d'information */
+        .info-box, .donate-box {
             background-color: #fff;
-            padding: 15px;
+            padding: 1.5rem; /* Padding augmenté */
             margin-bottom: 20px;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -342,69 +438,236 @@ background-color: var(--primary-blue); /* Utilise la variable pour le bleu princ
         }
 
         .info-title {
-            color: var(--primary-blue); /* Title in blue */
-            font-size: 1.2rem;
+            color: var(--primary-blue);
+            font-size: 1.3rem; /* Taille augmentée */
             margin-bottom: 10px;
-            font-weight: bold;
-        }
-        .info-title .read-more-button:hover {
-            color: white; /* Darker blue on hover */
+            font-weight: 600; /* Police plus grasse */
         }
 
         .info-list {
-            padding-left: 20px;
+            padding-left: 0; /* Suppression du padding par défaut */
             margin-bottom: 10px;
             list-style-type: none;
         }
 
         .info-list li {
             color: var(--secondary-text);
-            margin-bottom: 5px;
+            margin-bottom: 8px; /* Espacement augmenté */
+            display: flex; /* Pour aligner l'icône et le texte */
+            align-items: center;
         }
 
         .info-list li i {
-            color: var(--primary-blue); /* Icons in blue */
-            margin-right: 5px;
-        }
-
-        .donate-box {
-            background-color: #fff;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border: 1px solid var(--grey-border);
+            color: var(--primary-blue);
+            margin-right: 10px; /* Espace entre l'icône et le texte */
+            font-size: 1.1rem; /* Taille de l'icône */
         }
 
         .donate-button {
-            background-color: var(--primary-blue); /* Button in blue */
-            color: white;
+            background-color: var(--yellow-accent); /* Bouton de don en jaune */
+            color: var(--dark-text);
             border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            padding: 12px 25px; /* Padding augmenté */
+            border-radius: 25px;
             text-decoration: none;
             display: inline-block;
             font-size: 1rem;
-            transition: background-color 0.3s ease;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            text-transform: uppercase;
         }
 
         .donate-button:hover {
-            background-color: var(--darker-blue);
+            background-color: #ffda6a; /* Jaune plus clair */
+            transform: scale(1.03);
         }
 
-   
+        /* Séparateur horizontal */
+        .separator {
+            border-top: 1px solid var(--grey-border);
+            margin: 2rem 0; /* Plus d'espace */
+        }
+
+        /* Media Queries pour la responsivité fine */
+        @media (max-width: 991.98px) { /* Bootstrap lg breakpoint */
+            /* For the main navigation bar within the header, ensure it has `navbar-expand-lg` to collapse below lg */
+            .navbar .nav-link {
+                padding: 0.6rem 0.8rem !important; /* Réduire padding pour les liens sur tablettes */
+            }
+            .navbar .navbar-nav { /* S'assurer que les éléments du menu sont bien alignés quand le menu est ouvert */
+                align-items: center;
+            }
+        }
+
+        @media (max-width: 767.98px) { /* Bootstrap md breakpoint */
+            /* Supprime les bordures verticales sur mobile */
+            .navbar .nav-item {
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Ajoute une petite ligne horizontale pour la séparation */
+                padding-right: 0;
+                padding-left: 0;
+            }
+
+            .navbar .nav-item:last-child {
+                border-bottom: none; /* Supprime la dernière bordure horizontale */
+            }
+
+            .welcome-section {
+                padding: 1.5rem;
+            }
+            .welcome-section p {
+                text-align: left; /* Sur mobile, justifié peut être moins lisible */
+            }
+            .news-title {
+                font-size: 1.3rem;
+            }
+            .yellow-btn {
+                font-size: 0.8rem; /* Réduire la taille du texte du bouton si nécessaire */
+                padding: 6px 10px;
+            }
+            .image-container {
+                margin-bottom: 0; /* Le bar-wrapper fournit déjà de l'espace en dessous */
+            }
+            .info-card-block .bar-wrapper { /* Sur mobile, les cartes sont empilées, ajouter un peu d'espace en bas de la barre */
+                margin-bottom: 1.5rem;
+            }
+            #carouselExampleIndicators,
+            #carouselExampleIndicators .carousel-inner,
+            #carouselExampleIndicators .carousel-inner img {
+                max-height: 300px; /* Réduire la hauteur du carrousel sur mobile */
+                height: 300px;
+            }
+
+            /* Adjust the nav-link padding and overflow for smaller screens when collapsed */
+            .navbar-collapse .nav-link {
+                white-space: normal; /* Allow text to wrap within the hamburger menu */
+                text-overflow: clip; /* Remove ellipsis for full text in hamburger menu */
+                padding: 0.75rem 1rem !important; /* Restore normal padding for stacked items */
+            }
+        }
+
+        @media (max-width: 575.98px) { /* Bootstrap sm breakpoint */
+            .navbar .nav-link {
+                font-size: 0.9rem;
+                padding: 0.5rem !important; /* padding plus petit pour les liens de la navbar */
+                text-align: center; /* Centrer les liens dans le menu hamburger */
+            }
+            .navbar .nav-link::after {
+                display: none; /* Cacher l'effet de soulignement dans le menu hamburger */
+            }
+
+            .welcome-section h2 {
+                font-size: 1.5rem;
+            }
+            .yellow-btn {
+                font-size: 0.75rem;
+                padding: 5px 8px;
+            }
+            .read-more-button, .donate-button {
+                font-size: 0.8rem;
+                padding: 8px 15px;
+            }
+            .news-banner img {
+                max-height: 200px;
+            }
+            #carouselExampleIndicators,
+            #carouselExampleIndicators .carousel-inner,
+            #carouselExampleIndicators .carousel-inner img {
+                max-height: 250px; /* Réduire encore la hauteur du carrousel sur très petits écrans */
+                height: 250px;
+            }
+            .custom-footer {
+                padding: 30px 0;
+            }
+            .social-icon-link, .wordpress-link {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 <body>
-    {% include "gestion_content/header.html" %}
-    <hr>
-    <div class="main-container ">
-        <div id="carouselExampleIndicators" class="carousel slide " data-bs-ride="carousel"data-bs-ride="carousel" data-aos="zoom-in-down" data-aos-delay="1000">
+
+    <header class="bg-light mt-2" data-aos="fade-down" data-aos-duration="1000">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-3">
+                    <a class="navbar-brand" href="#">
+                        <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="img-fluid">
+                    </a>
+                </div>
+                <div class="col-md-9 d-flex justify-content-end align-items-center">
+                    <div>
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2" style="font-weight: 600">Donateurs</a>
+                        {% if user_authenticate %}
+                            <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se déconnecter</a>
+                        {% else %}
+                            <a href="{% url "signup" %}" class="btn btn-primary btn-sm me-2" style="font-weight: 600;">S'inscrire</a>
+                            <a href="{% url "signin" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se connecter</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav class="navbar navbar-expand-lg navbar-dark" data-aos="fade-down" data-aos-delay="200">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <strong><a class="nav-link active" href="{% url "home" %}">Accueil</a>
+                       </strong>
+                    </li>
+                    <li class="nav-item">
+                        <strong>
+                         <a class="nav-link" href="{% url "evenement" %}">Calendrier des événements du continent</a>
+
+                        </strong>
+                    </li>
+                    <li class="nav-item">
+                        <strong>
+                        <a class="nav-link" href="#">Annuaire des librairies BD du continent</a>
+
+                        </strong>
+                    </li>
+                    <li class="nav-item">
+                        <strong>
+                            <a class="nav-link" href="{% url "auteur" %}">Auteurs</a>
+
+                        </strong>
+                    </li>
+                    <li class="nav-item">
+                        <strong>
+                        <a class="nav-link" href="#">BDthèque</a>
+
+                        </strong>
+                    </li>
+                    <li class="nav-item">
+                        <strong>
+                        <a class="nav-link" href="#">Webtoon</a>
+
+                        </strong>
+                    </li>
+                    <li class="nav-item">
+                        <strong>
+                        <a class="nav-link" href="#">A propos</a>
+
+                        </strong>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="main-content-wrapper">
+        <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-aos="zoom-in-down" data-aos-delay="300">
             <div class="carousel-indicators">
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
                 <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
-                </ul>
             </div>
             <div class="carousel-inner">
                 <div class="carousel-item active">
@@ -427,104 +690,118 @@ background-color: var(--primary-blue); /* Utilise la variable pour le bleu princ
             </button>
         </div>
 
-    <div class="container mt-4 welcome-section"data-aos="fade-up" data-aos-delay="200">
-    <h2>Bienvenue à la Maison Africaine de la BD</h2>
-    <p>La Maison Africaine de la BD est un espace dédié à la <strong>bande dessinée africaine</strong>, sous toutes ses formes. Ici, vous pouvez <strong>découvrir, explorer et célébrer</strong> le talent des créateurs et créatrices venus de tout le continent. La plateforme M.A.B.D. met en lumière les <strong>dessinateurs, scénaristes et artistes graphiques</strong> qui racontent l'Afrique à travers leurs planches, leurs histoires, leurs univers uniques. Qu'ils soient déjà connus ou encore émergents, tous ont en commun une passion pour l'image et le récit. Parcourez nos archives, plongez dans des créations originales, apprenez-en plus sur les auteurs, et laissez-vous emporter par la richesse des styles, des cultures et des voix qui font la force de la BD africaine.</p>
-    <p>La Maison Africaine de la BD, c'est une vitrine, un lieu de mémoire et un pont entre les talents et le public. Un endroit où l'Afrique se lit, se regarde et s'imagine autrement.</p>
-</div>
+        <div class="container mt-4 welcome-section" data-aos="fade-up" data-aos-delay="200">
+            <h2>Bienvenue à la Maison Africaine de la BD</h2>
+            <p>La Maison Africaine de la BD est un espace dédié à la **bande dessinée africaine**, sous toutes ses formes. Ici, vous pouvez **découvrir, explorer et célébrer** le talent des créateurs et créatrices venus de tout le continent. La plateforme M.A.B.D. met en lumière les **dessinateurs, scénaristes et artistes graphiques** qui racontent l'Afrique à travers leurs planches, leurs histoires, leurs univers uniques. Qu'ils soient déjà connus ou encore émergents, tous ont en commun une passion pour l'image et le récit. Parcourez nos archives, plongez dans des créations originales, apprenez-en plus sur les auteurs, et laissez-vous emporter par la richesse des styles, des cultures et des voix qui font la force de la BD africaine.</p>
+            <p>La Maison Africaine de la BD, c'est une vitrine, un lieu de mémoire et un pont entre les talents et le public. Un endroit où l'Afrique se lit, se regarde et s'imagine autrement.</p>
+        </div>
 
         <div class="container py-5">
-     <div class="row text-center justify-content-center g-4">
-      
-      <!-- Bloc 1 -->
-      <div class="col-12 col-md-3">
-        <div class="image-container">
-          <img src="{% static "gestion_content/images/card5.jpg" %}" class="image-square" alt="Public BD">
-        </div>
-        <div class="bar-wrapper">
-          <button class="yellow-btn">Infos pratiques</button>
-        </div>
-      </div>
-
-      <!-- Bloc 2 -->
-      <div class="col-12 col-md-3">
-        <div class="image-container">
-          <img src="{% static "gestion_content/images/card6.jpg" %}" class="image-square" alt="Public BD">
-        </div>
-        <div class="bar-wrapper">
-          <button class="yellow-btn">Sorties BD du mois</button>
-        </div>
-      </div>
-
-      <!-- Bloc 3 -->
-      <div class="col-12 col-md-3">
-        <div class="image-container">
-          <img src="{% static "gestion_content/images/card7.jpg" %}" class="image-square" alt="Public BD">
-        </div>
-        <div class="bar-wrapper">
-          <button class="yellow-btn">Evènements BD du mois</button>
-        </div>
-      </div>
-
-      <!-- Bloc 4 -->
-      <div class="col-12 col-md-3">
-        <div class="image-container">
-          <img src="{% static "gestion_content/images/card7.jpg" %}" class="image-square" alt="Public BD">
-        </div>
-        <div class="bar-wrapper">
-          <button class="yellow-btn">Soutenez M.A.B.D.</button>
-        </div>
-      </div>
-
-      </div>
-     </div>
-
-       
-
-      <div class="container" style="height: 10%;">
-        <div class="row">
-            {% for actu in actualite %}
-            <div class="col-md-8" >
-                <h2>Dernières nouvelles de la BD</h2>
-                <div class="news-section" >
-                    
-                    <div class="news-banner">
-                        <img src="{{actu.media.url}}" alt="14e Festival BD de Montréal" style="max-height: 200px; object-fit: cover;">
+            <div class="row text-center justify-content-center g-4">
+                <div class="col-12 col-sm-6 col-md-3 info-card-block" data-aos="fade-up" data-aos-delay="100">
+                    <div class="image-container">
+                        <img src="{% static "gestion_content/images/card5.jpg" %}" class="image-square" alt="Infos Pratiques">
                     </div>
-                    <h3 class="news-title">{{actu.title}}</h3>
-                    <a href="{{actu.url_actu}}" class="read-more-button">LIRE L'ARTICLE</a>
+                    <div class="bar-wrapper">
+                        <button class="yellow-btn">Infos pratiques</button>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-3 info-card-block" data-aos="fade-up" data-aos-delay="200">
+                    <div class="image-container">
+                        <img src="{% static "gestion_content/images/card6.jpg" %}" class="image-square" alt="Sorties BD">
+                    </div>
+                    <div class="bar-wrapper">
+                        <button class="yellow-btn">Sorties BD du mois</button>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-3 info-card-block" data-aos="fade-up" data-aos-delay="300">
+                    <div class="image-container">
+                        <img src="{% static "gestion_content/images/card7.jpg" %}" class="image-square" alt="Evènements BD">
+                    </div>
+                    <div class="bar-wrapper">
+                        <button class="yellow-btn">Evènements BD</button>
+                    </div>
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-3 info-card-block" data-aos="fade-up" data-aos-delay="400">
+                    <div class="image-container">
+                        <img src="{% static "gestion_content/images/card7.jpg" %}" class="image-square" alt="Soutien MABD">
+                    </div>
+                    <div class="bar-wrapper">
+                        <button class="yellow-btn">Soutenez M.A.B.D.</button>
+                    </div>
                 </div>
             </div>
-             <!-- <div class="col-md-4">
-                <div class="info-box">
-                    <h3 class="info-title">Infos pratiques</h3>
-                    <ul class="info-list">
-                        <li>Du 23 au 25 mai 2025</li>
-                        <li><i class="bi bi-clock"></i> Vendredi : de 12 h à 20 h</li>
-                        <li><i class="bi bi-clock"></i> Samedi : de 10 h à 20 h</li>
-                        <li><i class="bi bi-clock"></i> Dimanche : de 10 h à 17 h</li>
-                        <li><i class="bi bi-currency-dollar"></i> C'est gratuit</li>
-                    </ul>
-                </div>
+        </div>
 
-                <div class="donate-box">
-                    <h3 class="info-title">Faire un don</h3>
-                    <p>Vous avez décidé de passer à l'action? C'est par ici!</p>
-                    <a href="#" class="donate-button">DONNER</a>
+        <div class="separator"></div>
+
+        <div class="container">
+            <h2 class="news-section-title" data-aos="fade-up">Dernières nouvelles de la BD</h2>
+            <div class="row justify-content-center">
+                {% for actu in actualite %}
+                <div class="col-md-10 col-lg-8" data-aos="fade-up" data-aos-delay="{{ forloop.counter0|add:1 }}00">
+                    <div class="news-item">
+                        <div class="news-banner">
+                            <img src="{{actu.media.url}}" alt="{{actu.title}}">
+                        </div>
+                        <h3 class="news-title">{{actu.title}}</h3>
+                        <a href="{{actu.url_actu}}" class="read-more-button">LIRE L'ARTICLE</a>
+                    </div>
                 </div>
-            </div> -->
-            {% endfor %}
-           
+                {% empty %}
+                <div class="col-12" data-aos="fade-up">
+                    <p class="text-center">Aucune actualité pour le moment.</p>
+                </div>
+                {% endfor %}
+            </div>
         </div>
     </div>
-        </div>
-     
 
-         
- {% include "gestion_content/footer.html" %}
-     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>  
-     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-  <script>
-    AOS.init();
-  </script> 
-  </body>
+    <footer class="custom-footer mt-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left">
+
+                    <div class="icon-row my-3">
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square social-icon"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram social-icon"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok social-icon"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link social-icon"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-wordpress wordpress-link"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-md-4 text-center mb-4 mb-md-0">
+                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-center">
+                    <div class="link-bar">
+                        <a href="#">Conditions Générales d'Utilisation</a> | <a href="#">Politique de Confidentialité</a> | <a href="#">Contact</a>
+                    </div>
+                </div>
+
+                
+            </div>
+            <div class="row">
+                <div class="col-12 text-center pt-4">
+                    <p class="mb-0">&copy; <span id="current-year"></span> Maison Africaine de la BD. Tous droits réservés.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true, // whether animation should happen only once - while scrolling down
+            duration: 800, // values from 0 to 3000, with step 50ms
+        });
+
+        // Set current year in footer
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

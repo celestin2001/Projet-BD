@@ -8,181 +8,189 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
-        
     :root {
-        --primary-blue: #007bff; /* Bleu principal */
-        --light-blue: #e3f2fd; /* Bleu clair pour les fonds/bordures */
-        --dark-blue: #0056b3; /* Bleu foncé pour les accents */
-        --text-color: #333; /* Couleur de texte par défaut */
-        --link-color: var(--primary-blue); /* Couleur des liens */
-        --link-hover-color: var(--dark-blue); /* Couleur des liens au survol */
-        --filter-bg: var(--light-blue); /* Fond des filtres */
-        --bs-primary: #007bff; /* Couleur bleue Bootstrap par défaut. Vous pouvez changer cette valeur pour votre bleu spécifique. */
-        --header-bg-color: #007bff; /* Couleur bleue pour le menu principal */
-        --shadow-color: rgba(0, 0, 0, 0.1); /* Couleur d'ombre subtile */
-        --bs-primary: #007bff; /* Couleur bleue Bootstrap par défaut. Vous pouvez changer cette valeur pour votre bleu spécifique. */
-          --header-bg-color: #007bff;
+        --primary-blue: #007bff;
+        --light-blue: #e3f2fd;
+        --dark-blue: #0056b3;
+        --text-color: #343a40; /* Un peu plus foncé pour meilleur contraste */
+        --link-color: var(--primary-blue);
+        --link-hover-color: var(--dark-blue);
+        --filter-bg: var(--light-blue);
+        --bs-primary: #007bff; /* Synchronisé */
+        --header-bg-color: #007bff; /* Synchronisé */
+        --shadow-color: rgba(0, 0, 0, 0.08); /* Ombre plus subtile */
+        --footer-bg-color: var(--primary-blue);
+        --footer-text-color: #f8f9fa;
+        --footer-link-color: #e9ecef;
+        --footer-link-hover-color: #ffffff;
+        --content-max-width: 1200px; /* Define a max-width for consistent content width */
     }
 
     body {
-        font-family: sans-serif;
+        font-family: 'Montserrat', sans-serif; /* Police moderne appliquée globalement */
         color: var(--text-color);
-        background-color: #f8f9fa; /* Fond gris clair plus doux */
+        background-color: #f4f7f9; /* Fond général de la page */
+        line-height: 1.6;
+        min-height: 100vh; /* Ensure body takes full viewport height */
+        display: flex;
+        flex-direction: column; /* Allow header, main content, footer to stack */
     }
 
-    /* Header amélioré */
-    header.bg-light {
-        background-color: #fff !important; /* Fond blanc pur pour plus de contraste */
-        border-bottom: 1px solid var(--light-blue); /* Bordure inférieure discrète */
-        padding-top: 1rem;
-        padding-bottom: 1rem;
+    /* General layout adjustments */
+    .container {
+        max-width: var(--content-max-width); /* Apply max-width to Bootstrap containers */
+    }
+
+    /* Styles for the header (assuming it's included from header.html) */
+    /* These styles should complement, not conflict with, header.html's own styles */
+    header {
+        background-color: #fff !important; /* Ensure background is white */
+        border-bottom: 1px solid #dee2e6; /* Standard Bootstrap border */
+        padding-top: 0.75rem; /* Slightly reduced padding */
+        padding-bottom: 0.75rem; /* Slightly reduced padding */
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Subtle shadow */
+        position: sticky; /* Make header sticky */
+        top: 0; /* Stick to the top */
+        z-index: 1030; /* Ensure it's above other content */
     }
 
     header .navbar-brand img {
-        background-color: transparent !important; /* Logo sans fond blanc */
-         /* Ajuster la hauteur du logo si nécessaire */
+        max-height: 50px; /* Responsive height for logo */
+        width: auto;
+        background-color: transparent !important;
     }
 
-    header .btn-outline-primary {
-        border-color: var(--primary-blue);
-        color: var(--primary-blue);
-    }
-
-    header .btn-outline-primary:hover {
-        background-color: var(--primary-blue);
-        color: white;
-    }
-
-    /* Navigation affinée */
+    /* Styles for the main navigation bar within the header */
     .navbar-dark {
-        background-color: var(--header-bg-color) !important;
+        background-color: var(--header-bg-color) !important; /* Use variable */
+        box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Soft shadow */
     }
-
     .navbar-dark .navbar-nav .nav-item {
-        border-right: 1px solid white; /* Séparateur plus subtil */
+        border-right: 1px solid white; /* Separator for desktop menu items */
     }
-
     .navbar-dark .navbar-nav .nav-item:last-child {
-        border-right: none;
+        border-right: none; /* No separator on last item */
     }
-
     .navbar-dark .navbar-nav .nav-link {
-        color: white ; /* Texte moins intense */
-        padding: 0.7rem 1rem !important; 
-        /* Un peu plus d'espace */
+        color: rgba(255,255,255,0.9) !important;
+        padding: 0.85rem 1.1rem !important;
+        font-weight: 500;
+        transition: background-color 0.2s ease, color 0.2s ease;
     }
-
+    .navbar-dark .navbar-nav .nav-link.active,
     .navbar-dark .navbar-nav .nav-link:hover,
-    .navbar-dark .navbar-nav .nav-link:focus,
-    .navbar-dark .navbar-nav .nav-link.active {
-        color: white !important;
+    .navbar-dark .navbar-nav .nav-link:focus {
+        color: #ffffff !important;
+        background-color: rgba(255,255,255,0.15); /* Slightly more prominent hover */
+    }
+    .navbar-toggler {
+        border-color: rgba(255,255,255,0.2) !important;
+    }
+    .navbar-toggler-icon {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
     }
 
-    /* Titre principal */
+    /* Main content area */
+    main {
+        flex-grow: 1; /* Allow main content to grow and push footer down */
+        padding-top: 1.5rem; /* Space below sticky header */
+        padding-bottom: 2rem; /* Space above footer */
+    }
+
+    /* Titre principal de la page Auteurs */
     .titre-auteurs {
         text-align: center;
         color: var(--dark-blue);
-        font-size: 2.2em; /* Légèrement réduit pour un aspect plus moderne */
-        margin-bottom: 2rem;
-        text-shadow: 1px 1px 2px var(--shadow-color); /* Ombre plus discrète */
+        font-size: 2.5rem; /* Taille de police cohérente */
+        margin-bottom: 2.5rem; /* Marge augmentée */
+        font-weight: 700;
+        animation: fadeIn 1s ease-out; /* Basic fade-in animation */
     }
 
-    /* Section Auteur Principal (mise en avant) */
-    .section-auteur {
+    /* Section principale contenant filtres, recherche et listes d'auteurs */
+    .section-auteur-contenu {
         margin-top: 2rem;
-        background-color: white; /* Fond blanc pour la section mise en avant */
+        background-color: white;
         padding: 2rem;
         border-radius: 12px;
-        box-shadow: 0 4px 10px var(--shadow-color); /* Ombre douce */
-        border: 1px solid var(--light-blue); /* Bordure claire */
+        box-shadow: 0 6px 18px var(--shadow-color);
+        border: 1px solid #dee2e6;
     }
-
-    .section-auteur h2 {
+    .section-auteur-contenu h2 {
         color: var(--primary-blue);
         margin-bottom: 1.5rem;
-        text-align: left; /* Alignement à gauche pour cette section */
-    }
-
-    .section-auteur .row {
-        gap: 1rem; /* Espacement entre les cartes en ligne */
+        font-size: 1.75rem;
+        font-weight: 600;
+        border-bottom: 2px solid var(--light-blue);
+        padding-bottom: 0.5rem;
     }
 
     /* Cartes d'auteurs */
     .auteur-card-wrapper {
-        display: flex;
-        flex-direction: column;
         height: 100%;
+        display: flex;
     }
-
     .auteur-card {
-        border: none; /* Supprimer la bordure par défaut */
-        border-radius: 8px;
-        margin-bottom: 20px;
-        box-shadow: 0 2px 6px var(--shadow-color); /* Ombre plus douce */
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        box-shadow: 0 3px 8px var(--shadow-color);
         background-color: #fff;
-        transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Transitions plus rapides */
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         display: flex;
         flex-direction: column;
         height: 100%;
+        overflow: hidden;
     }
-
     .auteur-card:hover {
-        transform: translateY(-3px); /* Élévation plus subtile */
-        box-shadow: 0 6px 12px var(--shadow-color); /* Ombre légèrement plus prononcée au survol */
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.12);
     }
-
     .auteur-card img {
         width: 100%;
-        height: auto;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
         object-fit: cover;
         aspect-ratio: 1/1;
-        flex-grow: 1;
+        background-color: #f8f9fa;
     }
-
     .auteur-info {
-        padding: 15px;
+        padding: 1rem;
         text-align: left;
         display: flex;
         flex-direction: column;
+        flex-grow: 1;
     }
-
     .auteur-info h5 {
         color: var(--dark-blue);
-        margin-bottom: 0.2rem; /* Réduire la marge */
-        font-size: 1.1rem; /* Légèrement plus grand */
-        font-weight: 500; /* Un peu plus épais */
+        margin-bottom: 0.3rem;
+        font-size: 1.15rem;
+        font-weight: 600;
     }
-
     .auteur-info .flag-icon {
-        font-size: 1em;
-        margin-right: 0.3rem;
-        vertical-align: middle;
-        color: var(--primary-blue); /* Couleur de l'icône de drapeau */
+        font-size: 1.1em;
+        margin-right: 0.4rem;
     }
-
     .auteur-info p {
-        font-size: 0.85rem;
-        color: var(--text-color);
-        margin-bottom: 0.5rem;
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 0.75rem;
     }
-
     .auteur-info .btn-primary {
         background-color: var(--primary-blue);
         border-color: var(--primary-blue);
         color: white;
-        font-size: 0.8rem;
-        padding: 8px 12px;
-        border-radius: 5px;
-        display: inline-block;
-        text-decoration: none;
+        font-size: 0.85rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        text-transform: uppercase;
+        font-weight: 500;
         margin-top: auto;
+        align-self: flex-start;
     }
-
     .auteur-info .btn-primary:hover {
         background-color: var(--dark-blue);
         border-color: var(--dark-blue);
@@ -190,555 +198,459 @@
 
     /* Section des filtres */
     .filtres-section {
-        background-color: #fff; /* Fond blanc pour les filtres */
+        background-color: #f8f9fa;
         padding: 1.5rem;
         border-radius: 8px;
-        margin-bottom: 2rem;
-        border: 1px solid var(--light-blue); /* Bordure claire */
-        box-shadow: 0 2px 4px var(--shadow-color);
+        margin-bottom: 2.5rem;
+        border: 1px solid #dee2e6;
     }
-
-    .filtres-section h2 {
-        color: var(--primary-blue);
-        margin-bottom: 1rem;
-        font-size: 1.5rem;
-    }
-
-    .filtres-section p {
-        font-size: 0.85rem;
-        color: var(--text-color);
-        margin-bottom: 1rem;
+    .filtres-section p.filter-description {
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 1.25rem;
         font-style: italic;
     }
-
     .filtres-pays {
         display: flex;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 0.5rem;
         justify-content: flex-start;
     }
-
     .filtres-pays button {
         background-color: white;
         color: var(--primary-blue);
         border: 1px solid var(--primary-blue);
-        border-radius: 5px;
-        padding: 6px 12px;
-        font-size: 0.8em;
-        transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-        text-align: center;
-        flex-direction: row; /* Alignement icône et texte */
+        border-radius: 20px;
+        padding: 0.4rem 0.9rem;
+        font-size: 0.85em;
+        transition: background-color 0.2s ease, color 0.2s ease;
         display: inline-flex;
         align-items: center;
+        line-height: 1.5;
     }
-
     .filtres-pays button .flag-icon {
         font-size: 1.2em;
         margin-right: 0.5rem;
-        margin-bottom: 0; /* Réinitialiser la marge inférieure */
     }
-
     .filtres-pays button.active,
     .filtres-pays button:hover {
         background-color: var(--primary-blue);
         color: white;
-        border-color: var(--primary-blue);
     }
 
     /* Section de recherche */
     .recherche-section {
-        margin-bottom: 2rem;
-        text-align: right;
+        margin-bottom: 2.5rem;
     }
-
+    .recherche-section form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        align-items: center;
+    }
     .recherche-section label {
-        font-size: 0.9em;
+        font-size: 0.95rem;
         color: var(--text-color);
-        margin-right: 0.5rem;
+        margin-bottom: 0;
     }
-
     .recherche-section input[type="text"] {
-        padding: 8px;
-        border: 1px solid #ddd;
-        border-radius: 5px;
-        font-size: 0.9em;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #ced4da;
+        border-radius: 6px;
+        font-size: 0.95rem;
+        flex-grow: 1;
+        min-width: 150px;
     }
-
     .recherche-section button {
-        background-color: white;
-        color: var(--primary-blue);
-        border: 1px solid var(--primary-blue);
-        border-radius: 5px;
-        padding: 8px 12px;
-        font-size: 0.9em;
-        transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
-    }
-
-    .recherche-section button:hover {
         background-color: var(--primary-blue);
         color: white;
-        border-color: var(--primary-blue);
+        border: 1px solid var(--primary-blue);
+        border-radius: 6px;
+        padding: 0.5rem 1rem;
+        font-size: 0.95rem;
+        transition: background-color 0.2s ease, border-color 0.2s ease;
+    }
+    .recherche-section button:hover {
+        background-color: var(--dark-blue);
+        border-color: var(--dark-blue);
     }
 
-    /* Sections d'auteurs par pays et autres */
-    .section-auteurs-pays,
-    .section-autres-auteurs {
-        margin-top: 3rem;
-    }
-
-    .section-auteurs-pays h2,
-    .section-autres-auteurs h2 {
+    /* Section titres pour "Auteurs par Pays", etc. */
+    .section-auteurs-categorie h2 {
         color: var(--primary-blue);
+        margin-top: 3rem;
         margin-bottom: 1.5rem;
-        text-align: center;
-        font-size: 1.5rem;
-    }
-
-    .coups-de-coeur-row,
-    .auteurs-par-pays-row,
-    .autres-auteurs-row {
-        margin-bottom: 2rem;
-        display: flex;
-        overflow-x: auto;
-        gap: 1rem;
-        padding-bottom: 1rem; /* Pour éviter que l'ombre ne soit coupée */
-    }
-
-    .coups-de-coeur-row > div,
-    .auteurs-par-pays-row > div,
-    .autres-auteurs-row > div {
-        flex: 0 0 auto;
-        width: calc(50% - 1rem);
-        max-width: calc(50% - 1rem);
-    }
-
-    @media (min-width: 768px) {
-        .coups-de-coeur-row > div,
-        .auteurs-par-pays-row > div,
-        .autres-auteurs-row > div {
-            width: calc(33.33% - 1rem);
-            max-width: calc(33.33% - 1rem);
-        }
-    }
-
-    @media (min-width: 992px) {
-        .coups-de-coeur-row > div,
-        .auteurs-par-pays-row > div,
-        .autres-auteurs-row > div {
-            width: calc(16.66% - 1rem);
-            max-width: calc(16.66% - 1rem);
-        }
+        text-align: left;
+        font-size: 1.75rem;
+        font-weight: 600;
+        border-bottom: 2px solid var(--light-blue);
+        padding-bottom: 0.5rem;
     }
 
     /* Pagination */
     .pagination {
-        margin-top: 2rem;
+        margin-top: 3rem;
+        justify-content: center;
     }
-
     .page-item.active .page-link {
         background-color: var(--primary-blue);
         border-color: var(--primary-blue);
         color: white;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
-
     .page-link {
         color: var(--primary-blue);
-        border-color: #ddd;
+        border: 1px solid #dee2e6;
+        margin: 0 3px;
+        border-radius: 0.375rem;
+        transition: all 0.2s ease;
     }
-
     .page-link:hover {
         color: var(--dark-blue);
-        border-color: #ccc;
+        background-color: #e9ecef;
+        border-color: #ced4da;
+    }
+    .page-item.disabled .page-link {
+        color: #6c757d;
+        background-color: #f8f9fa;
+        border-color: #dee2e6;
     }
 
-    /* Section Connexion */
-    .section-connexion {
-        text-align: center;
-        padding: 2rem;
-        background-color: #fff; /* Fond blanc */
-        border-radius: 8px;
-        margin-top: 3rem;
-        box-shadow: 0 2px 4px var(--shadow-color);
-        border: 1px solid var(--light-blue);
+    /* Styles du Footer */
+    .custom-footer {
+        background-color: var(--footer-bg-color);
+        color: var(--footer-text-color);
+        padding: 50px 0;
+        animation: slideUp 1s ease-out 0.2s both;
+        box-shadow: 0 -4px 12px var(--shadow-color);
+        font-size: 0.9rem;
+        margin-top: auto; /* Push footer to the bottom */
     }
-
-    .section-connexion h2 {
-        color: var(--primary-blue);
+    .custom-footer .container {
+        max-width: var(--content-max-width);
+    }
+    .logo-left {
+        filter: brightness(0) invert(1);
+        max-width: 70px;
+        height: auto;
         margin-bottom: 1rem;
     }
-
-    .section-connexion p {
-        margin-bottom: 1.5rem;
-        font-size: 0.9em;
+    .logo-left:hover {
+        filter: brightness(0) invert(1) opacity(0.85);
+        transform: scale(1.05);
     }
-
-    .section-connexion .btn-primary {
-        font-size: 1rem;
-        padding: 10px 20px;
+    .custom-footer .icon-row {
+        margin-bottom: 1rem;
     }
-
-    .section-connexion a {
-        color: var(--link-color);
+    .social-icon-link, .wordpress-link {
+        color: var(--footer-link-color);
+        font-size: 1.3rem;
+        margin: 0 7px;
+        transition: color 0.2s ease, transform 0.2s ease;
+    }
+    .social-icon-link:hover, .wordpress-link:hover {
+        color: var(--footer-link-hover-color);
+        transform: scale(1.12) translateY(-1px);
+    }
+    .link-bar {
+        font-size: 0.8rem;
+    }
+    .link-bar a {
+        color: var(--footer-link-color);
+        margin: 0 5px;
         text-decoration: none;
     }
-
-    .section-connexion a:hover {
-        color: var(--link-hover-color);
+    .link-bar a:hover {
+        color: var(--footer-link-hover-color);
         text-decoration: underline;
     }
-    #* Footer */
-     .custom-footer {
-background-color: #007bff;; /* Utilise la variable pour le bleu principal */
-    color: #fff; /* Texte blanc pour contraste */
-    padding: 30px 0;
-    width: 100%;
-    animation: slideUp 1s ease-out both;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 0.9rem;
-    font-family: sans-serif;
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
+    .logo-center {
+        filter: brightness(0) invert(1);
+        max-width: 90px;
+        height: auto;
+        transition: filter 0.2s ease, transform 0.2s ease;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .logo-center:hover {
+        filter: brightness(0) invert(1) opacity(0.85);
+        transform: scale(1.05);
     }
-}
+    .center-logos {
+        gap: 20px;
+    }
 
-.logo-left {
-    width: 80px; /* Reduced logo size */
-    margin-bottom: 10px;
-    filter: grayscale(70%);
-    transition: filter 0.3s ease, transform 0.2s ease;
-}
+    html {
+      scroll-behavior: smooth;
+    }
 
-.logo-left:hover {
-    filter: grayscale(0%);
-    transform: scale(1.05);
-}
+    /* Keyframe animations */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(50px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
-.social-icon-link {
-    color: #555;
-    text-decoration: none;
-    margin: 0 5px;
-    font-size: 1.2rem; /* Slightly larger social icons */
-    transition: color 0.3s ease, transform 0.2s ease;
-}
+    /* Media Queries pour affinements */
+    @media (max-width: 991.98px) { /* lg breakpoint - affects desktop navbar collapse */
+        /* For the main navbar in header.html, ensure it has `navbar-expand-lg` to collapse below lg */
+        .navbar-dark .navbar-nav {
+            align-items: flex-start; /* Align left in hamburger menu */
+        }
+        .navbar-dark .navbar-nav .nav-item {
+            border-right: none; /* No separator in hamburger menu */
+            border-bottom: 1px solid rgba(255,255,255,0.1); /* Horizontal separator */
+            width: 100%; /* Take full width */
+        }
+        .navbar-dark .navbar-nav .nav-item:last-child {
+            border-bottom: none;
+        }
+        .navbar-dark .navbar-nav .nav-link {
+            padding: 0.75rem 1rem !important; /* Uniform padding in hamburger menu */
+        }
+    }
 
-.social-icon-link:hover {
-    color: var(--primary-blue); /* Use your primary blue */
-    transform: scale(1.1);
-}
-
-.social-icon {
-    /* Styles for Font Awesome icons */
-}
-
-.wordpress-link {
-    color: #555;
-    text-decoration: none;
-    margin: 0 5px;
-    font-size: 1.2rem; /* Slightly larger WordPress icons */
-    transition: color 0.3s ease, transform 0.2s ease;
-}
-
-.wordpress-link:hover {
-    color: #21759b; /* WordPress blue */
-    transform: scale(1.1);
-}
-
-.logo-wordpress {
-    /* Styles for Font Awesome WordPress icons */
-}
-
-.icon-row {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin-bottom: 0.5rem; /* Reduced margin */
-}
-
-.link-bar {
-    font-size: 0.75rem; /* Smaller link bar text */
-}
-
-.link-bar a {
-    color: #555;
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.link-bar a:hover {
-    color: var(--primary-blue);
-}
-
-.logo-center {
-    max-width: 100px; /* Reduced center logo size */
-    height: auto;
-    filter: grayscale(70%);
-    transition: filter 0.3s ease, transform 0.2s ease;
-}
-
-.logo-center:hover {
-    filter: grayscale(0%);
-    transform: scale(1.05);
-}
-html {
-  scroll-behavior: smooth;
-}
+    @media (max-width: 767.98px) { /* md breakpoint */
+        .titre-auteurs {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+        .section-auteur-contenu {
+            padding: 1.5rem;
+        }
+        .section-auteur-contenu h2,
+        .section-auteurs-categorie h2 {
+            font-size: 1.5rem;
+        }
+        .recherche-section form {
+            flex-direction: column; /* Stack search form elements */
+            align-items: stretch;
+        }
+        .recherche-section input[type="text"],
+        .recherche-section button {
+            width: 100%; /* Full width for input and button */
+        }
+        .filtres-pays {
+            justify-content: center; /* Center filter buttons on mobile */
+        }
+        /* Footer adjustments for mobile */
+        .custom-footer .col-lg-4, .custom-footer .col-lg-8 {
+            text-align: center !important;
+            margin-bottom: 1.5rem; /* Space between stacked columns */
+        }
+        .custom-footer .col-lg-4:last-child, .custom-footer .col-lg-8:last-child {
+            margin-bottom: 0;
+        }
+        .center-logos {
+            justify-content: center !important;
+        }
+        .custom-footer .icon-row {
+            justify-content: center !important; /* Center social icons */
+        }
+        .custom-footer .link-bar {
+            text-align: center !important; /* Center link bar */
+        }
+    }
+    @media (max-width: 575.98px) { /* sm breakpoint */
+        .auteur-info h5 {
+            font-size: 1.05rem;
+        }
+        .auteur-info p {
+            font-size: 0.8rem;
+        }
+        .auteur-info .btn-primary {
+            font-size: 0.75rem;
+            padding: 0.4rem 0.6rem;
+        }
+        .filtres-pays button {
+            font-size: 0.8em;
+            padding: 0.35rem 0.8rem;
+        }
+    }
 
     </style>
 </head>
 <body>
-    <div class="container mt-2">
+    {# The header is included here. Ensure header.html has the correct Bootstrap Navbar structure. #}
+    {% include "gestion_content/header.html" %}
 
+    <main class="flex-shrink-0"> {# main tag with flex-shrink to push footer #}
+        <div class="container mt-4">
+            <h1 class="titre-auteurs">Découvrez nos Auteurs Talentueux</h1>
 
-        <header class="bg-light py-3"data-aos="fade-down" data-aos-duration="1000">
-            <div class="container">
-                <div class="row align-items-center">
-                    <div class="col-md-3">
-                        <a class="navbar-brand" href="#">
-                            <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="" style="background-color: white;width: auto; height: 150px;">
-                        </a>
-                    </div>
-                    <div class="col-md-9 d-flex justify-content-end align-items-center">
-                        <div class="d-none d-md-block">
-                            <a href="#" class="btn btn-outline-primary btn-sm me-2">Donateurs</a>
-                           {% if user.is_authenticated %}
-                                <a href="{% url 'deconnexion' %}" class="btn btn-primary btn-sm" style="font-weight: 600;
-    font-family: 'Times New Roman', Times, serif;">Se deconnecter</a>
-    {% else %}
-                                <a href="{% url 'signup' %}" class="btn btn-primary btn-sm me-2" style="font-weight: 600;
-    font-family: 'Times New Roman', Times, serif;">S'inscrire</a>
-                            <a href="{% url 'signin' %}" class="btn btn-primary btn-sm" style="font-weight: 600;
-    font-family: 'Times New Roman', Times, serif;">Se connecter</a>
-    {% endif %}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
-
-        <nav class="navbar navbar-expand-lg navbar-dark"data-aos="fade-down" data-aos-delay="200">
-            <div class="container">
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="mainNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="{% url "home" %}" style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">Accueil</a>
-                        </li>
-                       
-                      
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url "evenement" %}"style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">Calendrier des événements du continent</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">Annuaire des librairies BD du continent</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url "auteur" %}"style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">Auteurs</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">BDthèque</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">Webtoon</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">A propos</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <h1 class="titre-auteurs mt-4">Découvrez nos Auteurs Talentueux</h1>
-
-        <div class="section-auteur">
-            <section class="section-vedettes mt-4">
-                <h2>Nos Auteurs Vedettes</h2>
-                <div class="row coups-de-coeur-row">
-                    {% for auteur in auteurs_vedettes_principaux %}
-                    <div class="col-md-4 col-lg-2">
-                        <div class="auteur-card-wrapper">
-                            <div class="auteur-card">
-                                <img src="{{ auteur.profil_picture.url }}" alt="{{ auteur.username }}" class="img-fluid img-thumbnail">
-                                <div class="auteur-info">
-                                    <h5>{{ auteur.username }}</h5>
-                                    <p><span class="flag-icon flag-icon-{{ auteur.pays|lower }}"></span> {{ auteur.get_pays_display }}</p>
-                                    <a href="{% url 'detail_auteur' auteur.id %}" class="btn btn-primary btn-sm">PLUS D'INFOS</a>
+            <div class="section-auteur-contenu">
+                <section class="section-vedettes mb-4">
+                    <h2>Nos Auteurs Vedettes</h2>
+                    <div class="row g-3">
+                        {% for auteur in auteurs_vedettes_principaux %}
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                            <div class="auteur-card-wrapper">
+                                <div class="auteur-card">
+                                    <img src="{{ auteur.profil_picture.url }}" alt="{{ auteur.username }}" class="img-fluid">
+                                    <div class="auteur-info">
+                                        <h5>{{ auteur.username }}</h5>
+                                        <p><span class="flag-icon flag-icon-{{ auteur.pays|lower }}"></span> {{ auteur.get_pays_display }}</p>
+                                        <a href="{% url 'detail_auteur' auteur.id %}" class="btn btn-primary">PLUS D'INFOS</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    {% empty %}
-                    <p class="text-center">Aucun auteur vedette principal pour le moment.</p>
-                    {% endfor %}
-                </div>
-            </section>
-
-            <div class="filtres-section mt-4">
-                <h2>Filtres</h2>
-                <p>Filtrer les auteurs par pays </p>
-               <form method="get" action="{% url 'auteur' %}#auteurs-par-pays-section">
-
-                    <!-- <div class="form-check mb-2">
-                        <input type="checkbox" class="form-check-input" id="exclude_vedettes" name="exclude_vedettes" value="true" {% if request.GET.exclude_vedettes == 'true' %}checked{% endif %}>
-                        <label class="form-check-label" for="exclude_vedettes">Masquer les coups de cœur</label>
-                    </div> -->
-                    <div class="filtres-pays">
-                        <button type="submit" name="pays" value="" class="btn {% if not request.GET.pays %}active{% endif %}"><span class="flag-icon flag-icon-af"></span> Tous les pays</button>
-                        {% for code, nom in pays_list.items %}
-                        <button type="submit" name="pays" value="{{ code }}" class="btn {% if request.GET.pays == code %}active{% endif %}"><span class="flag-icon flag-icon-{{ code|lower }}"></span> {{ nom }}</button>
+                        {% empty %}
+                        <div class="col-12">
+                            <p class="text-center text-muted">Aucun auteur vedette principal pour le moment.</p>
+                        </div>
                         {% endfor %}
                     </div>
-                    {% if request.GET.q %}
-                        <input type="hidden" name="q" value="{{ request.GET.q }}">
-                    {% endif %}
-                    {% if request.GET.genre %}
-                        <input type="hidden" name="genre" value="{{ request.GET.genre }}">
-                    {% endif %}
-                </form>
-            </div>
+                </section>
 
-            <div class="recherche-section mt-4">
-                <form method="get" action="{% url 'auteur' %}">
-                    <label for="q">Rechercher un auteur :</label>
-                    <input type="text" id="q" name="q" value="{{ request.GET.q }}" placeholder="Nom ou email">
-                    <button type="submit" class="btn btn-outline-secondary btn-sm">Rechercher</button>
-                    {% if request.GET.genre %}
-                        <input type="hidden" name="genre" value="{{ request.GET.genre }}">
-                    {% endif %}
-                    {% if request.GET.pays %}
-                        <input type="hidden" name="pays" value="{{ request.GET.pays }}">
-                    {% endif %}
-                    {% if request.GET.exclude_vedettes %}
-                        <input type="hidden" name="exclude_vedettes" value="{{ request.GET.exclude_vedettes }}">
-                    {% endif %}
-                </form>
-            </div>
+                <div class="filtres-section">
+                    <h2>Filtres</h2>
+                    <p class="filter-description">Filtrer les auteurs par pays :</p>
+                    <form method="get" action="{% url 'auteur' %}#auteurs-par-pays-section">
+                        <div class="filtres-pays">
+                            <button type="submit" name="pays" value="" class="btn {% if not request.GET.pays %}active{% endif %}">
+                                <i class="fas fa-globe-africa me-1"></i> Tous
+                            </button>
+                            {% for code, nom in pays_list.items %}
+                            <button type="submit" name="pays" value="{{ code }}" class="btn {% if request.GET.pays == code %}active{% endif %}">
+                                <span class="flag-icon flag-icon-{{ code|lower }}"></span> {{ nom }}
+                            </button>
+                            {% endfor %}
+                        </div>
+                        {% if request.GET.q %}<input type="hidden" name="q" value="{{ request.GET.q }}">{% endif %}
+                        {% if request.GET.genre %}<input type="hidden" name="genre" value="{{ request.GET.genre }}">{% endif %}
+                    </form>
+                </div>
 
-            <section class="section-auteurs-pays mt-4" id="auteurs-par-pays-section">
-                <h2>Auteurs par Pays</h2>
-                <div class="row auteurs-par-pays-row">
-                    {% for auteur in auteurs_filtrés %} <!- Ici, 'auteurs_filtrés' contenait la liste filtrée sans pagination -->
-                    <div class="col-md-4 col-lg-2">
-                        <div class="auteur-card-wrapper">
-                            <div class="auteur-card">
-                                <img src="{{ auteur.profil_picture.url }}" alt="{{ auteur.username }}" class="img-fluid img-thumbnail">
-                                <div class="auteur-info">
-                                    <h5>{{ auteur.username }}</h5>
-                                    <p><span class="flag-icon flag-icon-{{ auteur.pays|lower }}"></span> {{ auteur.get_pays_display }}</p>
-                                    <a href="{% url 'detail_auteur' auteur.id %}" class="btn btn-primary btn-sm">PLUS D'INFOS</a>
+                <div class="recherche-section">
+                    <form method="get" action="{% url 'auteur' %}" class="row g-2 align-items-center justify-content-md-end">
+                        <div class="col-auto">
+                            <label for="q" class="visually-hidden">Rechercher un auteur</label>
+                        </div>
+                        <div class="col-md-4 col-sm-6 col-12">
+                            <input type="text" id="q" name="q" value="{{ request.GET.q }}" placeholder="Nom ou email de l'auteur" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-auto">
+                            <button type="submit" class="btn btn-sm"><i class="fas fa-search me-1"></i> Rechercher</button>
+                        </div>
+                        {% if request.GET.genre %}<input type="hidden" name="genre" value="{{ request.GET.genre }}">{% endif %}
+                        {% if request.GET.pays %}<input type="hidden" name="pays" value="{{ request.GET.pays }}">{% endif %}
+                    </form>
+                </div>
+
+                <section class="section-auteurs-categorie" id="auteurs-par-pays-section">
+                    <h2>Auteurs {% if request.GET.pays %}- {{ request.GET.pays_display_name|default:request.GET.pays }} {% elif request.GET.q %}- Résultats pour "{{request.GET.q}}" {% else %}par Pays{% endif %}</h2>
+                    <div class="row g-3">
+                        {% for auteur in auteurs_filtrés %}
+                        <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                            <div class="auteur-card-wrapper">
+                                <div class="auteur-card">
+                                    <img src="{{ auteur.profil_picture.url }}" alt="{{ auteur.username }}" class="img-fluid">
+                                    <div class="auteur-info">
+                                        <h5>{{ auteur.username }}</h5>
+                                        <p><span class="flag-icon flag-icon-{{ auteur.pays|lower }}"></span> {{ auteur.get_pays_display }}</p>
+                                        <a href="{% url 'detail_auteur' auteur.id %}" class="btn btn-primary">PLUS D'INFOS</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <p class="text-center text-muted">Aucun auteur trouvé avec ces critères.</p>
+                        </div>
+                        {% endfor %}
                     </div>
-                    {% empty %}
-                    <p class="text-center">Aucun auteur trouvé avec ces critères.</p>
-                    {% endfor %}
-                </div>
-            </section>
+                </section>
 
-            {% if user_authenticate %}
-            <nav id="pagination-section" aria-label="Page navigation">
-                {% if auteurs.has_other_pages %} <!- À ce moment, 'auteurs' pouvait être utilisé ici si vous aviez déjà tenté une pagination simple -->
-                <ul class="pagination justify-content-center mt-4">
-                    {% if auteurs.has_previous %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ auteurs.previous_page_number }}
-                           {% if request.GET.q %}&q={{ request.GET.q }}{% endif %}
-                           {% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}
-                           {% if request.GET.pays %}&pays={{ request.GET.pays }}{% endif %}
-                           {% if request.GET.exclude_vedettes %}&exclude_vedettes={{ request.GET.exclude_vedettes }}{% endif %}">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    {% endif %}
+                {% if auteurs_filtrés.has_other_pages %}
+                <nav id="pagination-section" aria-label="Page navigation" class="mt-5">
+                    <ul class="pagination">
+                        {% if auteurs_filtrés.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ auteurs_filtrés.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="Précédent">
+                                <span aria-hidden="true">&laquo;</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+                        {% endif %}
 
-                    {% for i in auteurs.paginator.page_range %}
-                    <li class="page-item {% if auteurs.number == i %}active{% endif %}">
-                        <a class="page-link" href="?page={{ i }}
-                           {% if request.GET.q %}&q={{ request.GET.q }}{% endif %}
-                           {% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}
-                           {% if request.GET.pays %}&pays={{ request.GET.pays }}{% endif %}
-                           {% if request.GET.exclude_vedettes %}&exclude_vedettes={{ request.GET.exclude_vedettes }}{% endif %}">
-                            {{ i }}
-                        </a>
-                    </li>
-                    {% endfor %}
+                        {% for i in auteurs_filtrés.paginator.page_range %}
+                            {% if auteurs_filtrés.number == i %}
+                                <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
+                            {% elif i > auteurs_filtrés.number|add:'-3' and i < auteurs_filtrés.number|add:'3' %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a></li>
+                            {% elif i == auteurs_filtrés.paginator.page_range.0 or i == auteurs_filtrés.paginator.page_range|last %}
+                                {% if i == auteurs_filtrés.paginator.page_range.0 and auteurs_filtrés.number > 4 %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a></li>
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                {% elif i == auteurs_filtrés.paginator.page_range|last and auteurs_filtrés.number < auteurs_filtrés.paginator.num_pages|add:'-3' %}
+                                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                                    <li class="page-item"><a class="page-link" href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a></li>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
 
-                    {% if auteurs.has_next %}
-                    <li class="page-item">
-                        <a class="page-link" href="?page={{ auteurs.next_page_number }}
-                           {% if request.GET.q %}&q={{ request.GET.q }}{% endif %}
-                           {% if request.GET.genre %}&genre={{ request.GET.genre }}{% endif %}
-                           {% if request.GET.pays %}&pays={{ request.GET.pays }}{% endif %}
-                           {% if request.GET.exclude_vedettes %}&exclude_vedettes={{ request.GET.exclude_vedettes }}{% endif %}">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                    {% endif %}
-                </ul>
+                        {% if auteurs_filtrés.has_next %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ auteurs_filtrés.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="Suivant">
+                                <span aria-hidden="true">&raquo;</span>
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+                        {% endif %}
+                    </ul>
+                </nav>
                 {% endif %}
-            </nav>
-            
-            {% endif %}
-
+            </div>
         </div>
-    </div>
-    </div>
-     <!-- start footer -->
-    <footer class="custom-footer mt-4" style="background-color: #007bff;  color: #fff; /* Texte blanc pour contraste */
-    padding: 30px 0;
-    width: 100%;
-    height: 100%;
-    animation: slideUp 1s ease-out both;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-    font-size: 0.9rem;
-    font-family: sans-serif;">
-    <div class="container">
-        <div class="row align-items-center">
-            <div class="col-md-4 text-center mb-4 mb-md-0">
-                <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left">
+    </main>
 
-                <div class="icon-row my-3">
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link social-icon"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-youtube social-icon"></i></a>
+    <footer class="custom-footer">
+        <div class="container">
+            <div class="row align-items-center gy-4">
+                <div class="col-lg-4 col-md-6 text-center text-md-start">
+                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left img-fluid">
+                    <div class="icon-row my-3 d-flex justify-content-center justify-content-md-start"> {# Added d-flex #}
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <div class="icon-row d-flex justify-content-center justify-content-md-start"> {# Added d-flex #}
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
+                    </div>
+                    <div class="mt-3 link-bar text-center text-md-start">
+                        <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a> /
+                        <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a> /
+                        <a href="#" target="_blank" rel="noopener noreferrer">Tik Tok</a> <br class="d-md-none">
+                        <a href="#" target="_blank" rel="noopener noreferrer">Link</a> /
+                        <a href="#" target="_blank" rel="noopener noreferrer">Youtube</a>
+                    </div>
                 </div>
-
-                <div class="icon-row">
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress logo-wordpress"></i></a>
-                    <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress logo-wordpress"></i></a>
-                </div>
-
-                <div class="mt-3">
-                    <div class="link-bar">
-                        <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a> / <a href="#" target="_blank" rel="noopener noreferrer"><span class="text-decoration-underline">insta</span></a> / <a href="#" target="_blank" rel="noopener noreferrer">Tik Tok</a> / <a href="#" target="_blank" rel="noopener noreferrer">Link</a> / <a href="#" target="_blank" rel="noopener noreferrer"><span class="text-decoration-underline">Youtube</span></a>
+                <div class="col-lg-8 col-md-6 text-center text-md-end mt-4 mt-md-0">
+                    <p class="mb-2" style="font-size: 0.9em; color: var(--footer-link-color);">Nos partenaires :</p>
+                    <div class="center-logos d-flex justify-content-center justify-content-md-end align-items-center flex-wrap">
+                        <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo Maison de la BD" class="logo-center img-fluid">
                     </div>
                 </div>
             </div>
-
-            <div class="col-md-8 text-center">
-                <div class="center-logos d-flex justify-content-center gap-4 flex-wrap">
-                    <img src="texte.jfif" alt="Logo Maduta" class="logo-center">
-                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo Maison de la BD" class="logo-center">
+            <div class="row mt-4">
+                <div class="col text-center" style="font-size: 0.8em; color: var(--footer-link-color, #bdc1c6);">
+                    &copy; {% now "Y" %} Maison Africaine de la BD. Tous droits réservés.
                 </div>
             </div>
         </div>
-    </div>
-</footer>
-    
-    <!-- Ajout des icônes FontAwesome -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    </footer>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // No specific JS needed here for the navbar if header.html is well-formed
+        // and Bootstrap's bundle.min.js is correctly loaded.
+    </script>
 </body>
 </html>
