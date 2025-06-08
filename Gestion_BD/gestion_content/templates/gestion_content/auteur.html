@@ -48,16 +48,21 @@
     }
 
     /* Styles for the header (assuming it's included from header.html) */
-    /* These styles should complement, not conflict with, header.html's own styles */
     header {
         background-color: #fff !important; /* Ensure background is white */
         border-bottom: 1px solid #dee2e6; /* Standard Bootstrap border */
-        padding-top: 0.75rem; /* Slightly reduced padding */
-        padding-bottom: 0.75rem; /* Slightly reduced padding */
+        padding-top: 0; /* Let navbar handle its own padding */
+        padding-bottom: 0; /* Let navbar handle its own padding */
         box-shadow: 0 2px 8px rgba(0,0,0,0.08); /* Subtle shadow */
         position: sticky; /* Make header sticky */
         top: 0; /* Stick to the top */
         z-index: 1030; /* Ensure it's above other content */
+        width: 100%; /* Ensure the header itself is full width */
+    }
+
+    header .navbar-brand {
+        padding-top: 0.5rem; /* Adjust padding around logo */
+        padding-bottom: 0.5rem;
     }
 
     header .navbar-brand img {
@@ -70,19 +75,45 @@
     .navbar-dark {
         background-color: var(--header-bg-color) !important; /* Use variable */
         box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Soft shadow */
+        width: 100%; /* Ensure the navbar fills its parent's width */
     }
+
+    /* --- MENU FULL WIDTH AND SEPARATORS FIX --- */
+    .navbar-expand-lg .navbar-collapse {
+        width: 100%; /* Ensures the collapsible part takes full width on large screens */
+    }
+
+    .navbar-dark .navbar-nav {
+        display: flex; /* Use flexbox to distribute items */
+        width: 100%; /* Ensure the nav takes full width */
+        justify-content: space-around; /* Distribute items evenly with space around */
+        align-items: stretch; /* Make items stretch to fill height */
+    }
+
     .navbar-dark .navbar-nav .nav-item {
-        border-right: 1px solid white; /* Separator for desktop menu items */
+        border-right: 1px solid rgba(255, 255, 255, 0.5); /* White separator with some transparency */
+        flex-grow: 1; /* Allow each nav-item to grow and fill available space */
+        text-align: center; /* Center text within each menu item */
     }
     .navbar-dark .navbar-nav .nav-item:last-child {
         border-right: none; /* No separator on last item */
     }
+
+   
+
     .navbar-dark .navbar-nav .nav-link {
         color: rgba(255,255,255,0.9) !important;
         padding: 0.85rem 1.1rem !important;
         font-weight: 500;
         transition: background-color 0.2s ease, color 0.2s ease;
+        display: block; /* Make the whole link clickable and fill the item */
+        height: 100%; /* Ensure the link fills the height of its parent nav-item */
+        display: flex; /* Use flexbox for vertical centering if needed */
+        align-items: center; /* Vertically center content */
+        justify-content: center; /* Horizontally center content */
     }
+    /* --- END MENU FIX --- */
+
     .navbar-dark .navbar-nav .nav-link.active,
     .navbar-dark .navbar-nav .nav-link:hover,
     .navbar-dark .navbar-nav .nav-link:focus {
@@ -91,6 +122,7 @@
     }
     .navbar-toggler {
         border-color: rgba(255,255,255,0.2) !important;
+        padding: 0.25rem 0.75rem; /* Better touch target */
     }
     .navbar-toggler-icon {
         background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
@@ -393,21 +425,38 @@
     }
 
     /* Media Queries pour affinements */
+    @media (min-width: 992px) { /* Applies from large (lg) breakpoint and up */
+        .navbar-expand-lg .container-fluid,
+        .navbar-expand-lg .container {
+            padding-right: 0; /* Remove horizontal padding for full width */
+            padding-left: 0; /* Remove horizontal padding for full width */
+            width: 100%;
+            max-width: none; /* Crucial for full width menu on large screens */
+        }
+    }
+
     @media (max-width: 991.98px) { /* lg breakpoint - affects desktop navbar collapse */
         /* For the main navbar in header.html, ensure it has `navbar-expand-lg` to collapse below lg */
+        .navbar-collapse {
+            background-color: var(--header-bg-color); /* Ensure collapsed menu has background */
+            border-top: 1px solid rgba(255,255,255,0.1); /* Separator for collapsed menu */
+            padding-bottom: 0.5rem; /* Add some padding at the bottom of the collapsed menu */
+        }
         .navbar-dark .navbar-nav {
-            align-items: flex-start; /* Align left in hamburger menu */
+            align-items: stretch; /* Stretch items to full width in hamburger menu */
+            flex-direction: column; /* Stack items vertically in hamburger menu */
         }
         .navbar-dark .navbar-nav .nav-item {
-            border-right: none; /* No separator in hamburger menu */
+            border-right: none; /* No vertical separator in hamburger menu */
             border-bottom: 1px solid rgba(255,255,255,0.1); /* Horizontal separator */
             width: 100%; /* Take full width */
+            text-align: center; /* Center menu items for better mobile aesthetics */
         }
         .navbar-dark .navbar-nav .nav-item:last-child {
             border-bottom: none;
         }
         .navbar-dark .navbar-nav .nav-link {
-            padding: 0.75rem 1rem !important; /* Uniform padding in hamburger menu */
+            padding: 1rem !important; /* More comfortable padding in hamburger menu */
         }
     }
 
@@ -648,9 +697,5 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        // No specific JS needed here for the navbar if header.html is well-formed
-        // and Bootstrap's bundle.min.js is correctly loaded.
-    </script>
 </body>
 </html>

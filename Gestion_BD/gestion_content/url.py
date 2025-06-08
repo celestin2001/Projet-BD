@@ -11,5 +11,6 @@ urlpatterns = [
   path('texte_mail',texte_mail, name='texte_mail'),
   path('profil_auteur',profil_auteur,name="profil_auteur"),
   path('apropos',apropos,name='apropos'),
+  path('page404',custom_404_view,name="page404")
  
 ]

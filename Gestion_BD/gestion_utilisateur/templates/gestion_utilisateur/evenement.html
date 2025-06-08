@@ -21,14 +21,14 @@
             --primary-blue: #007bff;
             --light-blue: #e3f2fd;
             --dark-blue: #0056b3;
-            --text-color: #343a40; /* Texte un peu plus foncé pour meilleur contraste */
+            --text-color: #343a40;
             --link-color: var(--primary-blue);
             --link-hover-color: var(--dark-blue);
             --filter-bg: var(--light-blue);
             --bs-primary: #007bff;
             --header-bg-color: #007bff;
             --content-max-width: 1240px;
-            --shadow-color: rgba(0, 0, 0, 0.08); /* Ombre encore plus subtile */
+            --shadow-color: rgba(0, 0, 0, 0.08);
             --footer-bg-color: var(--primary-blue);
             --footer-text-color: #f8f9fa;
             --footer-link-color: #e9ecef;
@@ -36,31 +36,31 @@
         }
 
         body {
-            font-family: 'Montserrat', sans-serif; /* Police mise à jour */
-            background-color: #f4f7f9; /* Fond très légèrement bleuté/gris */
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f4f7f9;
             color: var(--text-color);
-            line-height: 1.6; /* Interligne de base */
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            line-height: 1.6;
+            overflow-x: hidden;
         }
 
         .page-container {
             max-width: var(--content-max-width);
             margin: 0 auto;
-            padding: 2rem 15px; /* Padding vertical augmenté */
+            padding: 2rem 15px;
         }
 
         h1.page-title {
             text-align: center;
             color: var(--primary-blue);
-            margin-bottom: 1rem; /* Marge réduite, le sous-titre suit */
-            font-weight: 700; /* Police plus affirmée */
-            font-size: 2.25rem; /* Taille ajustée */
+            margin-bottom: 1rem;
+            font-weight: 700;
+            font-size: 2.25rem;
         }
 
         p.page-subtitle {
             font-size: 1.1rem;
-            color: #555; /* Couleur adoucie pour le sous-titre */
-            margin-bottom: 2.5rem; /* Plus d'espace avant le contenu principal */
+            color: #555;
+            margin-bottom: 2.5rem;
             text-align: center;
         }
 
@@ -68,22 +68,22 @@
             width: 100%;
             margin: 0 auto;
             background: #fff;
-            padding: 25px; /* Padding uniforme */
-            border-radius: 12px; /* Coins plus arrondis */
-            box-shadow: 0 8px 25px var(--shadow-color); /* Ombre douce et diffuse */
-            border: 1px solid #dee2e6; /* Bordure légère */
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            border: 1px solid #dee2e6;
         }
 
         #eventSearch {
             display: block;
-            margin: 0 auto 2.5rem; /* Plus d'espace en bas */
-            padding: 0.75rem 1rem; /* Dimensions Bootstrap standard pour input-lg */
-            max-width: 500px; /* Max-width pour le champ de recherche */
+            margin: 0 auto 2.5rem;
+            padding: 0.75rem 1rem;
+            max-width: 500px;
             width: 100%;
             border: 1px solid #ced4da;
-            border-radius: 0.5rem; /* Coins plus arrondis */
+            border-radius: 0.5rem;
             font-size: 1rem;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,.075); /* Ombre intérieure subtile */
+            box-shadow: inset 0 1px 2px rgba(0,0,0,.075);
         }
         #eventSearch::placeholder {
             color: #6c757d;
@@ -96,23 +96,23 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background: #fff;
-            padding: 30px; /* Padding augmenté */
-            border-radius: 10px; /* Coins arrondis */
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2); /* Ombre plus marquée pour la modale */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
             width: 90vw;
-            max-width: 550px; /* Max-width modale augmenté */
-            max-height: 90vh; /* Hauteur max augmentée */
+            max-width: 550px;
+            max-height: 90vh;
             overflow-y: auto;
-            z-index: 1055; /* Au-dessus de la navbar si besoin */
+            z-index: 1055;
         }
 
         #eventModal img {
             width: 100%;
-            height: 220px; /* Hauteur fixe pour l'image dans la modale */
-            object-fit: cover; /* Assure que l'image couvre sans se déformer */
-            border-radius: 8px; /* Coins arrondis pour l'image */
-            margin-bottom: 1.25rem; /* Marge sous l'image */
-            background-color: #e9ecef; /* Couleur de fond si l'image est transparente ou en chargement */
+            height: 220px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 1.25rem;
+            background-color: #e9ecef;
         }
         #eventModal h3 {
             color: var(--primary-blue);
@@ -123,15 +123,15 @@
         }
         #eventModal p {
             margin-bottom: 0.8rem;
-            color: #495057; /* Texte de la modale légèrement plus clair */
+            color: #495057;
         }
         #eventModal strong {
-            color: var(--dark-blue); /* Mots en gras plus foncés */
+            color: var(--dark-blue);
         }
-        #eventModal .btn-close { /* Style pour le bouton X de Bootstrap */
-            filter: grayscale(1) contrast(0%) brightness(150%); /* Bouton X blanc */
+        #eventModal .btn-close {
+            filter: grayscale(1) contrast(0%) brightness(150%);
         }
-        #eventModal .modal-footer-custom { /* Si vous voulez un pied de page à la modale */
+        #eventModal .modal-footer-custom {
             padding-top: 1.5rem;
             border-top: 1px solid #dee2e6;
             text-align: right;
@@ -139,26 +139,26 @@
 
         .tooltip {
             position: absolute;
-            z-index: 1080; /* Au-dessus de la plupart des éléments */
-            background-color: #fff; /* Fond blanc */
+            z-index: 1080;
+            background-color: #fff;
             color: var(--text-color);
             border-radius: 8px;
-            padding: 12px 18px; /* Padding ajusté */
-            box-shadow: 0 5px 20px rgba(0,0,0,0.12); /* Ombre douce */
+            padding: 12px 18px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
             font-size: 0.9rem;
-            max-width: 300px; /* Largeur max du tooltip */
+            max-width: 300px;
             opacity: 0;
             transition: opacity 0.25s ease, transform 0.25s ease;
             pointer-events: none;
             white-space: normal;
             border: 1px solid #e0e0e0;
-            transform: translateY(10px); /* Position de départ pour l'animation */
+            transform: translateY(10px);
         }
         .tooltip.visible {
             opacity: 1;
             transform: translateY(0);
         }
-        .tooltip::before { /* Flèche du tooltip */
+        .tooltip::before {
             content: "";
             position: absolute;
             width: 12px;
@@ -166,16 +166,16 @@
             background-color: #fff;
             border: 1px solid #e0e0e0;
             transform-origin: center center;
-            z-index: -1; /* Derrière le contenu du tooltip */
+            z-index: -1;
         }
-        .tooltip.tooltip-top::before { /* Flèche en bas, pointant vers le haut */
-            bottom: -7px; /* Positionne la flèche en dessous */
+        .tooltip.tooltip-top::before {
+            bottom: -7px;
             left: 50%;
             transform: translateX(-50%) rotate(45deg);
             border-top: none;
             border-left: none;
         }
-        .tooltip.tooltip-bottom::before { /* Flèche en haut, pointant vers le bas */
+        .tooltip.tooltip-bottom::before {
             top: -7px;
             left: 50%;
             transform: translateX(-50%) rotate(45deg);
@@ -183,73 +183,79 @@
             border-right: none;
         }
 
-        /* Header Specific Styles (from header.html context) */
+        /* Header Specific Styles */
         header.bg-light {
-            background-color: #fff !important; /* Fond blanc pur pour plus de contraste */
-            border-bottom: 1px solid var(--light-blue); /* Bordure inférieure discrète */
-            margin-top: 1rem; /* Adjust if needed based on your overall layout */
+            background-color: #fff !important;
+            border-bottom: 1px solid var(--light-blue);
+            margin-top: 1rem;
         }
 
         header .navbar-brand img {
-            background-color: transparent !important; /* Logo sans fond blanc */
-            width: auto; /* Allow width to scale */
-            height: 150px; /* Default height */
-            max-height: 150px; /* Ensure it doesn't get too tall */
-            object-fit: contain; /* Ensure the image fits within the bounds */
+            background-color: transparent !important;
+            width: auto;
+            height: 150px;
+            max-height: 150px;
+            object-fit: contain;
         }
 
-        /* Adjust logo size for smaller screens */
-        @media (max-width: 767.98px) { /* For small screens (less than md breakpoint) */
-            header .navbar-brand img {
-                height: 80px; /* Smaller height for mobile */
-                max-height: 80px;
-            }
-        }
-
+        /* --- DEBUT DES CORRECTIONS --- */
+        
         /* Navbar responsive */
-        .navbar { /* S'applique à la navbar incluse dans header.html */
+        .navbar {
             background-color: var(--header-bg-color) !important;
             max-width: var(--content-max-width);
-            margin: 0 auto; /* Centrer la navbar si elle est plus étroite que l'écran */
-            border-radius: 0 0 8px 8px; /* Coins arrondis en bas */
+            margin: 0 auto;
+            border-radius: 0 0 8px 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .navbar-brand img { /* If you have a logo within the navbar-brand itself */
-            max-height: 40px;
+        .navbar-nav {
+            display: flex;
+            justify-content: space-around; /* Distribue l'espace */
+        }
+
+        .navbar .nav-item {
+            border-right: 1px solid rgba(255, 255, 255, 0.5); /* Ligne séparatrice */
+            flex-grow: 1; /* Chaque élément grandit pour occuper l'espace */
+            text-align: center; /* Centre le texte */
+        }
+        
+        .navbar .nav-item:last-child {
+            border-right: none;
         }
 
         .navbar .nav-link {
             color: white !important;
-            /* Modifié: Réduire le padding horizontal et la taille de police */
-            padding: 0.75rem 0.7rem !important; /* Padding ajusté pour plus d'espace */
-            font-size: 0.95rem; /* Taille de police légèrement réduite */
             font-weight: 600;
             position: relative;
             transition: color 0.3s ease;
-            white-space: nowrap; /* Empêche le texte de passer à la ligne */
+            white-space: nowrap;
+            padding: 0.75rem 1rem !important;
         }
+
+        /* --- FIN DES CORRECTIONS --- */
+
         .navbar .nav-link::after {
             content: '';
             position: absolute;
-            bottom: 5px; /* Ajuster pour la position du soulignement */
+            bottom: 5px;
             left: 50%;
             transform: translateX(-50%);
             width: 0;
             height: 2px;
-            background-color: #ffc107; /* Assuming a yellow accent color */
+            background-color: #ffc107;
             transition: width 0.3s ease;
         }
 
         .navbar .nav-link:hover,
         .navbar .nav-link:focus,
-        .navbar .nav-item.active .nav-link { /* Style pour l'élément actif */
+        .navbar .nav-item.active .nav-link {
             color: rgba(255, 255, 255, 0.9) !important;
         }
         .navbar .nav-link:hover::after,
         .navbar .nav-link:focus::after,
         .navbar .nav-item.active .nav-link::after {
-            width: 70%; /* Soulignement au survol/focus */
+            width: 70%;
         }
 
         .navbar-toggler {
@@ -258,58 +264,48 @@
         .navbar-toggler-icon {
             background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
         }
-
-        /* Séparateur vertical pour les éléments de la navbar */
-        .navbar .nav-item {
-            border-right: 1px solid white; /* Ligne verticale blanche semi-transparente */
-        }
-
-        /* Supprimer le séparateur du dernier élément pour éviter une ligne inutile à la fin */
-        .navbar .nav-item:last-child {
-            border-right: none;
-        }
-
-        /* Styles du Footer */
+        
+        /* Footer Styles */
         .custom-footer {
             background-color: var(--footer-bg-color);
             color: var(--footer-text-color);
-            padding: 50px 0; /* Padding vertical augmenté */
-            box-shadow: 0 -4px 12px var(--shadow-color); /* Ombre plus distincte */
+            padding: 50px 0;
+            box-shadow: 0 -4px 12px var(--shadow-color);
             font-size: 0.9rem;
-            margin-top: 4rem; /* Plus d'espace avant le footer */
+            margin-top: 4rem;
         }
         .custom-footer .container {
             max-width: var(--content-max-width);
         }
         .logo-left {
             filter: brightness(0) invert(1);
-            max-width: 70px; /* Taille contrôlée */
-            height: auto;  /* Maintien des proportions */
-            margin-bottom: 1rem; /* Marge sous le logo */
+            max-width: 70px;
+            height: auto;
+            margin-bottom: 1rem;
         }
         .logo-left:hover {
             filter: brightness(0) invert(1) opacity(0.85);
             transform: scale(1.05);
         }
         .custom-footer .icon-row {
-            margin-bottom: 1rem; /* Espace sous les rangées d'icônes */
+            margin-bottom: 1rem;
         }
         .social-icon-link, .wordpress-link {
-            color: var(--footer-link-color); /* Couleur des icônes/liens du footer */
-            font-size: 1.3rem; /* Taille des icônes sociaux */
-            margin: 0 7px; /* Espacement horizontal */
+            color: var(--footer-link-color);
+            font-size: 1.3rem;
+            margin: 0 7px;
             transition: color 0.2s ease, transform 0.2s ease;
         }
         .social-icon-link:hover, .wordpress-link:hover {
             color: var(--footer-link-hover-color);
-            transform: scale(1.12) translateY(-1px); /* Effet de survol amélioré */
+            transform: scale(1.12) translateY(-1px);
         }
         .link-bar {
             font-size: 0.8rem;
         }
         .link-bar a {
             color: var(--footer-link-color);
-            margin: 0 5px; /* Espacement ajusté */
+            margin: 0 5px;
             text-decoration: none;
         }
         .link-bar a:hover {
@@ -318,8 +314,8 @@
         }
         .logo-center {
             filter: brightness(0) invert(1);
-            max-width: 90px; /* Taille contrôlée */
-            height: auto;  /* Maintien des proportions */
+            max-width: 90px;
+            height: auto;
             transition: filter 0.2s ease, transform 0.2s ease;
         }
         .logo-center:hover {
@@ -327,49 +323,69 @@
             transform: scale(1.05);
         }
         .center-logos {
-            gap: 20px; /* Espace entre les logos centraux */
+            gap: 20px;
         }
 
-        /* Media Queries pour ajustements fins */
-        @media (max-width: 991.98px) { /* Bootstrap lg breakpoint */
-            .navbar-dark .navbar-nav {
-                align-items: flex-start; /* Aligner à gauche dans le menu hamburger */
-            }
+        /* Media Queries */
+        @media (max-width: 991.98px) {
             .navbar .nav-item {
-                border-right: none; /* Pas de séparateur dans le menu hamburger */
-                border-bottom: 1px solid rgba(255,255,255,0.1); /* Séparateur horizontal */
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.1);
+                width: 100%;
             }
             .navbar .nav-item:last-child {
                 border-bottom: none;
             }
-            /* Sur les écrans plus petits, la propriété white-space: nowrap peut causer des débordements
-                Quand le menu est en mode "hamburger" (colonne), on veut que le texte revienne à la ligne. */
             .navbar .nav-link {
-                white-space: normal; /* Permettre au texte de revenir à la ligne dans le menu hamburger */
-                padding: 0.75rem 1rem !important; /* Revenir au padding standard */
-                font-size: 1rem; /* Revenir à la taille de police standard */
+                white-space: normal;
+                padding: 0.75rem 1rem !important;
+                font-size: 1rem;
+                text-align: left;
             }
         }
 
-        @media (max-width: 767.98px) { /* Bootstrap md breakpoint */
+        @media (max-width: 767.98px) {
+            header .navbar-brand img {
+                height: 80px;
+                max-height: 80px;
+            }
+
+            /* --- DEBUT CORRECTION ESPACEMENT HEADER --- */
+            .header-buttons-container {
+                margin-bottom: 1rem; /* Espace sous les boutons sur mobile */
+                text-align: center;  /* Centre les boutons */
+                width: 100%;
+            }
+
+            header .row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            header .col-md-3, header .col-md-9 {
+                justify-content: center !important;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+             /* --- FIN CORRECTION ESPACEMENT HEADER --- */
+            
             #calendar {
                 padding: 15px;
             }
             .fc-header-toolbar {
                 flex-direction: column;
-                align-items: stretch; /* Étirer les sections pour prendre toute la largeur */
+                align-items: stretch;
                 gap: 12px;
             }
-            .fc-header-toolbar .fc-toolbar-chunk { /* Assurer que chaque partie de la toolbar est bien disposée */
+            .fc-header-toolbar .fc-toolbar-chunk {
                 display: flex;
                 justify-content: space-between;
                 margin-bottom: 5px;
             }
-            .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) { /* Titre (center) */
+            .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
                 justify-content: center;
-                order: -1; /* Mettre le titre en premier sur mobile */
+                order: -1;
             }
-
             h1.page-title {
                 font-size: 1.9rem;
             }
@@ -379,17 +395,17 @@
             }
             .custom-footer .col-lg-4, .custom-footer .col-lg-8 {
                 text-align: center !important;
-                margin-bottom: 2rem; /* Plus d'espace entre les sections du footer sur mobile */
+                margin-bottom: 2rem;
             }
             .custom-footer .col-lg-4:last-child, .custom-footer .col-lg-8:last-child {
                 margin-bottom: 0;
             }
             .center-logos {
-                justify-content: center !important; /* Centrer les logos centraux sur mobile */
+                justify-content: center !important;
             }
         }
 
-        @media (max-width: 575.98px) { /* Bootstrap sm breakpoint */
+        @media (max-width: 575.98px) {
             .page-container {
                 padding: 1.5rem 15px;
             }
@@ -403,10 +419,10 @@
             }
             #eventModal {
                 padding: 20px;
-                width: 95vw; /* Encore plus de largeur sur très petits écrans */
+                width: 95vw;
             }
             #eventModal img {
-                height: 180px; /* Hauteur image modale réduite */
+                height: 180px;
             }
             #eventModal h3 {
                 font-size: 1.5rem;
@@ -416,7 +432,7 @@
                 font-size: 0.85em !important;
             }
             .social-icon-link, .wordpress-link {
-                font-size: 1.2rem; /* Icônes un peu plus petites */
+                font-size: 1.2rem;
                 margin: 0 5px;
             }
         }
@@ -433,7 +449,7 @@
                     </a>
                 </div>
                 <div class="col-md-9 d-flex justify-content-end align-items-center">
-                    <div>
+                    <div class="header-buttons-container">
                         <a href="#" class="btn btn-outline-primary btn-sm me-2" style="font-weight: 600">Donateurs</a>
                         {% if user_authenticate %}
                             <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se déconnecter</a>
@@ -453,15 +469,15 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav w-100">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url "home" %}">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url "evenement" %}">Calendrier des événements du continent</a>
+                        <a class="nav-link active" href="{% url "evenement" %}">Evènements</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Annuaire des librairies BD du continent</a>
+                        <a class="nav-link" href="#"> librairies BD Afrique</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url "auteur" %}">Auteurs</a>
@@ -546,7 +562,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const calendarEl = document.getElementById('calendar');
             const tooltipEl = document.createElement('div');
-            tooltipEl.className = 'tooltip'; // Initialement caché par opacité 0
+            tooltipEl.className = 'tooltip';
             document.body.appendChild(tooltipEl);
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
@@ -567,16 +583,16 @@
                         title: '{{ e.titre_evenement|escapejs }}',
                         start: '{{ e.date_evenement|date:"Y-m-d" }}{% if e.heure_evenement %}T{{ e.heure_evenement|time:"H:i:s" }}{% endif %}',
                         {% if e.date_fin_evenement %}
-                        end: '{{ e.date_fin_evenement|date:"Y-m-d" }}T23:59:59', // Assurer que l'événement de plusieurs jours inclut le dernier jour
+                        end: '{{ e.date_fin_evenement|date:"Y-m-d" }}T23:59:59',
                         {% endif %}
-                        color: '{{ e.couleur_evenement|default:"#007bff" }}', // Couleur personnalisable par événement
+                        color: '{{ e.couleur_evenement|default:"#007bff" }}',
                         extendedProps: {
                             location: '{{ e.lieu_evenement|escapejs|default:"Non spécifié" }}',
                             description: `{{ e.description|escapejs|default:"Aucune description." }}`,
                             image: '{% if e.image %}{{ e.image.url }}{% else %}{% static "gestion_content/images/default_event.png" %}{% endif %}',
-                            heure: '{{ e.heure_evenement|time:"H:i"|default:"" }}', // "" si non précisé
+                            heure: '{{ e.heure_evenement|time:"H:i"|default:"" }}',
                             date_debut_formatted: '{{ e.date_evenement|date:"d/m/Y" }}',
-                            date_fin_formatted: '{% if e.date_fin_evenement %}{{ e.date_fin_evenement|date:"d/m/Y" }}{% else %}{% endif %}' // "" si non précisé
+                            date_fin_formatted: '{% if e.date_fin_evenement %}{{ e.date_fin_evenement|date:"d/m/Y" }}{% else %}{% endif %}'
                         }
                     }{% if not forloop.last %},{% endif %}
                     {% endfor %}
@@ -585,16 +601,13 @@
                     const e = info.event.extendedProps;
                     document.getElementById('modalTitle').textContent = info.event.title;
                     document.getElementById('modalLocation').textContent = e.location;
-
                     let startStr = e.date_debut_formatted;
                     if (e.heure) startStr += ` à ${e.heure}`;
                     document.getElementById('modalStart').textContent = startStr;
-
                     document.getElementById('modalEnd').textContent = e.date_fin_formatted || 'Non précisée';
                     document.getElementById('modalDescription').innerHTML = e.description.replace(/\n/g, '<br>');
                     document.getElementById('modalImage').src = e.image;
                     document.getElementById('eventModal').style.display = 'block';
-
                     tooltipEl.classList.remove('visible');
                     tooltipEl.style.display = 'none';
                 },
@@ -605,44 +618,36 @@
                     if (e.date_fin_formatted && e.date_fin_formatted !== e.date_debut_formatted) {
                         timeStr += ` → ${e.date_fin_formatted}`;
                     } else if (e.date_fin_formatted && e.date_fin_formatted === e.date_debut_formatted && info.event.allDay === false && info.event.end) {
-                        // Gérer l'heure de fin si même jour et non allDay
                         let endDate = new Date(info.event.endStr);
                         let endTime = endDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                        if (e.heure && endTime !== e.heure) { // Si heure de début et heure de fin différentes
+                        if (e.heure && endTime !== e.heure) {
                              if(e.heure) timeStr = `${e.date_debut_formatted} de ${e.heure} à ${endTime}`;
                              else timeStr += ` jusqu'à ${endTime}`;
                         }
                     }
-
                     tooltipEl.innerHTML = `
                         <div style="font-weight: 600; font-size: 1.05em; margin-bottom: 5px; color: ${info.event.backgroundColor || 'var(--primary-blue)'};">${info.event.title}</div>
                         <div style="font-size: 0.9em;">
                             <div><i class="fas fa-map-marker-alt me-2" style="color: #6c757d;"></i> ${e.location}</div>
                             <div><i class="fas fa-clock me-2" style="color: #6c757d;"></i> ${timeStr}</div>
                         </div>`;
-
-                    tooltipEl.style.display = 'block'; // Nécessaire pour calculer offsetHeight/offsetWidth
-
+                    tooltipEl.style.display = 'block';
                     const eventRect = info.el.getBoundingClientRect();
                     const bodyRect = document.body.getBoundingClientRect();
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                     const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-
-                    let top = eventRect.top + scrollTop - tooltipEl.offsetHeight - 12; // 12px de marge au-dessus
+                    let top = eventRect.top + scrollTop - tooltipEl.offsetHeight - 12;
                     let left = eventRect.left + scrollLeft + (eventRect.width / 2) - (tooltipEl.offsetWidth / 2);
-                    let tooltipClass = 'tooltip-top'; // Flèche en bas (tooltip au-dessus)
-
-                    if (top < scrollTop + 5) { // Si sort en haut
-                        top = eventRect.bottom + scrollTop + 12; // Positionner en dessous
-                        tooltipClass = 'tooltip-bottom'; // Flèche en haut (tooltip en dessous)
+                    let tooltipClass = 'tooltip-top';
+                    if (top < scrollTop + 5) {
+                        top = eventRect.bottom + scrollTop + 12;
+                        tooltipClass = 'tooltip-bottom';
                     }
-
                     if (left < scrollLeft + 5) left = scrollLeft + 5;
                     if (left + tooltipEl.offsetWidth > scrollLeft + window.innerWidth - 5) {
                         left = scrollLeft + window.innerWidth - tooltipEl.offsetWidth - 5;
                     }
-
-                    tooltipEl.className = 'tooltip visible ' + tooltipClass; // Appliquer la classe pour la flèche
+                    tooltipEl.className = 'tooltip visible ' + tooltipClass;
                     tooltipEl.style.left = left + 'px';
                     tooltipEl.style.top = top + 'px';
                 },
@@ -655,20 +660,22 @@
                     }, 50);
                 },
                 windowResize: function(view) {
-                    // Peut-être forcer la fermeture du tooltip en cas de redimensionnement
                     tooltipEl.classList.remove('visible');
                     tooltipEl.style.display = 'none';
                 }
             });
-
             calendar.render();
-
             document.getElementById('eventSearch').addEventListener('input', function (e) {
                 const search = e.target.value.toLowerCase().trim();
-                calendar.getEvents().forEach(ev => {
-                    const match = ev.title.toLowerCase().includes(search) ||
-                                    (ev.extendedProps.location && ev.extendedProps.location.toLowerCase().includes(search));
-                    ev.setProp('display', match || search === '' ? 'auto' : 'none');
+                calendar.getEvents().forEach(event => {
+                    const title = event.title.toLowerCase();
+                    const location = event.extendedProps.location.toLowerCase();
+                    const description = event.extendedProps.description.toLowerCase();
+                    if (title.includes(search) || location.includes(search) || description.includes(search)) {
+                        event.setProp('display', 'auto');
+                    } else {
+                        event.setProp('display', 'none');
+                    }
                 });
             });
         });

@@ -109,34 +109,36 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        .navbar-brand img { /* If you have a logo within the navbar-brand itself */
-            max-height: 40px;
+        /* --- DEBUT MODIFICATIONS PROBLEME 1 --- */
+        .navbar-nav {
+            display: flex;
+            justify-content: space-around; /* Distribue l'espace uniformément */
         }
 
-        .navbar .nav-link {
-            color: white !important;
-            /* font-weight: 500; */
-            font-size: 15px;
-            
-            position: relative;
-            transition: color 0.3s ease;
-            /* Added for single line text */
-            white-space: nowrap; /* Prevent text wrapping */
-            overflow: hidden;    /* Hide overflow content */
-            text-overflow: ellipsis; /* Add ellipsis for hidden text */
-        }
-
-        /* Styles pour les lignes séparatrices verticales */
         .navbar .nav-item {
-            border-right: 1px solid rgba(255, 255, 255, 0.5); /* Ligne blanche semi-transparente */
-            padding-left: 15px; /* Espace à gauche du texte pour la ligne précédente */
+            border-right: 1px solid rgba(255, 255, 255, 0.5);
+            padding-left: 0;
+            padding-right: 0;
+            flex-grow: 1; /* Permet à chaque item de grandir et occuper l'espace */
+            text-align: center; /* Centre le texte à l'intérieur de chaque item */
         }
 
         .navbar .nav-item:last-child {
             border-right: none; /* Supprime la bordure sur le dernier élément */
         }
-        /* Fin des styles pour les lignes séparatrices verticales */
-
+        
+        .navbar .nav-link {
+            color: white !important;
+            font-size: 15px;
+            position: relative;
+            transition: color 0.3s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block; /* Le lien remplit tout le li */
+            padding: 0.75rem 1rem;
+        }
+        /* --- FIN MODIFICATIONS PROBLEME 1 --- */
 
         .navbar .nav-link::after {
             content: '';
@@ -490,22 +492,35 @@
 
         /* Media Queries pour la responsivité fine */
         @media (max-width: 991.98px) { /* Bootstrap lg breakpoint */
-            /* For the main navigation bar within the header, ensure it has `navbar-expand-lg` to collapse below lg */
-            .navbar .nav-link {
-                padding: 0.6rem 0.8rem !important; /* Réduire padding pour les liens sur tablettes */
-            }
-            .navbar .navbar-nav { /* S'assurer que les éléments du menu sont bien alignés quand le menu est ouvert */
+            .navbar .navbar-nav {
                 align-items: center;
             }
         }
 
         @media (max-width: 767.98px) { /* Bootstrap md breakpoint */
-            /* Supprime les bordures verticales sur mobile */
+            /* --- DEBUT MODIFICATIONS PROBLEME 2 --- */
+            .header-buttons-container {
+                margin-bottom: 1rem; /* Espace sous les boutons sur mobile */
+                text-align: center;  /* Centre les boutons */
+                width: 100%;
+            }
+
+            header .row {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            header .col-md-3, header .col-md-9 {
+                justify-content: center !important;
+                margin-bottom: 1rem;
+            }
+            /* --- FIN MODIFICATIONS PROBLEME 2 --- */
+            
+            /* Supprime les bordures verticales sur mobile et les remplace par des horizontales */
             .navbar .nav-item {
                 border-right: none;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.2); /* Ajoute une petite ligne horizontale pour la séparation */
-                padding-right: 0;
-                padding-left: 0;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                width: 100%; /* S'assure que les items prennent toute la largeur */
             }
 
             .navbar .nav-item:last-child {
@@ -522,38 +537,36 @@
                 font-size: 1.3rem;
             }
             .yellow-btn {
-                font-size: 0.8rem; /* Réduire la taille du texte du bouton si nécessaire */
+                font-size: 0.8rem;
                 padding: 6px 10px;
             }
             .image-container {
-                margin-bottom: 0; /* Le bar-wrapper fournit déjà de l'espace en dessous */
+                margin-bottom: 0;
             }
-            .info-card-block .bar-wrapper { /* Sur mobile, les cartes sont empilées, ajouter un peu d'espace en bas de la barre */
+            .info-card-block .bar-wrapper {
                 margin-bottom: 1.5rem;
             }
             #carouselExampleIndicators,
             #carouselExampleIndicators .carousel-inner,
             #carouselExampleIndicators .carousel-inner img {
-                max-height: 300px; /* Réduire la hauteur du carrousel sur mobile */
+                max-height: 300px;
                 height: 300px;
             }
-
-            /* Adjust the nav-link padding and overflow for smaller screens when collapsed */
             .navbar-collapse .nav-link {
-                white-space: normal; /* Allow text to wrap within the hamburger menu */
-                text-overflow: clip; /* Remove ellipsis for full text in hamburger menu */
-                padding: 0.75rem 1rem !important; /* Restore normal padding for stacked items */
+                white-space: normal;
+                text-overflow: clip;
+                padding: 0.75rem 1rem !important;
             }
         }
 
         @media (max-width: 575.98px) { /* Bootstrap sm breakpoint */
             .navbar .nav-link {
                 font-size: 0.9rem;
-                padding: 0.5rem !important; /* padding plus petit pour les liens de la navbar */
-                text-align: center; /* Centrer les liens dans le menu hamburger */
+                padding: 0.5rem !important;
+                text-align: center;
             }
             .navbar .nav-link::after {
-                display: none; /* Cacher l'effet de soulignement dans le menu hamburger */
+                display: none;
             }
 
             .welcome-section h2 {
@@ -573,7 +586,7 @@
             #carouselExampleIndicators,
             #carouselExampleIndicators .carousel-inner,
             #carouselExampleIndicators .carousel-inner img {
-                max-height: 250px; /* Réduire encore la hauteur du carrousel sur très petits écrans */
+                max-height: 250px;
                 height: 250px;
             }
             .custom-footer {
@@ -590,13 +603,12 @@
     <header class="bg-light mt-2" data-aos="fade-down" data-aos-duration="1000">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-md-3">
-                    <a class="navbar-brand" href="#">
+                <div class="col-md-3 text-center text-md-start"> <a class="navbar-brand" href="#">
                         <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="img-fluid">
                     </a>
                 </div>
                 <div class="col-md-9 d-flex justify-content-end align-items-center">
-                    <div>
+                    <div class="header-buttons-container">
                         <a href="#" class="btn btn-outline-primary btn-sm me-2" style="font-weight: 600">Donateurs</a>
                         {% if user_authenticate %}
                             <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se déconnecter</a>
@@ -616,46 +628,27 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainNav">
-                <ul class="navbar-nav me-auto">
+                <ul class="navbar-nav w-100">
                     <li class="nav-item">
-                        <strong><a class="nav-link active" href="{% url "home" %}">Accueil</a>
-                       </strong>
+                        <strong><a class="nav-link active" href="{% url "home" %}">Accueil</a></strong>
                     </li>
                     <li class="nav-item">
-                        <strong>
-                         <a class="nav-link" href="{% url "evenement" %}">Calendrier des événements du continent</a>
-
-                        </strong>
+                        <strong><a class="nav-link" href="{% url "evenement" %}">Evènements</a></strong>
                     </li>
                     <li class="nav-item">
-                        <strong>
-                        <a class="nav-link" href="#">Annuaire des librairies BD du continent</a>
-
-                        </strong>
+                        <strong><a class="nav-link" href="#"> Librairies BD Afrique</a></strong>
                     </li>
                     <li class="nav-item">
-                        <strong>
-                            <a class="nav-link" href="{% url "auteur" %}">Auteurs</a>
-
-                        </strong>
+                        <strong><a class="nav-link" href="{% url "auteur" %}">Auteurs</a></strong>
                     </li>
                     <li class="nav-item">
-                        <strong>
-                        <a class="nav-link" href="#">BDthèque</a>
-
-                        </strong>
+                        <strong><a class="nav-link" href="#">BDthèque</a></strong>
                     </li>
                     <li class="nav-item">
-                        <strong>
-                        <a class="nav-link" href="#">Webtoon</a>
-
-                        </strong>
+                        <strong><a class="nav-link" href="#">Webtoon</a></strong>
                     </li>
                     <li class="nav-item">
-                        <strong>
-                        <a class="nav-link" href="#">A propos</a>
-
-                        </strong>
+                        <strong><a class="nav-link" href="#">A propos</a></strong>
                     </li>
                 </ul>
             </div>
@@ -760,33 +753,42 @@
         </div>
     </div>
 
-    <footer class="custom-footer mt-4">
+<footer class="custom-footer">
         <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-4 text-center mb-4 mb-md-0">
-                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left">
+            <div class="row align-items-center gy-4">
+                <div class="col-lg-4 col-md-6 text-center text-md-start">
+                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left img-fluid">
 
-                    <div class="icon-row my-3">
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square social-icon"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram social-icon"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok social-icon"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link social-icon"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-wordpress wordpress-link"></i></a>
+                    <div class="icon-row my-3 justify-content-center justify-content-md-start">
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-youtube"></i></a>
+                    </div>
+                    <div class="icon-row justify-content-center justify-content-md-start">
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
+                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
+                    </div>
+                    <div class="mt-3 link-bar text-center text-md-start">
+                        <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a> /
+                        <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a> /
+                        <a href="#" target="_blank" rel="noopener noreferrer">Tik Tok</a> <br class="d-md-none"> <a href="#" target="_blank" rel="noopener noreferrer">Link</a> /
+                        <a href="#" target="_blank" rel="noopener noreferrer">Youtube</a>
                     </div>
                 </div>
 
-                <div class="col-md-4 text-center mb-4 mb-md-0">
-                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-center">
-                    <div class="link-bar">
-                        <a href="#">Conditions Générales d'Utilisation</a> | <a href="#">Politique de Confidentialité</a> | <a href="#">Contact</a>
+                <div class="col-lg-8 col-md-6 text-center text-md-end mt-4 mt-md-0">
+                    <p class="mb-2" style="font-size: 0.9em; color: var(--footer-link-color);">Nos partenaires :</p>
+                    <div class="center-logos d-flex justify-content-center justify-content-md-end align-items-center flex-wrap">
+                        <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Partenaire 1" class="logo-center img-fluid">
+                        <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Partenaire 2" class="logo-center img-fluid">
                     </div>
                 </div>
-
-                
             </div>
-            <div class="row">
-                <div class="col-12 text-center pt-4">
-                    <p class="mb-0">&copy; <span id="current-year"></span> Maison Africaine de la BD. Tous droits réservés.</p>
+            <div class="row mt-4">
+                <div class="col text-center" style="font-size: 0.8em; color: var(--footer-link-color, #bdc1c6);">
+                    &copy; {% now "Y" %} Maison Africaine de la BD. Tous droits réservés.
                 </div>
             </div>
         </div>
@@ -795,13 +797,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
-        AOS.init({
-            once: true, // whether animation should happen only once - while scrolling down
-            duration: 800, // values from 0 to 3000, with step 50ms
-        });
-
-        // Set current year in footer
-        document.getElementById('current-year').textContent = new Date().getFullYear();
+        AOS.init();
     </script>
 </body>
 </html>

@@ -16,9 +16,9 @@ SECRET_KEY = "django-insecure-c&7t#9g=*9(b2*_h3$zb!$vko0xffi0+=omr=dalbeyrefk87t
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['auteur-bd.bilili-bd.com', 'bilili-bd.com', 'localhost']
+ALLOWED_HOSTS = ['*']
 #'auteur-bd.bilili-bd.com', 'bilili-bd.com', 'localhost'
 # Celestin2001.pythonanywhere.com'
 X_FRAME_OPTIONS = 'ALLOWALL'
@@ -131,11 +131,16 @@ if IS_PRODUCTION:
 else:
     # Configuration locale (Développement avec SQLite)
     DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
+       'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'bd_auteur',  # Remplace par le nom réel de ta base MySQL
+            'USER': 'celestin',    # Remplace par ton utilisateur MySQL
+            'PASSWORD': 'bdauteur', # Remplace par ton mot de passe MySQL
+            'HOST': 'localhost',
+            'PORT': '3306',
         }
     }
+
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

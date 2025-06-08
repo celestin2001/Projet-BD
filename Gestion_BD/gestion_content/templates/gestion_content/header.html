@@ -8,8 +8,8 @@
                         {% if user.is_authenticated %}
                             <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm">Se déconnecter</a>
                         {% else %}
-                            <a href="signup" class="btn btn-primary btn-sm">S'inscrire</a>
-                            <a href="signin" class="btn btn-primary btn-sm">Se connecter</a>
+                            <a href="{% url "signup" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">S'inscrire</a>
+                            <a href="{% url "signin" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se connecter</a>
                         {% endif %}
                     </div>
                 </div>
@@ -24,23 +24,23 @@
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav mx-auto">
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url "home" %}">Accueil</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" style="font-weight: 600;" href="{% url "home" %}">Accueil</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'evenement' %}active{% endif %}" href="{% url "evenement" %}">Calendrier des événements</a> </li>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'evenement' %}active{% endif %}" style="font-weight: 600;" href="{% url "evenement" %}"> Evènements</a> </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Annuaire des librairies</a> </li>
+                        <a class="nav-link" href="#">librairies BD Afrique</a> </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'auteur' %}active{% endif %}" href="{% url "auteur" %}">Auteurs</a>
+                        <a class="nav-link {% if request.resolver_match.url_name == 'auteur' %}active{% endif %}" style="font-weight: 600;" href="{% url "auteur" %}">Auteurs</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">BDthèque</a>
+                        <a class="nav-link" href="#"style="font-weight: 600;">BDthèque</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Webtoon</a>
+                        <a class="nav-link" href="#"style="font-weight: 600;">Webtoon</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">A propos</a>
+                        <a class="nav-link" href="#"style="font-weight: 600;">A propos</a>
                     </li>
                 </ul>
             </div>

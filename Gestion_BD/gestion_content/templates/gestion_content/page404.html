@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Erreur 404 - Page Introuvable</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --light-blue-bg: #e0f2f7;
+            --dark-blue: #0056b3;
+            --text-color: #333;
+            --secondary-text-color: #6c757d; /* Couleur de texte secondaire */
+        }
+
+        body {
+            background-color: var(--light-blue-bg);
+            color: var(--text-color);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            text-align: center;
+            overflow: hidden; /* Empêche le défilement si les animations débordent un peu */
+        }
+
+        .error-container {
+            background-color: #fff;
+            border-radius: 15px; /* Rayon de bordure légèrement plus grand */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+            padding: 50px; /* Plus de padding pour un look plus aéré */
+            max-width: 600px; /* Largeur maximale augmentée */
+            width: 90%;
+            animation: fadeInScale 0.8s ease-out forwards; /* Nouvelle animation d'entrée */
+            position: relative; /* Pour positionner l'icône */
+        }
+
+        .error-icon {
+            font-size: 4em;
+            color: var(--dark-blue);
+            margin-bottom: 20px;
+            animation: bounceIn 1.2s ease-out;
+        }
+
+        .error-code {
+            font-size: 8em; /* Plus grand */
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 10px; /* Réduit l'espace pour rapprocher le message */
+            position: relative; /* Pour les éléments décoratifs */
+            display: inline-block;
+            animation: textPop 1.5s ease-out forwards; /* Nouvelle animation pour le texte */
+        }
+
+        .error-code span {
+            display: inline-block;
+            animation: bounceInText 0.8s ease-out forwards;
+        }
+        .error-code span:nth-child(1) { animation-delay: 0.1s; }
+        .error-code span:nth-child(2) { animation-delay: 0.2s; }
+        .error-code span:nth-child(3) { animation-delay: 0.3s; }
+        .error-code span:nth-child(4) { animation-delay: 0.4s; }
+
+
+        .error-message {
+            font-size: 1.6em; /* Plus grand */
+            color: var(--secondary-text-color); /* Couleur légèrement plus douce */
+            margin-bottom: 35px;
+            line-height: 1.4;
+        }
+
+        .home-button {
+            background-color: var(--primary-blue);
+            color: #fff;
+            padding: 16px 35px; /* Plus de padding pour un bouton plus grand */
+            border: none;
+            border-radius: 10px; /* Rayon de bordure plus doux */
+            font-size: 1.2em; /* Taille de police plus grande */
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            display: inline-flex; /* Pour aligner l'icône si on en ajoute une */
+            align-items: center;
+            justify-content: center;
+        }
+
+        .home-button:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-3px); /* Petit effet de soulèvement */
+        }
+
+        .home-button i {
+            margin-right: 8px; /* Espace entre l'icône et le texte */
+        }
+
+        /* --- Animations améliorées --- */
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes bounceIn {
+            0%, 20%, 40%, 60%, 80%, 100% {
+                transition-timing-function: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+            }
+            0% {
+                opacity: 0;
+                transform: scale3d(0.3, 0.3, 0.3);
+            }
+            20% {
+                transform: scale3d(1.1, 1.1, 1.1);
+            }
+            40% {
+                transform: scale3d(0.9, 0.9, 0.9);
+            }
+            60% {
+                opacity: 1;
+                transform: scale3d(1.03, 1.03, 1.03);
+            }
+            80% {
+                transform: scale3d(0.97, 0.97, 0.97);
+            }
+            100% {
+                opacity: 1;
+                transform: scale3d(1, 1, 1);
+            }
+        }
+
+        @keyframes bounceInText {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.5);
+            }
+            75% {
+                opacity: 1;
+                transform: translateY(10px) scale(1.05);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 576px) {
+            .error-code {
+                font-size: 6em;
+            }
+            .error-message {
+                font-size: 1.3em;
+            }
+            .error-container {
+                padding: 30px;
+            }
+            .home-button {
+                padding: 12px 25px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <i class="fas fa-exclamation-triangle error-icon"></i> <h1 class="error-code">
+            <span>4</span>
+            <span>0</span>
+            <span>4</span>
+        </h1>
+        <p class="error-message">
+            Désolé, nous n'avons pas pu trouver la page que vous cherchiez.
+            Elle a peut-être été déplacée ou n'existe plus.
+        </p>
+        <a href="{% url "home" %}" class="home-button">
+            <i class="fas fa-home"></i> Retourner à l'accueil
+        </a>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

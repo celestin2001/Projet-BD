@@ -111,7 +111,7 @@
             }
         }
 
-        /* Styles pour le bouton de retour à l'accueil (fixe et plus grand) */
+        /* --- Styles pour le bouton de retour à l'accueil (fixe et amélioré) --- */
         .back-to-home-link {
             position: fixed; /* Rendre le bouton fixe */
             top: 20px; /* Descend de 20px du haut */
@@ -141,6 +141,44 @@
         .back-to-home-link i {
             margin-right: 10px; /* Espace entre l'icône et le texte */
             font-size: 1.5em; /* Agrandir l'icône aussi */
+        }
+
+        /* --- Améliorations spécifiques pour petits écrans du bouton de retour --- */
+        @media (max-width: 768px) { /* Pour les tablettes et mobiles */
+            .back-to-home-link {
+                padding: 12px 20px; /* Réduire légèrement le padding sur les tablettes */
+                font-size: 1.1em; /* Réduire légèrement la taille de police */
+            }
+            .back-to-home-link i {
+                font-size: 1.3em; /* Ajuster la taille de l'icône */
+            }
+        }
+
+        @media (max-width: 576px) { /* Pour les très petits écrans de mobiles (Bootstrap's XS) */
+            .back-to-home-link {
+                top: 15px; /* Réduire la distance du haut */
+                left: 50%; /* Centrer horizontalement */
+                transform: translateX(-50%); /* Ajustement pour le centrage */
+                width: calc(100% - 40px); /* Prend presque toute la largeur avec une marge */
+                max-width: 250px; /* Limiter la largeur pour ne pas être trop envahissant */
+                border-radius: 8px; /* Rendre le bouton plus rectangulaire sur mobile */
+                text-align: center; /* Centrer le texte et l'icône à l'intérieur */
+                padding: 12px 15px; /* Ajuster le padding */
+                font-size: 1em; /* Taille de police légèrement plus petite */
+            }
+
+            .back-to-home-link i {
+                margin-right: 8px; /* Ajuster l'espace entre l'icône et le texte */
+                font-size: 1.2em; /* Taille de l'icône pour petits écrans */
+            }
+
+            /* Optionnel: Masquer le texte "Retour à l'accueil" sur les très petits écrans */
+            /* .back-to-home-link span {
+                display: none;
+            }
+            .back-to-home-link i {
+                margin-right: 0; 
+            } */
         }
 
         /* Styles pour les messages de Django (adaptés de la page d'inscription) */
