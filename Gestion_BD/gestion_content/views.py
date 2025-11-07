@@ -85,7 +85,7 @@ def detail_auteur(request, auteur_id):
     # Récupérer toutes les notations liées aux œuvres de cet auteur
     notations = Notation.objects.filter(work__in=oeuvres).select_related('user', 'work')
     # notif = Notation.objects.all().count()
-    # social_links = auteur.social_links if auteur.social_links else {}
+    liens_sociaux = Social_link.objects.filter(user=auteur)
 
 
     # print(notations.all().count())
@@ -106,6 +106,18 @@ def detail_auteur(request, auteur_id):
                         comment=comment
                     )
             return redirect('detail_auteur', auteur_id=auteur_id)
+        
+        elif form_type == 'ajout_reseaux':
+           plateforme = request.POST.get('plateforme')
+           url = request.POST.get('url')
+           reseau = Social_link.objects.create(
+              plateforme = plateforme,
+              url = url,
+              user = auteur
+           )
+           reseau.save()
+           return redirect('detail_auteur',auteur_id=auteur_id)
+           
 
         elif form_type == 'ajout_oeuvre':
             titre = request.POST.get('titre')
@@ -141,6 +153,8 @@ def detail_auteur(request, auteur_id):
         'profil':profil,
         'user': request.user,
         'auteur_oeuvre':auteur_oeuvre,
+        'liens_sociaux':liens_sociaux,
+        "reseau_choice":Social_link.lien
     })
 
 def detail_auteur2(request):

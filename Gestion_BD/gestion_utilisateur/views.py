@@ -13,7 +13,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.http import JsonResponse
 # from .task import send_approval_email
-from django.core.mail import send_mail
+from django.core.mail import send_mail,EmailMessage
 import random
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
@@ -80,6 +80,7 @@ def detailEvenement(request,my_id):
      return render(request,'gestion_utilisateur/detail_evenement.html',{'detail_event':detail_event})
 
 def signup(request):
+    mail = ""
     erreur = ""
     genrese = Genre.objects.all()
     pays = Utilisateur.PAYS_AFRICAINS
@@ -139,9 +140,39 @@ def signup(request):
         user = authenticate(request, username=email, password=password)
         if user:
             login(request, user)  # 🔥 Connexion correcte avec l'utilisateur authentifié
-          #   if user.role == "auteur":
+            if user.role == "auteur":
+                    sujet = "Nous avons reçu votre inscription"
+                    message = "Merci pour votre inscription en tant qu'auteur. Dans 48 heures, nous vous enverrons un email pour vous informer si vous êtes approuvé."
+                    from_email = settings.EMAIL_HOST_USER
+                    to_email = [user.email]  # toujours en liste
+                    email = EmailMessage(sujet, message, from_email, to_email)
+                    email.send(fail_silently=False)
+                    mail = "Un mail a été envoyé, merci de consulter votre boîte mail"
+
+                    # mail pour l'admin
+                    sujet = "Nouvelle inscription auteur sur votre site"
+                    message = f"""
+                    Bonjour Administrateur,
+
+                    Un nouvel utilisateur s'est inscrit en tant qu'auteur sur votre site.
+
+                    Détails de l'utilisateur :
+                    - Nom : {user.first_name} {user.last_name}
+                    - Email : {user.email}
+                    
+
+                    Merci de vérifier et d'approuver cet utilisateur si nécessaire.
+                            
+                    Cordialement,
+                    Votre site web
+                    """
+                    from_email = settings.EMAIL_HOST_USER
+                    to_email = ['comm.bililibd@gmail.com']  # toujours en liste
+                    email = EmailMessage(sujet, message, from_email, to_email)
+                    email.send(fail_silently=False)
+                    mail = "Un mail a été envoyé, merci de consulter votre boîte mail"
           #       send_approval_email.delay(user.id)
-            return redirect('home')
+            return render(request,'gestion_utilisateur/index.html',{'mail':mail})
     return render(request,'gestion_utilisateur/signup.html',{'genres':genrese,
                         "role":role,'pays':pays,"erreur":erreur})
 

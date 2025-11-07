@@ -64,8 +64,15 @@ class Utilisateur(AbstractUser):
         return f"{self.username}"
 
 class Social_link(models.Model):
+    lien = [
+        ('Facebook','Facebook'),
+        ('Instagram','Instagram'),
+        ('TikTok','TikTok'),
+        ('LinkedIn','LinkedIn'),
+        ('Site-web','Site-web')
+    ]
     user = models.ForeignKey(Utilisateur, on_delete=models.CASCADE,related_name="social_link")
-    platform = models.CharField(max_length=120)
+    plateforme = models.CharField(max_length=120,choices=lien,null=True)
     url = models.URLField()
 
     def __str__(self):
@@ -116,6 +123,8 @@ class ParticipationEvenement(models.Model):
 
     def __str__(self):
         return f"{self.prenom} {self.nom}"
+
+
 
 
    

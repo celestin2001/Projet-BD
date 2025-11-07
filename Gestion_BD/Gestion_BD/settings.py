@@ -16,9 +16,9 @@ SECRET_KEY = "django-insecure-c&7t#9g=*9(b2*_h3$zb!$vko0xffi0+=omr=dalbeyrefk87t
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['auteur-bd.bilili-bd.com', 'bilili-bd.com', 'localhost']
+ALLOWED_HOSTS = [ '127.0.0.1']
 #'auteur-bd.bilili-bd.com', 'bilili-bd.com', 'localhost'
 # Celestin2001.pythonanywhere.com'
 X_FRAME_OPTIONS = 'ALLOWALL'
@@ -147,8 +147,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'jeremiesandouno123@gmail.com'
-EMAIL_HOST_PASSWORD = 'idwpftboferfwfbc'
+EMAIL_HOST_USER = 'comm.bililibd@gmail.com'
+EMAIL_HOST_PASSWORD = 'ekqnmnhzckhrkzuf'
 # idwpftboferfwfbc
 # lglcsiyshbbtekrm
 

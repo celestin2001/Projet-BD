@@ -8,12 +8,34 @@ class Genre(models.Model):
         return self.name
     
 class Work(models.Model):
+    choix_edition = [
+        ('Numerique','Numerique'),
+        ('Physique','Physique'),
+        ('Physique_&_Numerique','Physique_&_Numerique')
+    ]
+    choix_genre = [
+        ('Comedie','Comedie'),
+        ('Aventure','Aventure'),
+        ('Fantastique','Fantastique'),
+        ('Histoire','Histoire'),
+        ('Humour','Humour'),
+        ('Science-fiction','Science-fiction'),
+        ('Jeunesse','Jeunesse'),
+        ('Suspense','Suspense'),
+        ('Western','Western'),
+        ('Romance','Romance'),
+        ('Polar','Polar'),
+        ('Tranche_de_vie','Tranche_de_vie')
+    ]
+    
+    edition = models.CharField(max_length=50,choices=choix_edition,default='Physique')
     title = models.CharField(max_length=255)
     author = models.ForeignKey('gestion_utilisateur.Utilisateur', on_delete=models.CASCADE, related_name='works')  
     publication_date = models.DateField()
     cover_image = models.ImageField(upload_to='media/', blank=True, null=True)
     description = models.TextField()
-    genres = models.ForeignKey('Genre',on_delete=models.CASCADE,blank=True,null=True,related_name='work')
+    genres = models.CharField(max_length=50,choices=choix_genre,default='Comedie')
+    valid = models.BooleanField(default=False)
 
     def __str__(self):
         return self.title

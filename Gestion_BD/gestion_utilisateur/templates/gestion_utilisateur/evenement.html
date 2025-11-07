@@ -1,4 +1,5 @@
 {% load static %}
+{% load i18n %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -13,20 +14,19 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <script src="{% static "gestion_content/js/index.global.min.js" %}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/locales/fr.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css">
 
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.10/locales/fr.js"></script>
+    
     <style>
         :root {
             --primary-blue: #007bff;
             --light-blue: #e3f2fd;
             --dark-blue: #0056b3;
             --text-color: #343a40;
-            --link-color: var(--primary-blue);
-            --link-hover-color: var(--dark-blue);
-            --filter-bg: var(--light-blue);
-            --bs-primary: #007bff;
             --header-bg-color: #007bff;
+            --header-top-bg: #212529; 
             --content-max-width: 1240px;
             --shadow-color: rgba(0, 0, 0, 0.08);
             --footer-bg-color: var(--primary-blue);
@@ -41,6 +41,7 @@
             color: var(--text-color);
             line-height: 1.6;
             overflow-x: hidden;
+            padding-top: 0;
         }
 
         .page-container {
@@ -64,13 +65,14 @@
             text-align: center;
         }
 
+        /* --- FullCalendar & Search Styles --- */
         #calendar {
             width: 100%;
             margin: 0 auto;
             background: #fff;
             padding: 25px;
             border-radius: 12px;
-            box-shadow: 0 8px 25px var(--shadow-color);
+            box-shadow: 0 0 25px var(--shadow-color);
             border: 1px solid #dee2e6;
         }
 
@@ -85,10 +87,35 @@
             font-size: 1rem;
             box-shadow: inset 0 1px 2px rgba(0,0,0,.075);
         }
-        #eventSearch::placeholder {
-            color: #6c757d;
+
+        .fc-theme-bootstrap5 .fc-button {
+            background-color: var(--primary-blue);
+            border-color: var(--dark-blue);
+        }
+        .fc-theme-bootstrap5 .fc-button:hover {
+            background-color: var(--dark-blue);
+            border-color: var(--dark-blue);
+        }
+        .fc .fc-toolbar.fc-header-toolbar {
+            margin-bottom: 1.5em;
+        }
+        .fc-daygrid-day-number {
+            font-weight: 600;
+            padding: 8px;
+            color: var(--dark-blue);
         }
 
+        /* --- MODALE FULLCALENDAR (CORRECTION Z-INDEX) --- */
+        #eventModal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1050; /* Doit être moins que la modale mais au-dessus du reste */
+            display: none;
+        }
         #eventModal {
             display: none;
             position: fixed;
@@ -98,14 +125,13 @@
             background: #fff;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
             width: 90vw;
             max-width: 550px;
             max-height: 90vh;
             overflow-y: auto;
-            z-index: 1055;
+            z-index: 1055; /* Doit être au-dessus du backdrop */
         }
-
         #eventModal img {
             width: 100%;
             height: 220px;
@@ -121,158 +147,61 @@
             font-weight: 600;
             font-size: 1.75rem;
         }
-        #eventModal p {
-            margin-bottom: 0.8rem;
-            color: #495057;
-        }
-        #eventModal strong {
-            color: var(--dark-blue);
-        }
-        #eventModal .btn-close {
-            filter: grayscale(1) contrast(0%) brightness(150%);
-        }
-        #eventModal .modal-footer-custom {
-            padding-top: 1.5rem;
-            border-top: 1px solid #dee2e6;
-            text-align: right;
-        }
+        /* --- FIN CORRECTION MODALE --- */
 
-        .tooltip {
-            position: absolute;
-            z-index: 1080;
-            background-color: #fff;
-            color: var(--text-color);
-            border-radius: 8px;
-            padding: 12px 18px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+
+        /* --- HEADER STYLES (Header3.png) --- */
+        .top-bar {
+            background-color: var(--header-top-bg); 
+            color: white;
+            padding: 0.25rem 0;
             font-size: 0.9rem;
-            max-width: 300px;
-            opacity: 0;
-            transition: opacity 0.25s ease, transform 0.25s ease;
-            pointer-events: none;
-            white-space: normal;
-            border: 1px solid #e0e0e0;
-            transform: translateY(10px);
         }
-        .tooltip.visible {
-            opacity: 1;
-            transform: translateY(0);
+        .top-bar .container {
+            max-width: var(--content-max-width);
         }
-        .tooltip::before {
-            content: "";
-            position: absolute;
-            width: 12px;
-            height: 12px;
-            background-color: #fff;
-            border: 1px solid #e0e0e0;
-            transform-origin: center center;
-            z-index: -1;
+        .top-bar .btn {
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            font-size: 0.85rem;
         }
-        .tooltip.tooltip-top::before {
-            bottom: -7px;
-            left: 50%;
-            transform: translateX(-50%) rotate(45deg);
-            border-top: none;
-            border-left: none;
+        .top-bar .btn-outline-light {
+            color: white;
+            border-color: rgba(255, 255, 255, 0.5);
         }
-        .tooltip.tooltip-bottom::before {
-            top: -7px;
-            left: 50%;
-            transform: translateX(-50%) rotate(45deg);
-            border-bottom: none;
-            border-right: none;
+        .top-bar .btn-warning {
+            color: var(--text-color) !important;
         }
 
-        /* Header Specific Styles */
-        header.bg-light {
-            background-color: #fff !important;
-            border-bottom: 1px solid var(--light-blue);
-            margin-top: 1rem;
-        }
-
-        header .navbar-brand img {
-            background-color: transparent !important;
-            width: auto;
-            height: 150px;
-            max-height: 150px;
-            object-fit: contain;
-        }
-
-        /* --- DEBUT DES CORRECTIONS --- */
-        
-        /* Navbar responsive */
         .navbar {
             background-color: var(--header-bg-color) !important;
-            max-width: var(--content-max-width);
-            margin: 0 auto;
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 0.5rem 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
-
+        .navbar-brand img {
+            height: 60px;
+            max-height: 60px;
+            filter: brightness(0) invert(1);
+        }
         .navbar-nav {
-            display: flex;
-            justify-content: space-around; /* Distribue l'espace */
+            flex-direction: row; 
+            margin-left: 2.5rem;
+            gap: 0.5rem;
         }
-
-        .navbar .nav-item {
-            border-right: 1px solid rgba(255, 255, 255, 0.5); /* Ligne séparatrice */
-            flex-grow: 1; /* Chaque élément grandit pour occuper l'espace */
-            text-align: center; /* Centre le texte */
-        }
-        
-        .navbar .nav-item:last-child {
-            border-right: none;
-        }
-
         .navbar .nav-link {
             color: white !important;
-            font-weight: 600;
-            position: relative;
-            transition: color 0.3s ease;
-            white-space: nowrap;
-            padding: 0.75rem 1rem !important;
+            font-weight: 500;
+            padding: 0.5rem 0.75rem !important;
         }
 
-        /* --- FIN DES CORRECTIONS --- */
-
-        .navbar .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 5px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 2px;
-            background-color: #ffc107;
-            transition: width 0.3s ease;
-        }
-
-        .navbar .nav-link:hover,
-        .navbar .nav-link:focus,
-        .navbar .nav-item.active .nav-link {
-            color: rgba(255, 255, 255, 0.9) !important;
-        }
-        .navbar .nav-link:hover::after,
-        .navbar .nav-link:focus::after,
-        .navbar .nav-item.active .nav-link::after {
-            width: 70%;
-        }
-
-        .navbar-toggler {
-            border-color: rgba(255,255,255,0.5) !important;
-        }
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.8%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-        }
-        
-        /* Footer Styles */
+        /* --- FOOTER STYLES (STABLES) --- */
         .custom-footer {
             background-color: var(--footer-bg-color);
             color: var(--footer-text-color);
             padding: 50px 0;
             box-shadow: 0 -4px 12px var(--shadow-color);
             font-size: 0.9rem;
-            margin-top: 4rem;
+            margin-top: 4rem; 
         }
         .custom-footer .container {
             max-width: var(--content-max-width);
@@ -283,44 +212,20 @@
             height: auto;
             margin-bottom: 1rem;
         }
-        .logo-left:hover {
-            filter: brightness(0) invert(1) opacity(0.85);
-            transform: scale(1.05);
-        }
-        .custom-footer .icon-row {
-            margin-bottom: 1rem;
-        }
         .social-icon-link, .wordpress-link {
             color: var(--footer-link-color);
             font-size: 1.3rem;
             margin: 0 7px;
-            transition: color 0.2s ease, transform 0.2s ease;
-        }
-        .social-icon-link:hover, .wordpress-link:hover {
-            color: var(--footer-link-hover-color);
-            transform: scale(1.12) translateY(-1px);
-        }
-        .link-bar {
-            font-size: 0.8rem;
         }
         .link-bar a {
             color: var(--footer-link-color);
             margin: 0 5px;
             text-decoration: none;
         }
-        .link-bar a:hover {
-            color: var(--footer-link-hover-color);
-            text-decoration: underline;
-        }
         .logo-center {
             filter: brightness(0) invert(1);
             max-width: 90px;
             height: auto;
-            transition: filter 0.2s ease, transform 0.2s ease;
-        }
-        .logo-center:hover {
-            filter: brightness(0) invert(1) opacity(0.85);
-            transform: scale(1.05);
         }
         .center-logos {
             gap: 20px;
@@ -328,156 +233,63 @@
 
         /* Media Queries */
         @media (max-width: 991.98px) {
-            .navbar .nav-item {
-                border-right: none;
-                border-bottom: 1px solid rgba(255,255,255,0.1);
-                width: 100%;
+            .navbar-nav {
+                flex-direction: column;
+                margin-left: 0;
+                padding-top: 10px;
+                gap: 0;
             }
-            .navbar .nav-item:last-child {
-                border-bottom: none;
-            }
-            .navbar .nav-link {
-                white-space: normal;
-                padding: 0.75rem 1rem !important;
-                font-size: 1rem;
-                text-align: left;
+            .top-bar .d-flex {
+                justify-content: center !important;
             }
         }
-
         @media (max-width: 767.98px) {
-            header .navbar-brand img {
-                height: 80px;
-                max-height: 80px;
-            }
-
-            /* --- DEBUT CORRECTION ESPACEMENT HEADER --- */
-            .header-buttons-container {
-                margin-bottom: 1rem; /* Espace sous les boutons sur mobile */
-                text-align: center;  /* Centre les boutons */
-                width: 100%;
-            }
-
-            header .row {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            header .col-md-3, header .col-md-9 {
-                justify-content: center !important;
-                text-align: center;
-                margin-bottom: 1rem;
-            }
-             /* --- FIN CORRECTION ESPACEMENT HEADER --- */
-            
-            #calendar {
-                padding: 15px;
-            }
-            .fc-header-toolbar {
-                flex-direction: column;
-                align-items: stretch;
-                gap: 12px;
-            }
-            .fc-header-toolbar .fc-toolbar-chunk {
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 5px;
-            }
-            .fc-header-toolbar .fc-toolbar-chunk:nth-child(2) {
-                justify-content: center;
-                order: -1;
-            }
-            h1.page-title {
-                font-size: 1.9rem;
-            }
-            p.page-subtitle {
-                font-size: 1rem;
-                margin-bottom: 2rem;
+            .navbar-brand img {
+                height: 50px;
             }
             .custom-footer .col-lg-4, .custom-footer .col-lg-8 {
                 text-align: center !important;
                 margin-bottom: 2rem;
-            }
-            .custom-footer .col-lg-4:last-child, .custom-footer .col-lg-8:last-child {
-                margin-bottom: 0;
-            }
-            .center-logos {
-                justify-content: center !important;
-            }
-        }
-
-        @media (max-width: 575.98px) {
-            .page-container {
-                padding: 1.5rem 15px;
-            }
-            #calendar {
-                padding: 10px;
-            }
-            #eventSearch {
-                padding: 0.6rem 0.8rem;
-                font-size: 0.9rem;
-                margin-bottom: 1.5rem;
-            }
-            #eventModal {
-                padding: 20px;
-                width: 95vw;
-            }
-            #eventModal img {
-                height: 180px;
-            }
-            #eventModal h3 {
-                font-size: 1.5rem;
-            }
-            .fc-button {
-                padding: 0.35em 0.55em !important;
-                font-size: 0.85em !important;
-            }
-            .social-icon-link, .wordpress-link {
-                font-size: 1.2rem;
-                margin: 0 5px;
             }
         }
     </style>
 </head>
 <body>
 
-    <header class="bg-light mt-2">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-3">
-                    <a class="navbar-brand" href="#">
-                        <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="img-fluid">
-                    </a>
-                </div>
-                <div class="col-md-9 d-flex justify-content-end align-items-center">
-                    <div class="header-buttons-container">
-                        <a href="#" class="btn btn-outline-primary btn-sm me-2" style="font-weight: 600">Donateurs</a>
-                        {% if user_authenticate %}
-                            <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se déconnecter</a>
-                        {% else %}
-                            <a href="{% url "signup" %}" class="btn btn-primary btn-sm me-2" style="font-weight: 600;">S'inscrire</a>
-                            <a href="{% url "signin" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se connecter</a>
-                        {% endif %}
-                    </div>
-                </div>
+    <div class="top-bar">
+        <div class="container d-flex justify-content-end align-items-center">
+            <div class="header-buttons-container d-flex align-items-center">
+                <a href="#" class="btn btn-outline-light btn-sm me-2">Donateurs</a>
+                {% if user_authenticate %}
+                    <a href="{% url "deconnexion" %}" class="btn btn-warning btn-sm">Se déconnecter</a>
+                {% else %}
+                    <a href="{% url "signup" %}" class="btn btn-warning btn-sm me-2">S'inscrire</a>
+                    <a href="{% url "signin" %}" class="btn btn-warning btn-sm">Se connecter</a>
+                {% endif %}
             </div>
         </div>
-    </header>
+    </div>
 
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
+            <a class="navbar-brand" href="{% url "home" %}">
+                        <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="img-fluid">
+            </a>
+
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+            
             <div class="collapse navbar-collapse" id="mainNav">
-                <ul class="navbar-nav w-100">
+                <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url "home" %}">Accueil</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item active">
                         <a class="nav-link active" href="{% url "evenement" %}">Evènements</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#"> librairies BD Afrique</a>
+                        <a class="nav-link" href="#">Librairies BD Afrique</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url "auteur" %}">Auteurs</a>
@@ -496,24 +308,29 @@
         </div>
     </nav>
 
+
     <div class="page-container">
-        <h1 class="page-title">Calendrier des Événements</h1>
+        <h1 class="page-title">Calendrier des Événements 🗓️</h1>
         <p class="page-subtitle">
-            Découvrez tous les événements à venir organisés par la Maison Africaine de la BD. Naviguez mois par mois pour ne rien manquer !
+            Découvrez tous les événements à venir organisés par la **Maison Africaine de la BD**. Naviguez mois par mois pour ne rien manquer !
         </p>
-        <input type="text" id="eventSearch" class="form-control" placeholder="Rechercher un événement...">
+        <input type="text" id="eventSearch" class="form-control" placeholder="🔍 Rechercher un événement par titre, lieu ou description...">
         <div id="calendar" class="mt-4"></div>
     </div>
 
+    <div id="eventModal-backdrop" onclick="closeEventModal()"></div>
     <div id="eventModal">
-        <button type="button" class="btn-close" aria-label="Close" onclick="document.getElementById('eventModal').style.display='none'" style="position: absolute; top: 15px; right: 15px;"></button>
-        <img id="modalImage" src="" alt="Image de l'événement">
+        <button type="button" class="btn-close" aria-label="Close" onclick="closeEventModal()" style="position: absolute; top: 15px; right: 15px;"></button>
+        <img id="modalImage" src="" alt="Image de l'événement" class="img-fluid">
         <h3 id="modalTitle"></h3>
         <p><strong>Lieu :</strong> <span id="modalLocation"></span></p>
         <p><strong>Début :</strong> <span id="modalStart"></span></p>
         <p><strong>Fin :</strong> <span id="modalEnd"></span></p>
         <p><strong>Description :</strong></p>
         <p id="modalDescription" style="white-space: pre-wrap;"></p>
+        <div class="text-end mt-3">
+             <a href="#" id="modalLink" class="btn btn-sm btn-primary" target="_blank" style="display:none; font-weight: 600;">Voir les détails</a>
+        </div>
     </div>
 
     <footer class="custom-footer">
@@ -522,14 +339,14 @@
                 <div class="col-lg-4 col-md-6 text-center text-md-start">
                     <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left img-fluid">
 
-                    <div class="icon-row my-3 justify-content-center justify-content-md-start">
+                    <div class="icon-row my-3 d-flex justify-content-center justify-content-md-start">
                         <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square"></i></a>
                         <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram"></i></a>
                         <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok"></i></a>
                         <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link"></i></a>
                         <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-youtube"></i></a>
                     </div>
-                    <div class="icon-row justify-content-center justify-content-md-start">
+                    <div class="icon-row d-flex justify-content-center justify-content-md-start">
                         <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
                         <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
                     </div>
@@ -559,6 +376,12 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Fonction pour fermer la modale (VÉRIFIÉE)
+        function closeEventModal() {
+            document.getElementById('eventModal').style.display = 'none';
+            document.getElementById('eventModal-backdrop').style.display = 'none';
+        }
+
         document.addEventListener('DOMContentLoaded', function () {
             const calendarEl = document.getElementById('calendar');
             const tooltipEl = document.createElement('div');
@@ -568,7 +391,7 @@
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 locale: 'fr',
                 initialDate: '{% now "Y-m-d" %}',
-                initialView: 'dayGridMonth',
+                initialView: window.innerWidth < 768 ? 'listWeek' : 'dayGridMonth',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
@@ -592,11 +415,13 @@
                             image: '{% if e.image %}{{ e.image.url }}{% else %}{% static "gestion_content/images/default_event.png" %}{% endif %}',
                             heure: '{{ e.heure_evenement|time:"H:i"|default:"" }}',
                             date_debut_formatted: '{{ e.date_evenement|date:"d/m/Y" }}',
-                            date_fin_formatted: '{% if e.date_fin_evenement %}{{ e.date_fin_evenement|date:"d/m/Y" }}{% else %}{% endif %}'
+                            date_fin_formatted: '{% if e.date_fin_evenement %}{{ e.date_fin_evenement|date:"d/m/Y" }}{% else %}{% endif %}',
+                            link: '{% if e.lien_details %}{{ e.lien_details|escapejs }}{% endif %}'
                         }
                     }{% if not forloop.last %},{% endif %}
                     {% endfor %}
                 ],
+                // LOGIQUE D'AFFICHAGE DE LA MODALE AU CLIC (VÉRIFIÉE)
                 eventClick: function (info) {
                     const e = info.event.extendedProps;
                     document.getElementById('modalTitle').textContent = info.event.title;
@@ -607,22 +432,36 @@
                     document.getElementById('modalEnd').textContent = e.date_fin_formatted || 'Non précisée';
                     document.getElementById('modalDescription').innerHTML = e.description.replace(/\n/g, '<br>');
                     document.getElementById('modalImage').src = e.image;
+                    
+                    const modalLink = document.getElementById('modalLink');
+                    if(e.link) {
+                        modalLink.href = e.link;
+                        modalLink.style.display = 'inline-block';
+                    } else {
+                        modalLink.style.display = 'none';
+                    }
+
+                    // Assure l'affichage correct de la modale et du backdrop
                     document.getElementById('eventModal').style.display = 'block';
+                    document.getElementById('eventModal-backdrop').style.display = 'block';
+                    
+                    // Cache le tooltip si visible
                     tooltipEl.classList.remove('visible');
                     tooltipEl.style.display = 'none';
                 },
+                // Logique du tooltip au survol (laissée intacte et stable)
                 eventMouseEnter: function (info) {
                     const e = info.event.extendedProps;
                     let timeStr = e.date_debut_formatted;
                     if (e.heure) timeStr += ` ${e.heure}`;
                     if (e.date_fin_formatted && e.date_fin_formatted !== e.date_debut_formatted) {
                         timeStr += ` → ${e.date_fin_formatted}`;
-                    } else if (e.date_fin_formatted && e.date_fin_formatted === e.date_debut_formatted && info.event.allDay === false && info.event.end) {
+                    } else if (info.event.allDay === false && info.event.end) {
                         let endDate = new Date(info.event.endStr);
                         let endTime = endDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                        if (e.heure && endTime !== e.heure) {
-                             if(e.heure) timeStr = `${e.date_debut_formatted} de ${e.heure} à ${endTime}`;
-                             else timeStr += ` jusqu'à ${endTime}`;
+                        if (e.heure && endTime) {
+                           if(e.heure) timeStr = `${e.date_debut_formatted} de ${e.heure} à ${endTime}`;
+                           else timeStr += ` jusqu'à ${endTime}`;
                         }
                     }
                     tooltipEl.innerHTML = `
@@ -633,7 +472,6 @@
                         </div>`;
                     tooltipEl.style.display = 'block';
                     const eventRect = info.el.getBoundingClientRect();
-                    const bodyRect = document.body.getBoundingClientRect();
                     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                     const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
                     let top = eventRect.top + scrollTop - tooltipEl.offsetHeight - 12;
@@ -659,12 +497,19 @@
                         }
                     }, 50);
                 },
+                // Logique de recherche et responsive (VÉRIFIÉE)
                 windowResize: function(view) {
                     tooltipEl.classList.remove('visible');
                     tooltipEl.style.display = 'none';
+                    if (window.innerWidth < 768 && calendar.view.type !== 'listWeek') {
+                        calendar.changeView('listWeek');
+                    } else if (window.innerWidth >= 768 && calendar.view.type === 'listWeek') {
+                           calendar.changeView('dayGridMonth');
+                    }
                 }
             });
             calendar.render();
+
             document.getElementById('eventSearch').addEventListener('input', function (e) {
                 const search = e.target.value.toLowerCase().trim();
                 calendar.getEvents().forEach(event => {

@@ -42,6 +42,7 @@ class CustomUserAdmin(UserAdmin):
         js = ('gestion_utilisateur/static/gestion_utilisateur/js/hide_fields.js',)  # Inclure le script JS pour cacher les champs
 
 admin.site.register(Utilisateur, CustomUserAdmin)
+admin.site.register(Social_link)
 # admin.site.register(Auteur)
 admin.site.register(BlogPost)
 admin.site.register(Evenement)
