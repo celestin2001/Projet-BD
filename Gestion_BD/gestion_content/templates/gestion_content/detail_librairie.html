@@ -1,0 +1,405 @@
+{% load static %}
+{% load i18n %} {# Ajout de i18n si vous prévoyez de traduire des textes #}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ librairie.nom }} - Détail de la Librairie</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    {# Font Awesome 6.0.0 est déjà référencé, assurant la prise en charge de fa-location-dot et fa-tiktok #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    {% block extra_css %}
+    <style>
+        /* ------------------------------------------- */
+        /* VARIABLES GLOBALES CSS */
+        /* ------------------------------------------- */
+        :root {
+            /* Couleurs de la page de détail */
+            --primary-blue: #007bff;
+            --light-blue: #e3f2fd;
+            --dark-blue: #0056b3;
+            --text-color: #343a40; 
+            --shadow-color: rgba(0, 0, 0, 0.08); 
+            /* Couleurs de l'en-tête (Basées sur l'image) */
+            --header-blue: #007bff; /* Bleu principal de l'en-tête */
+            --darker-blue: #0056b3; /* Bleu pour la Top Bar / Mobile Nav */
+            --yellow-accent: #ffc107; /* Jaune des boutons/survol */
+
+            --bs-primary-rgb: 0, 123, 255;
+            --bs-primary: #007bff;
+            --header-bg-color: #007bff;
+            --content-max-width: 1200px;
+            --light-grey: #f8f9fa;
+            --grey-border: #e0e0e0;
+            --dark-text: #333;
+            --secondary-text: #555;
+            --footer-text-light: #f0f0f0;
+            --footer-bg-dark: #0056b3;
+        }
+        
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            color: var(--text-color); 
+            background-color: #f4f7f9; 
+            overflow-x: hidden;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        /* Classes Bootstrap personnalisées */
+        .bg-primary { background-color: var(--primary-blue) !important; }
+        .btn-primary { background-color: var(--primary-blue) !important; border-color: var(--primary-blue) !important; }
+        .btn-primary:hover { background-color: var(--darker-blue) !important; border-color: var(--darker-blue) !important; }
+        .btn-outline-primary { color: var(--primary-blue); border-color: var(--primary-blue); }
+        .btn-outline-primary:hover { background-color: var(--primary-blue); color: white; }
+        .text-primary { color: var(--primary-blue) !important; }
+        .bg-light { background-color: #f8ff !important; }
+
+        /* Conteneurs pour centrer le contenu */
+        .main-content-wrapper, .header-inner-wrapper {
+            max-width: var(--content-max-width);
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px;
+            padding-right: 15px;
+            width: 100%;
+        }
+
+        /* --- STYLES EN-TÊTE ET NAVIGATION --- */
+        header.bg-primary {
+            padding-top: 0;
+            padding-bottom: 0;
+            margin-top: 0;
+            margin-bottom: 0;
+        }
+
+        .top-bar {
+            background-color: var(--darker-blue); 
+            padding: 0.3rem 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .top-bar .btn-outline-primary { color: white; border-color: white; }
+        .top-bar .btn-outline-primary:hover { background-color: white; color: var(--darker-blue); }
+
+        header .navbar-brand img {
+            filter: brightness(0) invert(1);
+            background-color: transparent !important;
+            height: 90px;
+            max-height: 90px;
+            object-fit: contain;
+        }
+
+        .main-nav-bar .nav-link {
+            color: white !important;
+            font-size: 14px; 
+            padding: 0.5rem 0.5rem; 
+            font-weight: 700; /* Assurer que le strong est bien appliqué par défaut */
+        }
+
+        .main-nav-bar .nav-link:hover,
+        .main-nav-bar .nav-link:focus,
+        .main-nav-bar .nav-item.active .nav-link {
+            color: var(--yellow-accent) !important;
+        }
+
+        .header-buttons-container .btn-primary {
+            background-color: var(--yellow-accent) !important;
+            border-color: var(--yellow-accent) !important;
+            color: var(--darker-blue) !important;
+        }
+        .header-buttons-container .btn-primary:hover {
+            background-color: #ffda6a !important;
+            border-color: #ffda6a !important;
+        }
+        
+        /* Media Queries pour la responsivité de l'en-tête (non modifiées) */
+        @media (min-width: 992px) { 
+            header .row { align-items: center; flex-wrap: nowrap; justify-content: space-between; }
+        }
+        @media (max-width: 991.98px) { 
+            .top-bar { display: none; }
+            .main-nav-bar { background-color: var(--darker-blue) !important; }
+            .main-nav-bar .nav-item { border-bottom: 1px solid rgba(255, 255, 255, 0.2); }
+            /* Mobile button styling to match mobile nav background */
+            .header-buttons-container .btn-outline-primary { color: white; border-color: white; }
+            .header-buttons-container .btn-outline-primary:hover { background-color: white; color: var(--darker-blue); }
+            .header-buttons-container .btn-primary { background-color: var(--yellow-accent) !important; border-color: var(--yellow-accent) !important; color: var(--darker-blue) !important; }
+        }
+        /* --- FIN STYLES EN-TÊTE --- */
+
+
+        /* ------------------------------------------- */
+        /* STYLES SPÉCIFIQUES À LA PAGE DE DÉTAIL (Corps) */
+        /* ------------------------------------------- */
+
+        .detail-header { 
+            background-color: white; 
+            padding: 3rem 0; 
+            box-shadow: 0 4px 10px var(--shadow-color); 
+            margin-bottom: 2rem;
+            border-bottom: 5px solid var(--primary-blue); 
+        }
+        .main-title { color: var(--dark-blue); font-size: 2.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .subtitle-enseigne { font-size: 1.2rem; color: #6c757d; font-weight: 500; }
+        .info-location { font-size: 1.1rem; color: var(--primary-blue); font-weight: 600; }
+        .info-location .flag-icon { margin-right: 8px; font-size: 1.2em; }
+        
+        /* Nouvelle carte d'image pour mieux contrôler la taille */
+        .image-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 3px 8px var(--shadow-color);
+            margin-bottom: 2rem;
+            /* Hauteur fixe pour l'affichage de la carte */
+            height: 350px; 
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+            background-color: var(--light-grey); /* Ajout d'un fond clair pour les images transparentes/petites */
+        }
+
+        /* Ajustement de la taille et de l'affichage de l'image */
+        .image-card img {
+            max-height: 100%;
+            width: auto; /* Permet à l'image d'avoir sa propre largeur */
+            max-width: 100%; /* S'assure que l'image ne dépasse pas la carte */
+            object-fit: contain; /* Garantit que toute l'image est visible */
+            display: block;
+            margin: auto;
+        }
+
+        .content-card { 
+            background-color: white; 
+            padding: 2rem; 
+            border-radius: 12px; 
+            box-shadow: 0 3px 8px var(--shadow-color); 
+            margin-bottom: 2rem; 
+            border-left: 5px solid var(--yellow-accent); 
+        }
+        .section-detail-title { 
+            color: var(--dark-blue); 
+            font-size: 1.5rem; 
+            font-weight: 600; 
+            margin-bottom: 1.5rem; 
+            padding-bottom: 5px; 
+            border-bottom: 2px solid var(--light-blue); 
+        }
+        /* Correction : utilisation de fa-location-dot pour l'adresse */
+        .contact-info a { color: var(--text-color); text-decoration: none; }
+        .contact-info a:hover { color: var(--primary-blue); }
+        .contact-info i, .opening-days-list li i { margin-right: 10px; color: var(--yellow-accent); }
+        
+        .social-links a { 
+            font-size: 1.8rem; 
+            margin-right: 15px; 
+            color: var(--dark-blue); 
+            transition: color 0.2s, transform 0.2s; 
+            text-decoration: none;
+        }
+        .social-links a:hover { transform: translateY(-2px); color: var(--primary-blue); }
+        
+        .map-container { 
+            border-radius: 12px; 
+            overflow: hidden; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); 
+            height: 400px; 
+            margin-bottom: 2rem; 
+            background-color: white; /* Fond blanc pour le conteneur en l'absence de carte */
+        }
+        .map-container iframe { width: 100%; height: 100%; border: none; }
+        
+        /* Style pour les jours d'ouverture */
+        .opening-days-list {
+            list-style: none;
+            padding: 0;
+            margin-top: 1rem;
+        }
+        .opening-days-list li {
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+    </style>
+    {% endblock %}
+</head>
+<body>
+    
+   {% include "gestion_content/header.html" %}
+    <main>
+        {% block content %}
+        <div class="detail-header">
+            <div class="container">
+                <h1 class="main-title">{{ librairie.nom }}</h1>
+                <p class="subtitle-enseigne">Enseigne : **{{ librairie.enseigne|default:"Non spécifiée" }}**</p>
+                
+                <div class="info-location">
+                    {# Assurez-vous que librairie.pays est un code pays ISO 3166-1 alpha-2, en minuscules #}
+                    <span class="flag-icon flag-icon-{{ librairie.pays|lower }}"></span>
+                    {{ librairie.ville }}, **{{ nom_pays }}**
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-8">
+                    
+                    <div class="row"> 
+                        <div class="col-md-9 mx-auto"> 
+                            {# PHOTO (Nouveau style appliqué) #}
+                            <div class="image-card"> 
+                                {% if librairie.photo %}
+                                    <img src="{{ librairie.photo.url }}" alt="Photo de {{ librairie.nom }}" class="img-fluid">
+                                {% else %}
+                                    <div class="p-5 text-center text-muted w-100 h-100 d-flex flex-column justify-content-center align-items-center">
+                                        <i class="fas fa-camera fa-3x mb-3 text-secondary"></i>
+                                        <p>Aucune photo principale disponible.</p>
+                                    </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    {# À PROPOS DE NOUS #}
+                    <div class="content-card">
+                        <h2 class="section-detail-title"><i class="fas fa-book-reader me-2"></i> À propos de nous</h2>
+                        <p class="lead">{{ librairie.a_propos|linebreaksbr|default:"Description non renseignée." }}</p>
+                    </div>
+
+                    {# HEURES ET JOURS D'OUVERTURE #}
+                    <div class="content-card">
+                        <h2 class="section-detail-title"><i class="fas fa-clock me-2"></i> Heures & Jours d'ouvertures</h2>
+                        
+                        {# BLOC POUR LES JOURS D'OUVERTURE #}
+                        <h5 class="mt-2 mb-2 text-muted"><i class="fas fa-calendar-alt me-2"></i> Jours d'ouverture :</h5>
+                        <ul class="opening-days-list">
+                            <li>**{{ librairie.jours_ouverture|default:"Non renseignés" }}**</li>
+                        </ul>
+                        
+                        <h5 class="mt-4 mb-2 text-muted"><i class="fas fa-clock me-2"></i> Horaires quotidiens :</h5>
+                        {% if librairie.heures_ouverture and librairie.heure_fermeture %}
+                            <p>
+                                De {{ librairie.heures_ouverture|time:"H\hi" }}H à {{ librairie.heure_fermeture|time:"H\hi" }}H
+                            </p>
+                            <p class="small text-muted">Les horaires peuvent être différents le week-end ou les jours fériés.</p>
+                        {% else %}
+                            <p class="text-muted">Horaires quotidiens spécifiques non disponibles.</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {# Colonne Latérale #}
+                <div class="col-lg-4">
+                    {# NOUS CONTACTER (EMAIL, TÉLÉPHONE) & ADRESSE #}
+                    <div class="content-card">
+                        <h2 class="section-detail-title"><i class="fas fa-id-card me-2"></i> Informations de contact</h2>
+                        <div class="contact-info mb-4">
+                            {% if librairie.email %}
+                                <a href="mailto:{{ librairie.email }}" class="d-block mb-2"><i class="fas fa-envelope"></i> {{ librairie.email }}</a>
+                            {% endif %}
+                            {% if librairie.telephone %}
+                                <a href="tel:{{ librairie.telephone }}" class="d-block"><i class="fas fa-phone"></i> {{ librairie.telephone }}</a>
+                            {% endif %}
+                        </div>
+
+                        {# ADRESSE #}
+                        <h5 class="mt-4 mb-2 text-muted"><i class="fas fa-location-dot me-2"></i> Adresse complète</h5>
+                        <p>
+                            {{ librairie.adresse|default:"Adresse non renseignée." }}<br>
+                            **{{ librairie.ville }}**, **{{ nom_pays }}**
+                        </p>
+                    </div>
+                    
+                    {# RÉSEAUX SOCIAUX #}
+                    <div class="content-card text-center">
+                        <h2 class="section-detail-title"><i class="fas fa-share-alt me-2"></i> Réseaux sociaux & Site Web</h2>
+                        <div class="social-links">
+                            {% if librairie.site_web %}
+                                <a href="{{ librairie.site_web }}" target="_blank" title="Site Web"><i class="fas fa-globe"></i></a>
+                            {% endif %}
+                            {% if librairie.facebook %}
+                                <a href="{{ librairie.facebook }}" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+                            {% endif %}
+                            {% if librairie.instagram %}
+                                <a href="{{ librairie.instagram }}" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+                            {% endif %}
+                            {% if librairie.linkedin %}
+                                <a href="{{ librairie.linkedin }}" target="_blank" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                            {% endif %}
+                            {% if librairie.tiktok %}
+                                <a href="{{ librairie.tiktok }}" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+                            {% endif %}
+                        </div>
+                        {% if not librairie.site_web and not librairie.facebook and not librairie.instagram and not librairie.linkedin and not librairie.tiktok %}
+                            <p class="text-muted small mt-3">Aucun lien social fourni.</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            {# ------------------------------------------- #}
+            {# MAP (LOCALISATION) - BLOC CORRIGÉ POUR LE MARQUEUR #}
+            {# ------------------------------------------- #}
+            {% if librairie.latitude and librairie.longitude %}
+                <div class="map-section mt-5">
+                    <h2 class="section-detail-title text-center"><i class="fas fa-map-marked-alt me-2"></i> Localisation</h2>
+                    <div class="map-container">
+                        {# Correction de l'URL Google Maps. Utilisation de embed/view pour afficher une carte centrée sur le point. #}
+                        {% with lat_long=librairie.latitude|stringformat:".6f"|add:","|add:librairie.longitude|stringformat:".6f" %}
+                            <iframe 
+                                {# Utilisation de l'API standard d'embed pour un marqueur centré #}
+                                src="https://maps.google.com/maps?q={{ lat_long }}&hl=fr&z=15&output=embed" 
+                                width="100%" 
+                                height="100%" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+                        {% endwith %}
+                    </div>
+                </div>
+            {% elif librairie.map_url %}
+                <div class="map-section mt-5">
+                    <h2 class="section-detail-title text-center"><i class="fas fa-map-marked-alt me-2"></i> Localisation</h2>
+                    <div class="map-container">
+                        {# Solution de secours : Utilisation de l'URL embarquée fournie #}
+                        <iframe src="{{ librairie.map_url }}" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+            {% else %}
+                <div class="map-section mt-5">
+                    <h2 class="section-detail-title text-center"><i class="fas fa-map-marked-alt me-2"></i> Localisation</h2>
+                    <div class="map-container">
+                        <div class="p-5 text-center text-muted w-100 h-100 d-flex flex-column justify-content-center align-items-center">
+                            <i class="fas fa-search-location fa-3x mb-3 text-secondary"></i>
+                            <p>Localisation par carte non disponible.<br> Adresse : **{{ librairie.adresse }}**, **{{ librairie.ville }}**</p>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+        {% endblock %}
+    </main>
+    
+    {# ------------------------------------------- #}
+    {# ⬇️ BLOC FOOTER (PIED DE PAGE) ⬇️ #}
+    {# ------------------------------------------- #}
+    {% block footer %}
+    {# Incluez ici le contenu de votre fichier footer8.html ou l'incluez directement comme ceci: #}
+    {% include "gestion_content/footer.html" %}
+    {% endblock %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

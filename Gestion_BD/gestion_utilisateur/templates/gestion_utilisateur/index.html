@@ -394,8 +394,8 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            background-color: var(--yellow-accent);
-            color: var(--dark-text);
+            background-color: var(--primary-blue);
+            color: white;
             border: none;
             padding: 8px 15px;
             font-weight: bold;
@@ -403,10 +403,14 @@
             border-radius: 20px;
             white-space: nowrap;
             transition: background-color 0.3s ease, transform 0.3s ease;
+            /* : #007bff; */
+            /* --light-blue: #e3f2fd;
+            --darker-blue: #0056b3; */
         }
         .yellow-btn:hover {
             background-color: #ffdb58;
             transform: translate(-50%, -50%) scale(1.05);
+            color: var(--dark-text);;
         }
         .news-section-title {
             color: var(--primary-blue);
@@ -466,160 +470,14 @@
         }
 
 
-        /* --- STYLES DU FOOTER (inchangés) --- */
-        .main-footer {
-            background-color: var(--footer-bg-dark);
-            color: var(--footer-text-light);
-            padding: 3rem 0;
-            width: 100%;
-            margin-top: 3rem;
-            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-        }
-        .footer-logo {
-            width: 100px;
-            height: auto;
-            filter: brightness(0) invert(1); 
-            margin-bottom: 1rem;
-        }
-        .main-footer h5 {
-            color: var(--yellow-accent);
-            font-weight: 700;
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
-        .main-footer .list-unstyled a {
-            color: var(--footer-text-light);
-            text-decoration: none;
-            font-size: 0.9rem;
-            line-height: 1.8;
-            transition: color 0.3s ease;
-            display: block;
-        }
-        .main-footer .list-unstyled a:hover {
-            color: var(--yellow-accent);
-            text-decoration: underline;
-        }
-        .social-icons a {
-            color: var(--footer-text-light);
-            font-size: 1.5rem;
-            margin-right: 15px;
-            transition: color 0.3s ease, transform 0.2s ease;
-        }
-        .social-icons a:hover {
-            color: var(--yellow-accent);
-            transform: scale(1.1);
-        }
-        .footer-bottom {
-            background-color: var(--primary-blue);
-            padding: 1rem 0;
-            font-size: 0.8rem;
-            color: #d4eaff;
-        }
-        .footer-bottom a {
-            color: #d4eaff;
-            text-decoration: none;
-            margin: 0 5px;
-        }
-        .footer-bottom a:hover {
-            color: var(--yellow-accent);
-        }
-        @media (max-width: 767.98px) {
-            .main-footer .col-md-3 {
-                margin-bottom: 2rem;
-                text-align: center;
-            }
-            .main-footer .social-icons {
-                text-align: center;
-            }
-            .main-footer h5 {
-                text-align: center;
-            }
-        }
-        /* --- FIN STYLES DU FOOTER --- */
-
-        .separator {
-            border-top: 1px solid var(--grey-border);
-            margin: 2rem 0;
-        }
+        /* --- STYLES DU FOOTER (mis à jour pour intégrer le bloc Partenaires avant les autres colonnes) --- */
+        
 
     </style>
 </head>
 <body>
     
-    <header class="bg-light" data-aos="fade-down" data-aos-duration="1000">
-        {# --- TOP BAR AVEC BOUTONS D'ACTION (Desktop uniquement) --- #}
-        <div class="top-bar d-none d-lg-block"> 
-            <div class="header-inner-wrapper d-flex justify-content-end align-items-center">
-                <div class="header-buttons-container">
-                    <a href="#" class="btn btn-outline-primary btn-sm me-2" style="font-weight: 600">Donateurs</a>
-                    {% if user_authenticate %}
-                        <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se déconnecter</a>
-                    {% else %}
-                        <a href="{% url "signup" %}" class="btn btn-primary btn-sm me-2" style="font-weight: 600;">S'inscrire</a>
-                        <a href="{% url "signin" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se connecter</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-        {# --- FIN TOP BAR --- #}
-
-        <div class="header-inner-wrapper"> {# Limite la largeur du header au contenu #}
-            <div class="row align-items-center">
-                <div class="col-lg-auto text-center text-lg-start logo-col"> 
-                    <a class="navbar-brand m-0 p-0" href="#">
-                        <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="img-fluid">
-                    </a>
-                </div>
-
-                <div class="col-lg">
-                     <nav class="navbar navbar-expand-lg navbar-dark p-0 main-nav-bar"> 
-                        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="mainNav">
-                            <ul class="navbar-nav w-100 justify-content-lg-end"> 
-                                <li class="nav-item">
-                                    <strong><a class="nav-link active" href="{% url "home" %}">Accueil</a></strong>
-                                </li>
-                                <li class="nav-item">
-                                    <strong><a class="nav-link" href="{% url "evenement" %}">Evènements</a></strong>
-                                </li>
-                                <li class="nav-item">
-                                    <strong><a class="nav-link" href="#"> Librairies BD Afrique</a></strong>
-                                </li>
-                                <li class="nav-item">
-                                    <strong><a class="nav-link" href="{% url "auteur" %}">Auteurs</a></strong>
-                                </li>
-                                <li class="nav-item">
-                                    <strong><a class="nav-link" href="#">BDthèque</a></strong>
-                                </li>
-                                <li class="nav-item">
-                                    <strong><a class="nav-link" href="#">Webtoon</a></strong>
-                                </li>
-                                <li class="nav-item">
-                                    <strong><a class="nav-link" href="#">A propos</a></strong>
-                                </li>
-                            </ul>
-                        </div>
-                    </nav>
-                </div>
-                
-                {# Boutons Donateurs/Se déconnecter pour mobile #}
-                <div class="col-12 d-lg-none text-center mt-3">
-                    <div class="header-buttons-container">
-                        <a href="#" class="btn btn-outline-primary btn-sm me-2" style="font-weight: 600">Donateurs</a>
-                        {% if user_authenticate %}
-                            <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se déconnecter</a>
-                        {% else %}
-                            <a href="{% url "signup" %}" class="btn btn-primary btn-sm me-2" style="font-weight: 600;">S'inscrire</a>
-                            <a href="{% url "signin" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se connecter</a>
-                        {% endif %}
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </header>
+     {% include "gestion_content/header.html" %}
 
     <div class="main-content-wrapper">
         {# --- DÉBUT CONTENU PRINCIPAL --- #}
@@ -667,7 +525,7 @@
                         <img src="{% static "gestion_content/images/card5.jpg" %}" class="image-square" alt="Infos Pratiques">
                     </div>
                     <div class="bar-wrapper">
-                        <button class="yellow-btn">Infos pratiques</button>
+                        <button class="yellow-btn">Newsletter</button>
                     </div>
                 </div>
 
@@ -727,80 +585,17 @@
         {# --- FIN CONTENU PRINCIPAL --- #}
     </div>
 
-    {# --- DÉBUT FOOTER --- #}
-    <footer class="main-footer">
-        <div class="header-inner-wrapper"> {# Utiliser le même conteneur pour l'alignement #}
-            <div class="row">
-                {# Colonne 1: Logo et Description #}
-                <div class="col-md-4 text-center text-md-start">
-                    <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="footer-logo">
-                    <p class="mt-2" style="font-size: 0.9rem;">
-                        Promouvoir, célébrer et archiver le meilleur de la bande dessinée africaine. Un pont entre les créateurs et le monde.
-                    </p>
-                    <div class="social-icons mt-3">
-                        <a href="#" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
-                    </div>
-                </div>
+    {# --- DÉBUT FOOTER CORRIGÉ COMPLET --- #}
 
-                {# Colonne 2: Liens rapides #}
-                <div class="col-md-2 col-6 mt-4 mt-md-0">
-                    <h5>Navigation</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="{% url "home" %}">Accueil</a></li>
-                        <li><a href="{% url "evenement" %}">Évènements</a></li>
-                        <li><a href="{% url "auteur" %}">Auteurs</a></li>
-                        <li><a href="#">BDthèque</a></li>
-                    </ul>
-                </div>
+    {% include "gestion_content/footer.html" %}
+   
+    {# --- FIN FOOTER CORRIGÉ COMPLET --- #}
 
-                {# Colonne 3: Information & Contact #}
-                <div class="col-md-3 col-6 mt-4 mt-md-0">
-                    <h5>Ressources</h5>
-                    <ul class="list-unstyled">
-                        <li><a href="#">Foire aux questions (FAQ)</a></li>
-                        <li><a href="#">Nous contacter</a></li>
-                        <li><a href="#">Devenir partenaire</a></li>
-                        <li><a href="#">Faire un don</a></li>
-                    </ul>
-                </div>
-
-                {# Colonne 4: Newsletter et Lieu #}
-                <div class="col-md-3 mt-4 mt-md-0">
-                    <h5>Restez Informé</h5>
-                    <p style="font-size: 0.9rem;">Inscrivez-vous à notre newsletter pour les dernières nouvelles.</p>
-                    <form>
-                        <div class="input-group mb-3">
-                            <input type="email" class="form-control form-control-sm" placeholder="Votre email" aria-label="Votre email">
-                            <button class="btn btn-warning btn-sm" type="submit">OK</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </footer>
-    
-    <div class="footer-bottom text-center">
-        <div class="header-inner-wrapper">
-            &copy; 2025 Maison Africaine de la BD. Tous droits réservés.
-            <span class="mx-2">|</span>
-            <a href="#">Conditions générales</a>
-            <span class="mx-2">|</span>
-            <a href="#">Politique de confidentialité</a>
-        </div>
-    </div>
-    {# --- FIN FOOTER --- #}
-
+    {# --- AJOUT DES SCRIPTS JS --- #}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
     <script>
-        AOS.init({
-            once: true,
-            duration: 800
-        });
+        AOS.init();
     </script>
-
 </body>
 </html>

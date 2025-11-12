@@ -222,6 +222,17 @@
                     <input type="text" class="form-control" id="lastname" placeholder="Jean Dupont" name="lastname" required>
                     <div class="invalid-feedback">Veuillez entrer votre nom complet.</div>
                 </div>
+
+                  <div class="mb-3">
+                        <label for="nationalite" class="form-label">Pays d'origine</label>
+                        <select class="form-select" id="nationalite" name="nationalite">
+                            <option value="" selected disabled>Sélectionnez une option</option>
+                            {% for value, label in pays %}
+                            <option value="{{ value }}">{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="invalid-feedback">Veuillez sélectionner un pays.</div>
+                    </div>
                 
                 <div class="mb-3">
                     <label for="role" class="form-label">Rôle</label>

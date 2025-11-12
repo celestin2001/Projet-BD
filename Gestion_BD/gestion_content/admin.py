@@ -7,8 +7,14 @@ from .models import *
 admin.site.register(Work)
 admin.site.register(Genre)
 admin.site.register(Notation)
+admin.site.register(Librairie)
 admin.site.site_title = "Plateforme DB"
 admin.site.site_header = "Auteur DB"
 admin.site.index_title = "Gestion des auteurs"
+admin.site.register(Contact)
+admin.site.register(Editeur)
+admin.site.register(Livre)
+admin.site.register(Auteur)
+
 
 

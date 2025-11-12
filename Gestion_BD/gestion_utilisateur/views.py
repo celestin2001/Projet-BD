@@ -54,12 +54,18 @@ def detail_actualite(request,my_id):
 
 def evenements(request):
     evenements = Evenement.objects.all()
+    user_authenticate = request.user.is_authenticated
+    context = {
+         'evenements':evenements,
+         'user_authenticate':user_authenticate
+    }
     print(evenements)
-    return render(request, 'gestion_utilisateur/evenement.html',{"evenements":evenements})
+    return render(request, 'gestion_utilisateur/evenement.html',context)
 
 # def evenements_json(request):
 #     evenements = Evenement.objects.all()
 #     events_list = []
+
 #     for evenement in evenements:
 #         event = {
 #             'title': evenement.titre_evenement,
@@ -84,7 +90,7 @@ def signup(request):
     erreur = ""
     genrese = Genre.objects.all()
     pays = Utilisateur.PAYS_AFRICAINS
-    role = Utilisateur.Role_choice
+    role_choix = Utilisateur.Role_choice
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -97,6 +103,7 @@ def signup(request):
         profil_picture = request.FILES.get('profile_pic')
         telephone = request.POST.get('telephone')
         pays = request.POST.get('nationalite')
+        role = request.POST.get('role')
         # genre = request.POST.getlist('genre')
         user_exist = Utilisateur.objects.filter(username=username)
         if user_exist:
@@ -134,12 +141,15 @@ def signup(request):
             ville_residence = ville_residence,
             telephone = telephone,
             pays = pays,
+            role = role
             
             # genres = genre
         )
         user = authenticate(request, username=email, password=password)
         if user:
             login(request, user)  # 🔥 Connexion correcte avec l'utilisateur authentifié
+            if user.role == 'editeur':
+                 return redirect('editeur')
             if user.role == "auteur":
                     sujet = "Nous avons reçu votre inscription"
                     message = "Merci pour votre inscription en tant qu'auteur. Dans 48 heures, nous vous enverrons un email pour vous informer si vous êtes approuvé."
@@ -174,7 +184,7 @@ def signup(request):
           #       send_approval_email.delay(user.id)
             return render(request,'gestion_utilisateur/index.html',{'mail':mail})
     return render(request,'gestion_utilisateur/signup.html',{'genres':genrese,
-                        "role":role,'pays':pays,"erreur":erreur})
+                        "role":role_choix,'pays':pays,"erreur":erreur})
 
 
 # def auteur(request):
@@ -193,6 +203,8 @@ def signin(request):
         user=authenticate(request,email=email,password=password)
         if user is not None:
             login(request,user)
+            if user.role == 'editeur':
+                 return redirect('editeur')
             
             return redirect('home')
         else:

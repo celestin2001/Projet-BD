@@ -24,6 +24,7 @@
             --primary-blue: #007bff;
             --light-blue: #e3f2fd;
             --dark-blue: #0056b3;
+            --darker-blue: #004d99; /* Ajout/Correction pour le fond du footer (plus foncé que primary) */
             --text-color: #343a40;
             --header-bg-color: #007bff;
             --header-top-bg: #212529; 
@@ -33,6 +34,8 @@
             --footer-text-color: #f8f9fa;
             --footer-link-color: #e9ecef;
             --footer-link-hover-color: #ffffff;
+            --yellow-accent: #ffc107; /* Couleur jaune pour l'accentuation des titres du footer */
+            --footer-text-light: #e9ecef; /* Couleur du texte et des liens légers */
         }
 
         body {
@@ -65,7 +68,7 @@
             text-align: center;
         }
 
-        /* --- FullCalendar & Search Styles --- */
+        /* --- FullCalendar & Search Styles --- (Laissées intactes car non affectées) */
         #calendar {
             width: 100%;
             margin: 0 auto;
@@ -105,7 +108,7 @@
             color: var(--dark-blue);
         }
 
-        /* --- MODALE FULLCALENDAR (CORRECTION Z-INDEX) --- */
+        /* --- MODALE FULLCALENDAR --- */
         #eventModal-backdrop {
             position: fixed;
             top: 0;
@@ -113,7 +116,7 @@
             width: 100%;
             height: 100%;
             background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1050; /* Doit être moins que la modale mais au-dessus du reste */
+            z-index: 1050; 
             display: none;
         }
         #eventModal {
@@ -130,7 +133,7 @@
             max-width: 550px;
             max-height: 90vh;
             overflow-y: auto;
-            z-index: 1055; /* Doit être au-dessus du backdrop */
+            z-index: 1055; 
         }
         #eventModal img {
             width: 100%;
@@ -147,10 +150,9 @@
             font-weight: 600;
             font-size: 1.75rem;
         }
-        /* --- FIN CORRECTION MODALE --- */
 
 
-        /* --- HEADER STYLES (Header3.png) --- */
+        /* --- HEADER STYLES --- */
         .top-bar {
             background-color: var(--header-top-bg); 
             color: white;
@@ -194,119 +196,13 @@
             padding: 0.5rem 0.75rem !important;
         }
 
-        /* --- FOOTER STYLES (STABLES) --- */
-        .custom-footer {
-            background-color: var(--footer-bg-color);
-            color: var(--footer-text-color);
-            padding: 50px 0;
-            box-shadow: 0 -4px 12px var(--shadow-color);
-            font-size: 0.9rem;
-            margin-top: 4rem; 
-        }
-        .custom-footer .container {
-            max-width: var(--content-max-width);
-        }
-        .logo-left {
-            filter: brightness(0) invert(1);
-            max-width: 70px;
-            height: auto;
-            margin-bottom: 1rem;
-        }
-        .social-icon-link, .wordpress-link {
-            color: var(--footer-link-color);
-            font-size: 1.3rem;
-            margin: 0 7px;
-        }
-        .link-bar a {
-            color: var(--footer-link-color);
-            margin: 0 5px;
-            text-decoration: none;
-        }
-        .logo-center {
-            filter: brightness(0) invert(1);
-            max-width: 90px;
-            height: auto;
-        }
-        .center-logos {
-            gap: 20px;
-        }
-
-        /* Media Queries */
-        @media (max-width: 991.98px) {
-            .navbar-nav {
-                flex-direction: column;
-                margin-left: 0;
-                padding-top: 10px;
-                gap: 0;
-            }
-            .top-bar .d-flex {
-                justify-content: center !important;
-            }
-        }
-        @media (max-width: 767.98px) {
-            .navbar-brand img {
-                height: 50px;
-            }
-            .custom-footer .col-lg-4, .custom-footer .col-lg-8 {
-                text-align: center !important;
-                margin-bottom: 2rem;
-            }
-        }
+        /* --- FOOTER STYLES CORRIGÉS (footer11.png) --- */
+       
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <div class="container d-flex justify-content-end align-items-center">
-            <div class="header-buttons-container d-flex align-items-center">
-                <a href="#" class="btn btn-outline-light btn-sm me-2">Donateurs</a>
-                {% if user_authenticate %}
-                    <a href="{% url "deconnexion" %}" class="btn btn-warning btn-sm">Se déconnecter</a>
-                {% else %}
-                    <a href="{% url "signup" %}" class="btn btn-warning btn-sm me-2">S'inscrire</a>
-                    <a href="{% url "signin" %}" class="btn btn-warning btn-sm">Se connecter</a>
-                {% endif %}
-            </div>
-        </div>
-    </div>
-
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="{% url "home" %}">
-                        <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="img-fluid">
-            </a>
-
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="mainNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url "home" %}">Accueil</a>
-                    </li>
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="{% url "evenement" %}">Evènements</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Librairies BD Afrique</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url "auteur" %}">Auteurs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">BDthèque</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Webtoon</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">A propos</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+     {% include "gestion_content/header.html" %}
 
 
     <div class="page-container">
@@ -332,47 +228,11 @@
              <a href="#" id="modalLink" class="btn btn-sm btn-primary" target="_blank" style="display:none; font-weight: 600;">Voir les détails</a>
         </div>
     </div>
+    </div>
+    
 
-    <footer class="custom-footer">
-        <div class="container">
-            <div class="row align-items-center gy-4">
-                <div class="col-lg-4 col-md-6 text-center text-md-start">
-                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left img-fluid">
-
-                    <div class="icon-row my-3 d-flex justify-content-center justify-content-md-start">
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-youtube"></i></a>
-                    </div>
-                    <div class="icon-row d-flex justify-content-center justify-content-md-start">
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
-                    </div>
-                    <div class="mt-3 link-bar text-center text-md-start">
-                        <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a> /
-                        <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a> /
-                        <a href="#" target="_blank" rel="noopener noreferrer">Tik Tok</a> <br class="d-md-none"> <a href="#" target="_blank" rel="noopener noreferrer">Link</a> /
-                        <a href="#" target="_blank" rel="noopener noreferrer">Youtube</a>
-                    </div>
-                </div>
-
-                <div class="col-lg-8 col-md-6 text-center text-md-end mt-4 mt-md-0">
-                    <p class="mb-2" style="font-size: 0.9em; color: var(--footer-link-color);">Nos partenaires :</p>
-                    <div class="center-logos d-flex justify-content-center justify-content-md-end align-items-center flex-wrap">
-                        <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Partenaire 1" class="logo-center img-fluid">
-                        <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Partenaire 2" class="logo-center img-fluid">
-                    </div>
-                </div>
-            </div>
-            <div class="row mt-4">
-                <div class="col text-center" style="font-size: 0.8em; color: var(--footer-link-color, #bdc1c6);">
-                    &copy; {% now "Y" %} Maison Africaine de la BD. Tous droits réservés.
-                </div>
-            </div>
-        </div>
-    </footer>
+ {% include "gestion_content/footer.html" %}
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
@@ -504,7 +364,7 @@
                     if (window.innerWidth < 768 && calendar.view.type !== 'listWeek') {
                         calendar.changeView('listWeek');
                     } else if (window.innerWidth >= 768 && calendar.view.type === 'listWeek') {
-                           calendar.changeView('dayGridMonth');
+                            calendar.changeView('dayGridMonth');
                     }
                 }
             });

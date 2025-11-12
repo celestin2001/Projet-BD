@@ -1,0 +1,391 @@
+{% load static %}
+ <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ editeur.nom }} - Détail de l'Éditeur</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* (Conserver le CSS que vous avez fourni ici) */
+        /* ------------------------------------------- */
+        /* VARIABLES GLOBALES CSS (De votre thème) */
+        /* ------------------------------------------- */
+        :root {
+            --primary-blue: #007bff;
+            --light-blue: #e3f2fd;
+            --dark-blue: #0056b3;
+            --text-color: #343a40; 
+            --shadow-color: rgba(0, 0, 0, 0.1); 
+            --yellow-accent: #ffc107; 
+            --content-max-width: 1200px;
+            --light-grey: #f8f9fa;
+            --grey-border: #e0e0e0;
+        }
+        
+        body { 
+            font-family: 'Montserrat', sans-serif; 
+            color: var(--text-color); 
+            background-color: #f4f7f9; 
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* STYLES GÉNÉRAUX ET TITRES */
+        .container { max-width: var(--content-max-width); }
+        .detail-header-editor { 
+            background: linear-gradient(180deg, white 70%, var(--light-blue) 100%);
+            padding-top: 2rem;
+            padding-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 3rem;
+        }
+        .main-title-editor { 
+            color: var(--dark-blue); 
+            font-size: 3rem; 
+            font-weight: 800;
+            line-height: 1.1;
+            margin-top: 10px;
+        }
+        .info-location-editor { 
+            font-size: 1rem; 
+            color: var(--primary-blue); 
+            font-weight: 600; 
+            margin-top: 10px;
+        }
+        .content-card-editor { 
+            background-color: white; 
+            padding: 2rem; 
+            border-radius: 12px; 
+            box-shadow: 0 5px 15px var(--shadow-color);
+            margin-bottom: 2rem; 
+            border-left: 6px solid var(--primary-blue);
+            transition: transform 0.3s ease;
+        }
+        .content-card-editor:hover {
+             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); 
+        }
+        .section-detail-title-editor { 
+            color: var(--yellow-accent);
+            font-size: 1.6rem; 
+            font-weight: 700; 
+            margin-bottom: 1.5rem; 
+            padding-bottom: 5px; 
+            border-bottom: 2px solid var(--grey-border); 
+        }
+
+        /* Style spécifique pour le logo */
+        .logo-card {
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 3px 10px var(--shadow-color);
+            height: 180px; 
+            width: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white; 
+            border: 4px solid var(--yellow-accent);
+            margin: 0 auto 1.5rem;
+        }
+        .logo-card img {
+            max-height: 100%;
+            max-width: 90%;
+            object-fit: contain;
+            padding: 10px;
+        }
+
+        /* LISTE DES LIVRES & AUTEURS */
+        .book-list-container {
+            display: flex;
+            overflow-x: auto; 
+            padding-bottom: 15px; 
+            gap: 20px;
+            margin-top: 15px;
+        }
+        .book-list-container::-webkit-scrollbar { height: 8px; }
+        .book-list-container::-webkit-scrollbar-thumb { background: rgba(0, 123, 255, 0.3); border-radius: 10px; }
+
+        .book-card {
+            flex: 0 0 140px;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-color);
+            transition: transform 0.2s;
+        }
+        .book-card:hover {
+            transform: translateY(-5px);
+            color: var(--dark-blue);
+        }
+
+        .book-cover {
+            width: 100%;
+            height: 190px;
+            background-color: var(--light-grey);
+            border-radius: 6px;
+            overflow: hidden;
+            margin-bottom: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .book-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .book-title {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .book-author {
+            display: block;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+
+        .author-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            background-color: var(--primary-blue);
+            color: white;
+            transition: background-color 0.2s, transform 0.2s;
+            text-decoration: none;
+            margin-bottom: 0.5rem;
+        }
+        .author-badge:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+            color: white;
+        }
+        .contact-info a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .contact-info a:hover { color: var(--primary-blue); }
+        .contact-info i { color: var(--yellow-accent); margin-right: 10px; }
+        .map-container { 
+            border-radius: 12px; 
+            overflow: hidden; 
+            box-shadow: 0 5px 15px rgba(0,0,0,0.15); 
+            height: 400px; 
+            background-color: white;
+        }
+    </style>
+</head>
+<body>
+    
+   {% include "gestion_content/header.html" %}
+
+    <main>
+        <div class="detail-header-editor">
+            <div class="container text-center">
+                <div class="logo-card">
+                    {% if editeur.logo %}
+                        <img src="{{ editeur.logo.url }}" alt="Logo de l'Éditeur" class="img-fluid">
+                    {% else %}
+                        <img src="{% static 'chemin/vers/placeholder-logo.png' %}" alt="Logo par défaut" class="img-fluid">
+                    {% endif %}
+                </div>
+                
+                <h1 class="main-title-editor">{{ editeur.nom }}</h1>
+                <p class="lead text-muted fs-5 mt-2 mb-3">
+                    {% if editeur.slogan %}
+                        {{ editeur.slogan }}
+                    {% else %}
+                        Découvrez l'univers de cet éditeur africain.
+                    {% endif %}
+                </p>
+                
+                <div class="info-location-editor">
+                    {% with code_pays=editeur.utilisateur.pays|lower %}
+                        <span class="flag-icon flag-icon-{{ code_pays }}"></span> 
+                    {% endwith %}
+                    <i class="fas fa-map-marker-alt me-2"></i> Siège à **{{ editeur.ville_siege }}**, **{{ editeur.pays_siege }}**
+                </div>
+                <p class="mt-1 small text-muted">
+                    <i class="fas fa-calendar-alt me-1"></i> Fondé en **{{ editeur.annee_fondation|default:"Non spécifié" }}**
+                </p>
+                
+                <div class="social-links mt-4">
+    {% if editeur.site_web %}
+        <a href="{{ editeur.site_web }}" target="_blank" title="Site Web"><i class="fas fa-globe"></i></a>
+    {% endif %}
+    
+    {% for link in editeur.utilisateur.social_link.all %}
+        {% if link.plateforme == 'Facebook' and link.url %}
+            <a href="{{ link.url }}" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        {% elif link.plateforme == 'Instagram' and link.url %}
+            <a href="{{ link.url }}" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+        {% elif link.plateforme == 'TikTok' and link.url %}
+            <a href="{{ link.url }}" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+        {% elif link.plateforme == 'LinkedIn' and link.url %}
+            <a href="{{ link.url }}" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        {% endif %}
+    {% endfor %}
+    
+    {% if editeur.facebook and not has_facebook_link %}
+        <a href="{{ editeur.facebook }}" target="_blank" title="Facebook (Champ Direct)"><i class="fab fa-facebook-f"></i></a>
+    {% endif %}
+    
+    {% if editeur.instagram and not has_instagram_link %}
+        <a href="{{ editeur.instagram }}" target="_blank" title="Instagram (Champ Direct)"><i class="fab fa-instagram"></i></a>
+    {% endif %}
+</div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                
+                <div class="col-lg-8">
+                    
+                    <div class="content-card-editor">
+                        <h2 class="section-detail-title-editor"><i class="fas fa-info-circle me-2"></i> Notre Histoire et Vision</h2>
+                        {% if editeur.description %}
+                            <p class="lead">
+                                {{ editeur.description|linebreaksbr }}
+                            </p>
+                        {% else %}
+                            <p class="lead text-muted">
+                                Aucune description détaillée n'est disponible pour le moment.
+                            </p>
+                        {% endif %}
+                        </div>
+
+                    <div class="content-card-editor">
+                        <h2 class="section-detail-title-editor"><i class="fas fa-user-edit me-2"></i> Nos Talents</h2>
+                        {% if auteurs_editeur %}
+                            <div class="d-flex flex-wrap gap-3">
+                                {% for auteur in auteurs_editeur %}
+                                    <a href="{% url 'detail_auteur' auteur.id %}" class="author-badge">
+                                        <i class="fas fa-user-circle me-2"></i> 
+                                        **{{ auteur.get_full_name|default:auteur.username }}**
+                                    </a>
+                                {% endfor %}
+                                {% if tous_livres_count > 10 %}
+                                    <a href="{% url 'editeur_auteurs_list' slug=editeur.slug %}" class="author-badge btn-warning" style="background-color: var(--yellow-accent) !important; color: var(--dark-blue) !important;">
+                                        <i class="fas fa-search me-2"></i> Voir tous les auteurs
+                                    </a>
+                                {% endif %}
+                            </div>
+                        {% else %}
+                            <p class="text-muted">Aucun auteur n'est encore associé à cet éditeur.</p>
+                        {% endif %}
+                    </div>
+
+                    <div class="content-card-editor">
+                        <h2 class="section-detail-title-editor"><i class="fas fa-book-open me-2"></i> Catalogue Récent</h2>
+                        
+                        {% if livres_publies %}
+                            <div class="book-list-container">
+                                {% for livre in livres_publies %}
+                                    <a href="" class="book-card">
+                                        {% comment %} <a href="{% url 'livre_detail' slug=livre.slug %}" class="book-card"> {% endcomment %}
+                                        <div class="book-cover">
+                                            {% if livre.couverture %}
+                                                <img src="{{ livre.couverture.url }}" alt="Couverture de {{ livre.titre }}">
+                                            {% else %}
+                                                <img src="{% static 'chemin/vers/placeholder-cover.png' %}" alt="Couverture par défaut">
+                                            {% endif %}
+                                        </div>
+                                        <span class="book-title" title="{{ livre.titre }}">{{ livre.titre }}</span>
+                                        <span class="book-author">{{ livre.auteur_principal.utilisateur.get_full_name|default:livre.auteur_principal.utilisateur.username }}</span>
+                                    </a>
+                                {% endfor %}
+                            </div>
+                            {% comment %} <div class="text-center mt-4">
+                                <a href="{% url 'editeur_catalogue' slug=editeur.slug %}" class="btn btn-primary">
+                                     <a href="{% url 'editeur_catalogue' slug=editeur.slug %}" class="btn btn-primary">
+                                    Voir tout le Catalogue ({{ tous_livres_count }} titres)
+                                </a>
+                            </div> {% endcomment %}
+                        {% else %}
+                             <p class="text-muted">Aucun livre n'a encore été publié par cet éditeur.</p>
+                        {% endif %}
+                    </div>
+
+                </div>
+
+                <div class="col-lg-4">
+                    
+                    <div class="content-card-editor">
+                        <h2 class="section-detail-title-editor"><i class="fas fa-headset me-2"></i> Contact Rapide</h2>
+                        <div class="contact-info mb-4">
+                            {% if editeur.email_contact %}
+                                <a href="mailto:{{ editeur.email_contact }}" class="d-block mb-2"><i class="fas fa-envelope"></i> {{ editeur.email_contact }}</a>
+                            {% elif editeur.utilisateur.email %}
+                                <a href="mailto:{{ editeur.utilisateur.email }}" class="d-block mb-2"><i class="fas fa-envelope"></i> {{ editeur.utilisateur.email }} (Compte)</a>
+                            {% endif %}
+                            {% if editeur.utilisateur.telephone %}
+                                <a href="tel:{{ editeur.utilisateur.telephone }}" class="d-block"><i class="fas fa-phone"></i> {{ editeur.utilisateur.telephone }}</a>
+                            {% endif %}
+                        </div>
+
+                        <h5 class="mt-4 mb-2 text-muted"><i class="fas fa-location-dot me-2"></i> Adresse du Siège</h5>
+                        <p>
+                            {{ editeur.adresse_siege|default:"Adresse non spécifiée" }}<br>
+                            **{{ editeur.ville_siege|default:"Ville inconnue" }}**, **{{ editeur.pays_siege|default:"Pays inconnu" }}**
+                        </p>
+                    </div>
+
+                    <div class="content-card-editor" style="border-left-color: var(--yellow-accent);">
+                        <h2 class="section-detail-title-editor" style="color: var(--dark-blue);"><i class="fas fa-calendar-day me-2"></i> Événements à venir</h2>
+                        
+                        {% if evenements_a_venir %}
+                            {% for event in evenements_a_venir %}
+                                <div class="mb-3 border-start ps-3 border-4 border-warning">
+                                    <p class="mb-0 fw-bold">{{ event.titre }}</p>
+                                    <p class="small mb-1 text-muted"><i class="fas fa-map-marker-alt me-1"></i> {{ event.lieu }}</p>
+                                    <p class="small fw-bold text-primary">{{ event.date|date:"d F Y" }}</p>
+                                </div>
+                            {% endfor %}
+                            <div class="text-center mt-4">
+                                <a href="{% url 'editeur_evenements' slug=editeur.slug %}" class="btn btn-outline-primary btn-sm">Voir tous les événements</a>
+                            </div>
+                        {% else %}
+                             <p class="text-muted">Aucun événement à venir n'est planifié.</p>
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+            
+            {% if editeur.latitude and editeur.longitude %}
+                <div class="map-section mt-5 mb-5">
+                    <h2 class="section-detail-title-editor text-center" style="color: var(--dark-blue);"><i class="fas fa-map-marked-alt me-2"></i> Localisation du Siège</h2>
+                    <div class="map-container">
+                        <iframe 
+                            src="https://maps.google.com/maps?q={{ editeur.latitude }},{{ editeur.longitude }}&z=15&output=embed" 
+                            width="100%" 
+                            height="100%" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade">
+                        </iframe>
+                    </div>
+                </div>
+            {% endif %}
+
+        </div>
+    </main>
+    
+   {% include "gestion_content/footer.html" %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

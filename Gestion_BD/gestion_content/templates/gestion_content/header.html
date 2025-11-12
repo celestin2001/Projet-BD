@@ -1,49 +1,380 @@
 {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maison Africaine de la BD</title>
+    <link rel="icon" type="image/png" href="{% static "gestion_content/images/logo.png" %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Document</title>
 
-<div class="container mt-3 mt-md-5" style="max-width: 1240px;"> <header class="bg-light py-3 rounded shadow-sm" data-aos="fade-down" data-aos-duration="1000"> <div class="container">
-            <div class="row align-items-center gy-3 gy-md-0"> <div class="col-12 col-md-auto text-center text-md-start"> <a href="{% url "home" %}"> <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="img-fluid" style="max-height: 100px; background-color: white;"> </a>
+    <style>
+             body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--light-grey);
+            overflow-x: hidden;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        
+        header.bg-light {
+            background-color: var(--primary-blue) !important;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+        }
+        /* --- FIN MODIFICATION POUR SUPPRIMER L'ESPACE BLANC SUPÉRIEUR --- */
+
+        :root {
+            --bs-primary-rgb: 0, 123, 255;
+            --bs-primary: #007bff;
+            --header-bg-color: #007bff;
+            --content-max-width: 1200px;
+
+            /* Variables de couleur améliorées */
+            --primary-blue: #007bff;
+            --light-blue: #e3f2fd;
+            --darker-blue: #0056b3;
+            --light-grey: #f8f9fa;
+            --grey-border: #e0e0e0;
+            --dark-text: #333;
+            --secondary-text: #555;
+            --yellow-accent: #ffc107;
+            --footer-text-light: #f0f0f0;
+            --footer-bg-dark: #0056b3;
+        }
+
+        .bg-primary {
+            background-color: var(--primary-blue) !important;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-blue) !important;
+            border-color: var(--primary-blue) !important;
+        }
+        .btn-primary:hover {
+            background-color: var(--darker-blue) !important;
+            border-color: var(--darker-blue) !important;
+        }
+
+        .btn-outline-primary {
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+        }
+        .btn-outline-primary:hover {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+
+        .text-primary {
+            color: var(--primary-blue) !important;
+        }
+
+        .bg-light {
+            background-color: #f8f9fa !important;
+        }
+
+        /* Conteneur principal centré */
+        .main-content-wrapper {
+            max-width: var(--content-max-width);
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px;
+            padding-right: 15px;
+            width: 100%;
+        }
+
+        /* --- NOUVELLE CLASSE POUR LIMITER LA LARGEUR DE L'EN-TÊTE --- */
+        .header-inner-wrapper {
+            max-width: var(--content-max-width);
+            margin-left: auto;
+            margin-right: auto;
+            padding-left: 15px; 
+            padding-right: 15px;
+            width: 100%;
+        }
+        /* --- FIN NOUVELLE CLASSE --- */
+
+        
+        /* --- STYLES EN-TÊTE ET NAVIGATION (MISE À JOUR POUR FOND BLEU) --- */
+        
+        /* Cacher la Top Bar claire (ou la rendre blanche sur fond bleu) */
+        .top-bar {
+            background-color: var(--darker-blue); 
+            padding: 0.3rem 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .top-bar .btn-sm {
+            padding: 0.2rem 0.5rem;
+            font-size: 0.8rem;
+        }
+        .top-bar .btn-outline-primary {
+            color: white;
+            border-color: white;
+        }
+        .top-bar .btn-outline-primary:hover {
+            background-color: white;
+            color: var(--darker-blue);
+        }
+
+        /* Header Specific Styles */
+        header .navbar-brand {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+        }
+        
+        /* MISE À JOUR : Logo en blanc */
+        header .navbar-brand img {
+            filter: brightness(0) invert(1);
+            background-color: transparent !important;
+            width: auto;
+            height: 90px;
+            max-height: 90px;
+            object-fit: contain;
+        }
+
+        /* Ajuster logo size for smaller screens */
+        @media (max-width: 767.98px) {
+            header .navbar-brand img {
+                height: 80px;
+                max-height: 80px;
+            }
+        }
+        
+        /* Réajustement du conteneur principal de l'en-tête */
+        header .container {
+            padding-top: 0;
+            padding-bottom: 0;
+            width: auto;
+        }
+        
+        /* Nouvelle barre de navigation principale (MISE À JOUR : Liens en blanc) */
+        .main-nav-bar {
+            background-color: transparent !important;
+            margin: 0;
+            padding: 0;
+            border-radius: 0;
+            box-shadow: none;
+            flex-grow: 1; 
+        }
+
+        .main-nav-bar .nav-link {
+            color: white !important; /* Liens en blanc */
+            font-size: 16px; 
+            padding: 0.5rem 0.5rem; 
+        }
+        .main-nav-bar .nav-link:hover,
+        .main-nav-bar .nav-link:focus,
+        .main-nav-bar .nav-item.active .nav-link {
+            color: var(--yellow-accent) !important; /* Jaune au survol */
+        }
+        .main-nav-bar .nav-link::after {
+            background: var(--yellow-accent); /* Soulignement en jaune */
+        }
+        
+        /* Boutons de connexion dans le header pour desktop */
+        .header-buttons-container .btn-outline-primary {
+            color: white;
+            border-color: white;
+        }
+        .header-buttons-container .btn-outline-primary:hover {
+            background-color: white;
+            color: var(--primary-blue);
+        }
+        .header-buttons-container .btn-primary {
+            background-color: var(--yellow-accent) !important;
+            border-color: var(--yellow-accent) !important;
+            color: var(--darker-blue) !important;
+        }
+        .header-buttons-container .btn-primary:hover {
+            background-color: #ffda6a !important;
+            border-color: #ffda6a !important;
+        }
+
+        /* Media Queries pour la responsivité de l'en-tête */
+        @media (min-width: 992px) { 
+            header .row {
+                align-items: center;
+                flex-wrap: nowrap; 
+                justify-content: space-between; 
+            }
+            header .col-lg-auto.logo-col {
+                flex: 0 0 auto;
+                width: auto;
+                padding-right: 1rem;
+                display: flex;
+                align-items: center;
+            }
+            header .col-lg {
+                flex-grow: 1;
+                display: flex;
+                align-items: center;
+                justify-content: flex-end; 
+            }
+        }
+        
+        @media (max-width: 991.98px) { 
+            .top-bar {
+                display: none;
+            }
+            
+            header .row {
+                flex-direction: column; 
+                align-items: center; 
+            }
+            
+            header .col-lg-auto.logo-col {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .header-buttons-container {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 1rem;
+            }
+            
+            .main-nav-bar {
+                background-color: var(--darker-blue) !important; /* Bleu foncé pour le menu mobile */
+                width: 100%;
+                margin-top: 0; 
+                border-radius: 8px;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
+            .main-nav-bar .navbar-collapse {
+                justify-content: center;
+            }
+            .main-nav-bar .navbar-nav {
+                flex-direction: column; 
+                width: 100%;
+            }
+            .main-nav-bar .nav-item {
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+                padding: 0.5rem 0;
+                text-align: center;
+            }
+            .main-nav-bar .nav-item:last-child {
+                border-bottom: none;
+            }
+            .main-nav-bar .nav-link {
+                color: white !important;
+            }
+            .main-nav-bar .nav-link:hover,
+            .main-nav-bar .nav-link:focus,
+            .main-nav-bar .nav-item.active .nav-link {
+                color: var(--yellow-accent) !important;
+            }
+            .header-buttons-container .btn-outline-primary {
+                color: var(--primary-blue);
+                border-color: var(--primary-blue);
+            }
+            .header-buttons-container .btn-outline-primary:hover {
+                background-color: var(--primary-blue);
+                color: white;
+            }
+            .header-buttons-container .btn-primary {
+                background-color: var(--primary-blue) !important;
+                border-color: var(--primary-blue) !important;
+                color: white !important;
+            }
+            .header-buttons-container .btn-primary:hover {
+                background-color: var(--darker-blue) !important;
+                border-color: var(--darker-blue) !important;
+                color: white !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="bg-primary" >
+        {# --- TOP BAR AVEC BOUTONS D'ACTION (Desktop uniquement) --- #}
+        <div class="top-bar d-none d-lg-block"> 
+            <div class="header-inner-wrapper d-flex justify-content-end align-items-center">
+                <div class="header-buttons-container">
+                    <a href="#" class="btn btn-outline-primary btn-sm me-2" style="font-weight: 600">Donateurs</a>
+                    {% if user_authenticate %}
+                        <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se déconnecter</a>
+                    {% else %}
+                        <a href="{% url "signup" %}" class="btn btn-primary btn-sm me-2" style="font-weight: 600;">S'inscrire</a>
+                        <a href="{% url "signin" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se connecter</a>
+                    {% endif %}
                 </div>
-                <div class="col-12 col-md"> <div class="d-flex flex-column flex-md-row justify-content-center justify-content-md-end align-items-center gap-2">
-                        <a href="#" class="btn btn-outline-primary btn-sm">Donateurs</a>
-                        {% if user.is_authenticated %}
-                            <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm">Se déconnecter</a>
+                
+            </div>
+        </div>
+        {# --- FIN TOP BAR --- #}
+
+        <div class="header-inner-wrapper"> {# Limite la largeur du header au contenu #}
+            <div class="row align-items-center">
+                <div class="col-lg-auto text-center text-lg-start logo-col"> 
+                    <a class="navbar-brand m-0 p-0" href="{% url "home" %}">
+                        <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD Logo" class="img-fluid">
+                    </a>
+                </div>
+ 
+                <div class="col-lg">
+                    <nav class="navbar navbar-expand-lg navbar-dark p-0 main-nav-bar"> 
+                        <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse" id="mainNav">
+                            <ul class="navbar-nav w-100 justify-content-lg-end"> 
+                                <li class="nav-item">
+                                    <strong><a class="nav-link active" href="{% url "home" %}">Accueil</a></strong>
+                                </li>
+                                <li class="nav-item">
+                                    <strong><a class="nav-link" href="{% url "evenement" %}">Evènements</a></strong>
+                                </li>
+                                 <li class="nav-item">
+                                    <strong><a class="nav-link" href="{% url "auteur" %}">Auteurs</a></strong>
+                                </li>
+                                <li class="nav-item">
+                                    <strong><a class="nav-link" href="{% url "editeur" %}">Editeurs</a></strong>
+                                </li>
+                               
+        
+                                <li class="nav-item">
+                                    <strong><a class="nav-link" href="{% url "bdtheque" %}">BDthèque</a></strong>
+                                </li>
+                                 <li class="nav-item">
+                                    <strong><a class="nav-link" href="{% url "Librairie" %}"> Librairies</a></strong>
+                                </li>
+                                
+                                <li class="nav-item">
+                                    <strong><a class="nav-link" href="{% url "apropos" %}">A propos</a></strong>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
+                </div>
+                
+                {# Boutons Donateurs/Se déconnecter pour mobile #}
+                <div class="col-12 d-lg-none text-center mt-3">
+                    <div class="header-buttons-container">
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2" style="font-weight: 600">Donateurs</a>
+                        {% if user_authenticate %}
+                            <a href="{% url "deconnexion" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se déconnecter</a>
                         {% else %}
-                            <a href="{% url "signup" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">S'inscrire</a>
+                            <a href="{% url "signup" %}" class="btn btn-primary btn-sm me-2" style="font-weight: 600;">S'inscrire</a>
                             <a href="{% url "signin" %}" class="btn btn-primary btn-sm" style="font-weight: 600;">Se connecter</a>
                         {% endif %}
                     </div>
                 </div>
+
             </div>
         </div>
     </header>
-
-    <nav class="navbar navbar-expand-lg navbar-dark mt-3" data-aos="fade-down" data-aos-delay="200"> <div class="container">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="mainNav">
-                <ul class="navbar-nav mx-auto">
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" style="font-weight: 600;" href="{% url "home" %}">Accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'evenement' %}active{% endif %}" style="font-weight: 600;" href="{% url "evenement" %}"> Evènements</a> </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">librairies BD Afrique</a> </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if request.resolver_match.url_name == 'auteur' %}active{% endif %}" style="font-weight: 600;" href="{% url "auteur" %}">Auteurs</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"style="font-weight: 600;">BDthèque</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"style="font-weight: 600;">Webtoon</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#"style="font-weight: 600;">A propos</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+</body>
+</html>

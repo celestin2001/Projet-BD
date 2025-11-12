@@ -6,10 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Auteurs - Maison Africaine de la BD</title>
     
+    {# Liens Bootstrap et Icônes #}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+    
+    {# Police de Caractères #}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -19,17 +22,19 @@
     /* VARIABLES GLOBALES ET LAYOUT */
     /* ------------------------------------------- */
     :root {
-        --primary-blue: #007bff;
+        --primary-blue: #007bff; /* Bleu des liens/boutons */
         --light-blue: #e3f2fd;
         --dark-blue: #0056b3;
         --text-color: #343a40; 
-        --header-bg-color: #007bff; /* C'est le bleu que nous allons utiliser pour le header */
-        --top-bar-bg-color: #004a99; /* Nouveau: Bleu plus foncé pour la Top Bar */
+        --header-bg-color: #007bff; 
+        --top-bar-bg-color: #004a99; /* Bleu très foncé pour la top-bar et le footer principal */
         --shadow-color: rgba(0, 0, 0, 0.08); 
-        --footer-bg-color: var(--primary-blue);
-        /* CORRECTION: Ajout des couleurs manquantes pour le Footer */
+        
+        /* NOUVEAU: Variables pour le Footer MABD (bleu foncé, accents jaunes/blancs) */
+        --footer-bg-color: var(--top-bar-bg-color); /* #004a99 */
         --footer-text-color: white; 
-        --footer-link-color: #e9ecef; 
+        --footer-link-color: #ffc107; /* Jaune d'accent */
+        --footer-sub-text-color: #bdc1c6; /* Gris clair pour mentions */
         --content-max-width: 1200px; 
     }
 
@@ -48,168 +53,15 @@
     }
 
     /* ------------------------------------------- */
-    /* NOUVEAUX STYLES POUR LE HEADER (Double Barre) */
+    /* STYLES DU HEADER (Double Barre) */
     /* ------------------------------------------- */
 
-    /* Le header complet englobe le tout */
-    header {
-        background-color: var(--header-bg-color) !important; 
-        box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-        position: sticky;
-        top: 0;
-        z-index: 1030;
-        padding: 0; 
-    }
-
-    /* 1. TOP BAR (Boutons Donateurs/Déconnexion) */
-    .top-bar-custom {
-        background-color: var(--top-bar-bg-color); /* Nouveau fond */
-        width: 100%;
-        display: flex;
-        justify-content: flex-end; 
-        align-items: center;
-        padding: 0.3rem 2rem 0.3rem 0; /* Espacement ajusté */
-    }
-
-    /* Boutons Donateurs / Déconnexion */
-    .btn-donateurs-custom {
-        color: white !important;
-        border-color: white !important;
-        font-weight: 500;
-        margin-right: 0.5rem; 
-        padding: 0.2rem 0.6rem; 
-        font-size: 0.8rem;
-    }
-    .btn-deconnexion-custom {
-        background-color: #ffc107 !important; 
-        border-color: #ffc107 !important;
-        color: var(--dark-blue) !important;
-        font-weight: 600;
-        padding: 0.2rem 0.6rem; 
-        font-size: 0.8rem;
-    }
-    .btn-deconnexion-custom:hover {
-        background-color: #e0a800 !important;
-        border-color: #d39e00 !important;
-    }
-    .btn-donateurs-custom:hover {
-        background-color: rgba(255,255,255,0.1);
-    }
-
-
-    /* 2. MAIN NAV BAR (Logo et Menu) */
-    .navbar-custom {
-        padding: 0; 
-        background-color: transparent !important; 
-    }
-
-    /* Logo du site */
-    .logo-header-custom {
-        max-height: 70px; 
-        width: auto;
-        filter: brightness(0) invert(1); 
-        margin-left: 2rem; 
-        padding: 0.5rem 0; 
-    }
-
-    /* Styles pour les liens de navigation (menu) */
-    .navbar-custom .navbar-collapse {
-        flex-grow: 1; 
-        margin-left: 3rem; 
-        margin-right: 2rem;
-        background-color: transparent !important; 
-    }
-
-    .navbar-custom .navbar-nav .nav-link {
-        color: white !important; 
-        font-weight: 500; 
-        /* Padding vertical réduit pour l'alignement sur l'axe horizontal */
-        padding: 1rem 1.1rem !important; 
-        transition: background-color 0.2s ease, color 0.2s ease;
-        text-align: center; 
-        line-height: 1; 
-        font-size: 0.95rem;
-    }
-
-    /* Hover/Active state for links */
-    .navbar-custom .navbar-nav .nav-link.active,
-    .navbar-custom .navbar-nav .nav-link:hover,
-    .navbar-custom .navbar-nav .nav-link:focus {
-        color: #ffffff !important;
-        background-color: rgba(255,255,255,0.15); 
-        border-radius: 4px;
-    }
-
-    /* Styles pour le Toggler (Menu mobile) */
-    .navbar-toggler {
-        border-color: rgba(255,255,255,0.2) !important;
-        margin-right: 1rem;
-    }
-    .navbar-toggler-icon {
-        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-    }
-
-    /* ------------------------------------------- */
-    /* MEDIA QUERIES pour mobile et tablette */
-    /* ------------------------------------------- */
-
-    @media (min-width: 992px) { 
-        .navbar-expand-lg .container-fluid {
-            padding-right: 0; 
-            padding-left: 0; 
-        }
-        /* Cacher le toggler sur les grands écrans */
-        .navbar-toggler {
-            display: none;
-        }
-        /* Aligner le contenu de la nav principale correctement */
-        .navbar-custom .container-fluid {
-            display: flex;
-            justify-content: flex-start;
-            align-items: stretch;
-        }
-    }
-
-    @media (max-width: 991.98px) { 
-        /* Cacher la top bar en mobile */
-        .top-bar-custom {
-            display: none !important; 
-        }
-        /* Rendre le toggler visible et le positionner correctement */
-        .navbar-toggler {
-            display: block;
-            margin-left: auto; 
-            margin-right: 1rem;
-        }
-        /* Ajuster le logo en mobile */
-        .logo-header-custom {
-            max-height: 60px;
-            margin-left: 1rem;
-        }
-
-        /* Menu déroulant en mobile */
-        .navbar-collapse {
-            background-color: var(--dark-blue); 
-            border-top: 1px solid rgba(255,255,255,0.1); 
-            padding-bottom: 0.5rem;
-            margin: 0; 
-            width: 100%; 
-        }
-        .navbar-custom .navbar-nav {
-            flex-direction: column; 
-            align-items: stretch;
-        }
-        .navbar-custom .navbar-nav .nav-link {
-            padding: 0.8rem 1rem !important; 
-            text-align: left;
-            border-bottom: 1px solid rgba(255,255,255,0.05); 
-        }
-        .navbar-custom .navbar-nav .nav-item:last-child {
-            border-bottom: none;
-        }
-    }
+   
     
-    /* Le reste de votre CSS (main, footer, auteurs-card) inchangé... */
+    /* ------------------------------------------- */
+    /* STYLES DE LA PAGE AUTEURS (MAIN) */
+    /* ------------------------------------------- */
+
     main {
         flex-grow: 1; 
         padding-top: 1.5rem; 
@@ -240,6 +92,7 @@
         padding-bottom: 0.5rem;
     }
 
+    /* Card Auteur */
     .auteur-card-wrapper {
         height: 100%;
         display: flex;
@@ -304,6 +157,7 @@
         border-color: var(--dark-blue);
     }
 
+    /* Filtres et Recherche */
     .filtres-section {
         background-color: #f8f9fa;
         padding: 1.5rem;
@@ -377,6 +231,8 @@
         border-bottom: 2px solid var(--light-blue);
         padding-bottom: 0.5rem;
     }
+
+    /* Pagination */
     .pagination {
         margin-top: 3rem;
         justify-content: center;
@@ -394,41 +250,8 @@
         border-radius: 0.375rem;
         transition: all 0.2s ease;
     }
-    
-    /* Styles du Footer (utilise les nouvelles variables) */
-    .custom-footer {
-        background-color: var(--footer-bg-color);
-        color: var(--footer-text-color);
-        padding: 50px 0;
-        margin-top: auto; 
-    }
-    .logo-left {
-        filter: brightness(0) invert(1);
-        max-width: 70px;
-        height: auto;
-        margin-bottom: 1rem;
-    }
-    .social-icon-link, .wordpress-link {
-        color: var(--footer-link-color);
-        font-size: 1.3rem;
-        margin: 0 7px;
-        transition: color 0.2s ease, transform 0.2s ease;
-    }
-    .link-bar a {
-        color: var(--footer-link-color);
-        margin: 0 5px;
-        text-decoration: none;
-    }
-    .logo-center {
-        filter: brightness(0) invert(1);
-        max-width: 90px;
-        height: auto;
-    }
-    .center-logos {
-        gap: 20px;
-    }
 
-    /* Media Queries pour affinements */
+    /* Media Queries pour affinements Auteurs */
     @media (max-width: 767.98px) { 
         .recherche-section form {
             flex-direction: column; 
@@ -442,62 +265,152 @@
             justify-content: center; 
         }
     }
+    
+    /* ------------------------------------------- */
+    /* STYLES DU FOOTER (Mis à jour pour le fond bleu foncé) */
+    /* ------------------------------------------- */
+    
+    .custom-footer {
+        background-color: var(--footer-bg-color); /* #004a99 */
+        color: var(--footer-text-color);
+        padding-top: 40px; 
+        margin-top: auto; 
+        font-size: 0.95rem; 
+    }
+    .custom-footer h5 {
+        color: white;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 1.1rem;
+    }
+    .custom-footer ul {
+        list-style: none;
+        padding-left: 0;
+        margin-bottom: 0;
+    }
+    .custom-footer ul li {
+        margin-bottom: 0.5rem;
+    }
+    .custom-footer ul li a,
+    .custom-footer .contact-info a {
+        color: var(--footer-text-color);
+        text-decoration: none;
+        transition: color 0.2s;
+        font-weight: 400;
+    }
+    .custom-footer ul li a:hover,
+    .custom-footer .contact-info a:hover {
+        color: var(--footer-link-color); /* Jaune */
+    }
+
+    /* Logos des partenaires (Soutenu par) */
+    .logos-partenaires {
+        gap: 20px;
+    }
+    .logos-partenaires img {
+        max-height: 50px; 
+        width: auto;
+        margin: 0 5px;
+        filter: brightness(0) invert(1); 
+        opacity: 0.9;
+        transition: opacity 0.2s;
+    }
+    .logos-partenaires img:hover {
+        opacity: 1;
+    }
+    .soutenu-par-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--footer-link-color); 
+        margin-bottom: 1.5rem;
+        text-transform: uppercase;
+        padding-top: 1.5rem; /* Espace au-dessus du titre */
+    }
+
+    /* Section Contact */
+    .contact-info p {
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+        display: flex;
+        align-items: center;
+    }
+    .contact-info p i {
+        color: var(--footer-link-color); 
+        margin-right: 8px;
+        font-size: 1.1em;
+    }
+
+    /* Logos Sociaux */
+    .social-icons-footer {
+        margin-top: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    .social-icons-footer a {
+        color: var(--footer-text-color);
+        font-size: 1.5rem;
+        margin-right: 15px;
+        transition: color 0.2s, transform 0.2s;
+    }
+    .social-icons-footer a:hover {
+        color: var(--footer-link-color);
+        transform: translateY(-2px);
+    }
+    .description-mabd {
+        font-size: 0.9rem;
+        color: var(--footer-sub-text-color);
+        line-height: 1.4;
+        margin-bottom: 1.5rem;
+    }
+    .footer-logo-mabd {
+        max-height: 70px; 
+        width: auto;
+        filter: brightness(0) invert(1);
+        margin-bottom: 1rem;
+    }
+
+    /* Mentions légales et copyright (Bandeau inférieur bleu vif) */
+    .footer-copyright-bar {
+        background-color: var(--primary-blue); /* #007bff */
+        color: white;
+        padding: 15px 0;
+        font-size: 0.85em;
+        text-align: center;
+        margin-top: 30px; /* Sépare de la section principale du footer */
+    }
+    .footer-copyright-bar a {
+        color: white;
+        text-decoration: none;
+        margin: 0 8px;
+        transition: color 0.2s;
+    }
+    .footer-copyright-bar a:hover {
+        color: var(--footer-link-color); /* Jaune */
+    }
+    
+    @media (max-width: 991.98px) {
+        .custom-footer {
+            text-align: center;
+        }
+        .custom-footer .row > div {
+            margin-bottom: 20px;
+        }
+        .contact-info p {
+            justify-content: center;
+        }
+        .social-icons-footer {
+            justify-content: center !important;
+        }
+        .footer-copyright-bar {
+            padding: 10px 1rem;
+        }
+    }
     </style>
 </head>
 <body>
-    {# HEADER DIRECTEMENT INTÉGRÉ ICI - STRUCTURE À DEUX NIVEAUX #}
-    <header>
-        {# 1. TOP BAR AVEC BOUTONS DONATEURS/DÉCONNECTER (Visible uniquement en Desktop) #}
-        <div class="top-bar-custom d-none d-lg-flex"> 
-            <a href="#" class="btn btn-outline-light btn-sm btn-donateurs-custom">Donateurs</a>
-            <a href="#" class="btn btn-warning btn-sm btn-deconnexion-custom">Se déconnecter</a>
-        </div>
+ 
+   {% include "gestion_content/header.html" %}
 
-        {# 2. MAIN NAV BAR AVEC LOGO ET MENU #}
-        <nav class="navbar navbar-expand-lg navbar-custom">
-            <div class="container-fluid px-0">
-                
-                {# Logo du site #}
-                <a class="navbar-brand" href="{% url 'home' %}">
-
-                    <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD" class="img-fluid logo-header-custom">
-                </a>
-
-                {# Bouton pour le menu mobile (Toggler) - Mis avant le menu pour l'ordre sur petits écrans #}
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-
-                {# Contenu du menu de navigation principal #}
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0"> 
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.path == 'home' %}active{% endif %}" href="{% url 'home' %}">Accueil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'evenement' in request.path %}active{% endif %}" href="{% url 'evenement' %}">Évènements</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'librairies' in request.path %}active{% endif %}" href="#">Librairies BD Afrique</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if 'auteur' in request.path %}active{% endif %}" href="{% url 'auteur' %}">Auteurs</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="#">BDthèque</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="#">Webtoon</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link " href="#">À propos</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
+   
     <main class="flex-shrink-0"> 
         <div class="container mt-4">
             <h1 class="titre-auteurs">Découvrez nos Auteurs Talentueux</h1>
@@ -506,6 +419,7 @@
                 <section class="section-vedettes mb-4">
                     <h2>Nos Auteurs Vedettes</h2>
                     <div class="row g-3">
+                        {# Simuler des données pour l'affichage, à remplacer par votre boucle réelle #}
                         {% for auteur in auteurs_vedettes_principaux %}
                         <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <div class="auteur-card-wrapper">
@@ -586,10 +500,10 @@
                     </div>
                 </section>
 
+                {# PAGINATION #}
                 {% if auteurs_filtrés.has_other_pages %}
                 <nav id="pagination-section" aria-label="Page navigation" class="mt-5">
                     <ul class="pagination">
-                        {# Rendu de tous les paramètres GET à part 'page' dans une variable, pour DRY #}
                         {% with get_params='&'|join:request.GET.items|slice:'1:'|join:'&' %}
                         
                             {# Bouton Précédent #}
@@ -603,19 +517,17 @@
                             <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
                             {% endif %}
 
-                            {# Boucle des numéros de page #}
+                            {# Boucle des numéros de page (logique pour afficher les pages adjacentes et les points de suspension) #}
                             {% for i in auteurs_filtrés.paginator.page_range %}
                                 {% if auteurs_filtrés.number == i %}
                                     <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
-                                {# Afficher les 2 pages autour de la page actuelle #}
                                 {% elif i > auteurs_filtrés.number|add:'-3' and i < auteurs_filtrés.number|add:'3' %}
                                     <li class="page-item"><a class="page-link" href="?page={{ i }}{{ get_params }}">{{ i }}</a></li>
-                                {# Afficher les points de suspension pour les pages éloignées #}
-                                {% elif i == auteurs_filtrés.paginator.page_range.0 or i == auteurs_filtrés.paginator.page_range|last %}
-                                    {% if i == auteurs_filtrés.paginator.page_range.0 and auteurs_filtrés.number > 4 %}
+                                {% elif forloop.first or forloop.last %}
+                                    {% if forloop.first and auteurs_filtrés.number > 4 %}
                                         <li class="page-item"><a class="page-link" href="?page={{ i }}{{ get_params }}">{{ i }}</a></li>
                                         <li class="page-item disabled"><span class="page-link">...</span></li>
-                                    {% elif i == auteurs_filtrés.paginator.page_range|last and auteurs_filtrés.number < auteurs_filtrés.paginator.num_pages|add:'-3' %}
+                                    {% elif forloop.last and auteurs_filtrés.number < auteurs_filtrés.paginator.num_pages|add:'-3' %}
                                         <li class="page-item disabled"><span class="page-link">...</span></li>
                                         <li class="page-item"><a class="page-link" href="?page={{ i }}{{ get_params }}">{{ i }}</a></li>
                                     {% endif %}
@@ -640,46 +552,92 @@
         </div>
     </main>
 
+    {# ========================================== #}
+    {#                FOOTER (Corrigé)             #}
+    {# ========================================== #}
     <footer class="custom-footer">
-        <div class="container">
-            <div class="row align-items-center gy-4">
-                <div class="col-lg-4 col-md-6 text-center text-md-start">
-                    <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo BD" class="logo-left img-fluid">
-                    <div class="icon-row my-3 d-flex justify-content-center justify-content-md-start"> 
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-facebook-square"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-instagram"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-tiktok"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fas fa-link"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-link"><i class="fab fa-youtube"></i></a>
-                    </div>
-                    <div class="icon-row d-flex justify-content-center justify-content-md-start"> 
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
-                        <a href="#" target="_blank" rel="noopener noreferrer" class="wordpress-link"><i class="fab fa-wordpress"></i></a>
-                    </div>
-                    <div class="mt-3 link-bar text-center text-md-start">
-                        <a href="#" target="_blank" rel="noopener noreferrer">Facebook</a> /
-                        <a href="#" target="_blank" rel="noopener noreferrer">Instagram</a> /
-                        <a href="#" target="_blank" rel="noopener noreferrer">Tik Tok</a> <br class="d-md-none">
-                        <a href="#" target="_blank" rel="noopener noreferrer">Link</a> /
-                        <a href="#" target="_blank" rel="noopener noreferrer">Youtube</a>
+        <div class="container text-center">
+            
+            {# Section Soutien (Soutenu par) #}
+            <p class="soutenu-par-title">SOUTENU PAR</p>
+            <div class="logos-partenaires d-flex justify-content-center align-items-center flex-wrap mb-4">
+                <img src="{% static "gestion_content/images/bili-bd-festival-logo.png" %}" alt="Bili BD Festival Logo" class="img-fluid">
+                <img src="{% static "gestion_content/images/afd-logo.png" %}" alt="AFD Logo" class="img-fluid"> 
+                <img src="{% static "gestion_content/images/cibdi-logo.png" %}" alt="CIBDI Logo" class="img-fluid"> 
+                <img src="{% static "gestion_content/images/ifc-logo.png" %}" alt="IFC Logo" class="img-fluid"> 
+                {# Assurez-vous que les chemins d'accès statiques sont corrects #}
+            </div>
+
+            <div class="row pt-4 text-md-start">
+                
+                {# Colonne LOGO + Description MABD + Sociaux #}
+                <div class="col-lg-3 col-md-6 order-md-1">
+                    <img src="{% static "gestion_content/images/logo.png" %}" alt="Maison Africaine de la BD" class="img-fluid footer-logo-mabd">
+                    <p class="description-mabd d-none d-md-block">
+                        Maison Africaine de la BD : Promouvoir et célébrer la bande dessinée africaine.
+                    </p>
+                    <div class="social-icons-footer d-flex justify-content-center justify-content-md-start">
+                        <a href="https://www.facebook.com/BiliBDFestival/" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/bilibdfestival/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@bilibd_festival" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+                        <a href="https://www.linkedin.com/company/bili-bd-festival/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        {# Ajouté pour être cohérent avec le lien dans footer10.png #}
+                        <a href="https://www.youtube.com/@bilibdfestival5030" target="_blank" rel="noopener noreferrer" aria-label="Youtube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
-                <div class="col-lg-8 col-md-6 text-center text-md-end mt-4 mt-md-0">
-                    <p class="mb-2" style="font-size: 0.9em; color: var(--footer-link-color, #e9ecef);">Nos partenaires :</p>
-                    <div class="center-logos d-flex justify-content-center justify-content-md-end align-items-center flex-wrap">
-                        <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo Maison de la BD" class="logo-center img-fluid">
-                        <img src="{% static "gestion_content/images/logo2.jpeg" %}" alt="Logo Partenaire" class="logo-center img-fluid"> 
+
+                {# Colonne NAVIGATION #}
+                <div class="col-lg-3 col-md-6 order-md-2 mt-4 mt-md-0">
+                    <h5>NAVIGATION</h5>
+                    <ul>
+                        <li><a href="{% url 'home' %}">Accueil</a></li>
+                        <li><a href="{% url 'evenement' %}">Évènements</a></li>
+                        <li><a href="{% url 'auteur' %}">Auteurs</a></li>
+                        <li><a href="">Librairies BD Afrique</a></li>
+                        <li><a href="#">BDthèque</a></li>
+                        <li><a href="#">Webtoon</a></li>
+                    </ul>
+                </div>
+
+                {# Colonne INFORMATION #}
+                <div class="col-lg-3 col-md-6 order-md-3 mt-4 mt-lg-0">
+                    <h5>INFORMATION</h5>
+                    <ul>
+                        <li><a href="{% url 'apropos' %}">À propos de nous</a></li>
+                        <li><a href="">Contactez-nous</a></li>
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Soutenir la M.A.B.D.</a></li>
+                        <li><a href="#">Partenariats</a></li>
+                    </ul>
+                </div>
+
+                {# Colonne CONTACT (CORRIGÉE avec le bon numéro de téléphone) #}
+                <div class="col-lg-3 col-md-6 order-md-4 mt-4 mt-lg-0">
+                    <h5>CONTACT</h5>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Adr.: [Votre adresse complète]</p>
+                        <p><i class="fas fa-envelope"></i> Email: <a href="mailto:contact@mabd.org">contact@mabd.org</a></p>
+                        {# CORRECTION: Mise à jour du numéro de téléphone provisoire #}
+                        <p><i class="fas fa-phone"></i> Tél.: +224 626 26 95 80</p>
                     </div>
                 </div>
             </div>
-            <div class="row mt-4">
-                <div class="col text-center" style="font-size: 0.8em; color: var(--footer-link-color, #bdc1c6);">
-                    &copy; {% now "Y" %} Maison Africaine de la BD. Tous droits réservés.
-                </div>
+        </div>
+
+        {# Bandeau de copyright final (fond bleu vif) #}
+        <div class="footer-copyright-bar">
+            <div class="container">
+                &copy; 2025 **Maison Africaine de la BD**. Tous droits réservés. | <a href="#">Mentions Légales</a> | <a href="#">Politique de Confidentialité</a>
             </div>
         </div>
     </footer>
 
+    {# ========================================== #}
+    {#               JS SCRIPTS                   #}
+    {# ========================================== #}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Placeholder pour les scripts JS personnalisés
+    </script>
 </body>
 </html>

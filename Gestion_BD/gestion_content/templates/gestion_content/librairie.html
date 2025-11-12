@@ -1,0 +1,439 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Librairies BD Afrique - Maison Africaine de la BD</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+    :root {
+        --primary-blue: #007bff;
+        --light-blue: #e3f2fd;
+        --dark-blue: #0056b3;
+        --text-color: #343a40; 
+        --header-bg-color: #007bff;
+        --top-bar-bg-color: #004a99;
+        --shadow-color: rgba(0, 0, 0, 0.08); 
+        --footer-bg-color: var(--primary-blue);
+        --footer-text-color: white; 
+        --footer-link-color: #e9ecef; 
+        --content-max-width: 1200px; 
+    }
+
+    body {
+        font-family: 'Montserrat', sans-serif; 
+        color: var(--text-color);
+        background-color: #f4f7f9; 
+        line-height: 1.6;
+        min-height: 100vh; 
+        display: flex;
+        flex-direction: column; 
+    }
+
+    .container {
+        max-width: var(--content-max-width); 
+    }
+
+    /* ------------------------------------------- */
+    /* STYLES DU HEADER */
+    /* ------------------------------------------- */
+    
+    
+    /* ------------------------------------------- */
+    /* STYLES DU CONTENU PRINCIPAL (Main) */
+    /* ------------------------------------------- */
+    main {
+        flex-grow: 1; 
+        padding-top: 1.5rem; 
+        padding-bottom: 2rem; 
+    }
+
+    /* Section générique et Titres */
+    .section {
+        padding: 3rem 0;
+    }
+    .section-title {
+        text-align: center;
+        color: var(--dark-blue);
+        font-size: 2.2rem; 
+        margin-bottom: 2rem; 
+        font-weight: 700;
+        border-bottom: 3px solid var(--light-blue);
+        display: block; /* Changé pour permettre le centrage */
+        padding-bottom: 0.5rem;
+        margin-left: auto;
+        margin-right: auto;
+        width: fit-content; /* S'adapte au contenu */
+    }
+
+    /* --- HERO (Barre de recherche) --- */
+    .hero {
+        background-color: white;
+        padding: 3rem 0 2rem;
+        box-shadow: 0 4px 10px var(--shadow-color);
+        margin-bottom: 2rem;
+    }
+    .hero .title {
+        color: var(--primary-blue);
+        font-size: 2.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+    .hero .subtitle {
+        font-size: 1.1rem;
+        color: #6c757d;
+        margin-bottom: 2rem;
+    }
+    .search-bar {
+        display: flex;
+        max-width: 800px; 
+        margin: 0 auto;
+        gap: 0.5rem;
+    }
+    .search-bar input[type="text"],
+    .search-bar select {
+        padding: 0.75rem 1rem;
+        border: 1px solid #ced4da;
+        border-radius: 8px;
+        font-size: 1rem;
+    }
+    .search-bar input[type="text"] {
+        flex-grow: 1;
+    }
+    .search-bar select {
+        width: 150px;
+    }
+    .search-bar button {
+        background-color: var(--primary-blue);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: background-color 0.2s;
+        white-space: nowrap;
+    }
+    .search-bar button:hover {
+        background-color: var(--dark-blue);
+    }
+    
+    @media (max-width: 768px) {
+        .search-bar {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+        .search-bar select {
+            width: 100%;
+        }
+        .search-bar button {
+            width: 100%; /* Bouton prend toute la largeur en mobile */
+        }
+    }
+
+    /* --- GRILLE DE CARTES (Librairies vedettes & filtrées) --- */
+    .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+        gap: 1.5rem;
+    }
+    .card {
+        text-decoration: none;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        box-shadow: 0 3px 8px var(--shadow-color);
+        background-color: #fff;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 100%; 
+        color: var(--text-color); /* Assure la couleur du texte par défaut */
+    }
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+        color: var(--text-color); /* Maintient la couleur du texte au survol */
+    }
+    .card-img {
+        width: 100%;
+        object-fit: cover;
+        aspect-ratio: 16/10; 
+        background-color: #f8f9fa;
+    }
+    .card-content {
+        padding: 1rem;
+        text-align: left;
+        flex-grow: 1;
+    }
+    .card-title {
+        color: var(--dark-blue);
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-bottom: 0.3rem;
+    }
+    .card-subtitle {
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 0;
+    }
+    .card-subtitle .flag-icon {
+        font-size: 1.1em;
+    }
+
+    /* --- GRILLE DES VILLES (Tuiles de lieu) --- */
+    .city-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+        padding: 2rem 0;
+    }
+
+    .city-card {
+        background-color: white;
+        border: 1px solid #dee2e6;
+        border-radius: 10px;
+        padding: 1.5rem 1rem;
+        text-align: center;
+        transition: all 0.2s ease-in-out;
+        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.05);
+        height: 100%;
+    }
+    .city-card:hover {
+        border-color: var(--primary-blue);
+        background-color: var(--light-blue);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+    }
+
+    /* Style pour la tuile sélectionnée */
+    .city-card.active {
+        border-color: #ffc107; 
+        background-color: #fffbe6; 
+        box-shadow: 0 0 15px rgba(255, 193, 7, 0.4);
+    }
+    .city-card.active .city-name, .city-card.active .city-count {
+        color: var(--dark-blue);
+    }
+
+    .city-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        color: #ffc107; 
+    }
+    .city-card:hover .city-icon {
+        color: var(--dark-blue);
+    }
+    .city-name {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--dark-blue);
+        margin-bottom: 0.2rem;
+    }
+    .city-count {
+        font-size: 0.9rem;
+        color: #6c757d;
+    }
+
+    /* --- Pagination --- */
+    .pagination {
+        margin-top: 3rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+    }
+    .pagination a, .pagination span {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.2s;
+        white-space: nowrap;
+    }
+    .pagination a {
+        color: white;
+        background-color: var(--primary-blue);
+    }
+    .pagination a:hover {
+        background-color: var(--dark-blue);
+    }
+    .pagination span {
+        color: var(--dark-blue);
+        border: 1px solid #ced4da;
+        background-color: white;
+    }
+
+    /* ------------------------------------------- */
+    /* STYLES DU FOOTER */
+    /* ------------------------------------------- */
+   
+    </style>
+</head>
+<body>
+    {# HEADER #}
+     {% include "gestion_content/header.html" %}
+    
+    <main>
+        <section class="hero">
+            <div class="container text-center">
+                <h1 class="title">Annuaire des Librairies BD Afrique</h1>
+                <p class="subtitle">
+                    Découvrez les meilleures librairies et espaces BD, classées par pays, ville et popularité.
+                </p>
+            
+                <form method="GET" class="search-bar">
+    <input type="text" name="q" placeholder="Rechercher par nom de librairie ou ville..."
+        value="{{ q_recherche|default:'' }}" class="form-control">
+
+    {% comment %} <select name="pays" class="form-select">
+        <option value="">Tous les pays</option>
+        {% for code, nom in pays_list.items %}
+            <option value="{{ code }}" {% if pays_filtre == code %}selected{% endif %}>
+                {{ nom }}
+            </option>
+        {% endfor %}
+    </select> {% endcomment %}
+
+    {# Champ caché pour conserver le filtre ville lors de la recherche #}
+    <input type="hidden" name="ville" value="{{ ville_filtre|default:'' }}">
+
+    <button type="submit"><i class="fas fa-search me-1"></i> Rechercher</button>
+</form>
+
+            </div>
+        </section>
+        
+        {% if librairies_vedettes %}
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">Librairies vedettes 🌟</h2>
+            
+                <div class="card-grid">
+                    {% for librairie in librairies_vedettes %}
+                    <a href="{% url "detail_librairie" librairie.id %}" class="card">
+                        {# Utilisez l'image par défaut si aucune image n'est présente #}
+                        <img src="{% if librairie.photo %}{{ librairie.photo.url }}{% else %}{% static 'gestion_content/images/default_librairie.png' %}{% endif %}" alt="{{ librairie.nom }}" class="card-img">
+                        <div class="card-content">
+                            <h3 class="card-title">{{ librairie.nom }}</h3>
+                            <p class="card-subtitle">
+                                <i class="fas fa-map-marker-alt me-1"></i> {{ librairie.ville }} 
+                                {% if librairie.pays %}
+                                (code : <span class="flag-icon flag-icon-{{ librairie.pays|lower }}"></span>)
+                                {% endif %}
+                            </p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        {% endif %}
+        
+        <section class="section bg-light">
+            <div class="container">
+                <h2 class="section-title">Parcourir par ville 🏙️</h2>
+            
+                <div class="city-grid">
+                    
+                    {# Tuile pour "Toutes les villes" #}
+                    <a href="?q={{ q_recherche|default:'' }}&pays={{ pays_filtre|default:'' }}#filtre_par_ville" class="text-decoration-none">
+                        <div class="city-card {% if not ville_filtre %}active{% endif %}">
+                            <div class="city-icon" style="color: var(--dark-blue);">🌍</div>
+                            <p class="city-name">Toutes les villes</p>
+                            <p class="city-count">Afficher tout</p>
+                        </div>
+                    </a>
+
+                    {# Tuiles des villes filtrées #}
+                    
+                    {% for v in villes %}
+                    <a href="?ville={{ v.ville|urlencode }}&q={{ q_recherche|default:'' }}&pays={{ pays_filtre|default:'' }}#filtre_par_ville"  class="text-decoration-none">
+                        <div class="city-card {% if ville_filtre == v.ville %}active{% endif %}">
+                            <div class="city-icon">
+                                {% if v.code_pays %}
+                                <span class="flag-icon flag-icon-{{ v.code_pays|lower }}" style="font-size: 1.5em;"></span>
+                                {% else %}
+                                📍
+                                {% endif %}
+                            </div>
+                            <p class="city-name">{{ v.ville }}</p>
+                            <p class="city-count">{{ v.count }} librairies</p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
+        
+        <section class="section">
+            <div class="container">
+                <h2 class="section-title">
+                    Toutes les librairies 
+                   {% if ville_filtre %} à {{ ville_filtre }}
+                    {# Pour éviter l'erreur, nous affichons seulement le code si la liste des pays existe et que le filtre est appliqué #}
+                    {% elif pays_filtre and pays_list %} en {{ pays_filtre }} 
+                    {% elif q_recherche %} (Résultats de recherche)
+                    {% endif %}
+                    
+                </h2>
+            
+                {% if librairies_filtrees.object_list %}
+                <div class="card-grid"id="filtre_par_ville" >
+                    {% for librairie in librairies_filtrees %}
+                    <a href="{% url "detail_librairie" librairie.id %}" class="card" >
+                        <img src="{% if librairie.photo %}{{ librairie.photo.url }}{% else %}{% static 'gestion_content/images/default_librairie.png' %}{% endif %}" alt="{{ librairie.nom }}" class="card-img">
+                        <div class="card-content">
+                            <h3 class="card-title">{{ librairie.nom }}</h3>
+                            <p class="card-subtitle">
+                                <i class="fas fa-map-marker-alt me-1"></i> {{ librairie.ville }} — 
+                                {% if librairie.pays %}
+                                (<span class="flag-icon flag-icon-{{ librairie.pays|lower }}"></span>)
+                                {% endif %}
+                            </p>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+            
+                {% if librairies_filtrees.has_other_pages %}
+                <div class="pagination">
+                    {# Construire la chaîne des paramètres GET en retirant le paramètre 'page' si présent #}
+                    {% with current_params=request.GET.urlencode %}
+                    {% if librairies_filtrees.has_previous %}
+                        <a href="?page={{ librairies_filtrees.previous_page_number }}&{{ current_params|cut:'&page='|cut:'page=' }}" aria-label="Précédent">Précédent</a>
+                    {% endif %}
+            
+                    <span>Page {{ librairies_filtrees.number }} / {{ librairies_filtrees.paginator.num_pages }}</span>
+            
+                    {% if librairies_filtrees.has_next %}
+                        <a href="?page={{ librairies_filtrees.next_page_number }}&{{ current_params|cut:'&page='|cut:'page=' }}" aria-label="Suivant">Suivant</a>
+                    {% endif %}
+                    {% endwith %}
+                </div>
+                {% endif %}
+
+                {% else %}
+                <p class="text-center text-muted mt-5">Aucune librairie trouvée pour ces critères de recherche.</p>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+    
+    {# FOOTER #}
+   {% include "gestion_content/footer.html" %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
