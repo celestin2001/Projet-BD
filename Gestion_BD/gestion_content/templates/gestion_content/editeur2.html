@@ -417,12 +417,14 @@
                         <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <div class="auteur-card-wrapper">
                                 <div class="auteur-card">
-                                    <img src="{{ editeur.utilisateur.profil_picture.url }}" alt="{{ editeur.nom }}" class="img-fluid">
+                                    {% if editeur.profil_picture %}
+                                    <img src="{{ editeur.profil_picture.url }}" alt="{{ editeur.nom }}" class="img-fluid">
+                                    {% endif %}
                                     <div class="auteur-info">
-                                        <h5>{{ editeur.nom }}</h5>
+                                        <h5>{{ editeur.username }}</h5>
                                         <p>
-                                            <span class="flag-icon flag-icon-{{ editeur.utilisateur.pays|lower }}"></span> 
-                                            {{ editeur.utilisateur.get_pays_display }}
+                                            <span class="flag-icon flag-icon-{{ editeur.pays|lower }}"></span> 
+                                            {{ editeur.get_pays_display }}
                                         </p>
                                         <a href="{% url 'detail_auteur' editeur.id %}" class="btn btn-primary">PLUS D'INFOS</a>
                                     </div>
@@ -482,14 +484,14 @@
                         <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <div class="auteur-card-wrapper">
                                 <div class="auteur-card">
-                                    <img src="{{ editeur.utilisateur.profil_picture.url }}" alt="{{ editeur.nom }}" class="img-fluid">
+                                    <img src="{{ editeur.profil_picture.url }}" alt="{{ editeur.nom }}" class="img-fluid">
                                     <div class="auteur-info">
-                                        <h5>{{ editeur.nom }}</h5>
+                                        <h5>{{ editeur.username }}</h5>
                                         <p>
-                                            <span class="flag-icon flag-icon-{{ editeur.utilisateur.pays|lower }}"></span> 
-                                            {{ editeur.utilisateur.get_pays_display }}
+                                            <span class="flag-icon flag-icon-{{ editeur.pays|lower }}"></span> 
+                                            {{ editeur.get_pays_display }}
                                         </p>
-                                        <a href="" class="btn btn-primary">PLUS D'INFOS</a>
+                                        <a href="{% url 'detail_auteur' editeur.id %}" class="btn btn-primary">PLUS D'INFOS</a>
                                     </div>
                                 </div>
                             </div>

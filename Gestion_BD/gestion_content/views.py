@@ -645,99 +645,155 @@ def bdtheque(request):
 
 
 
+# def editeur(request):
+#     User = get_user_model()
+
+#     # 1. ÉDITEURS VEDETTES PRINCIPAUX
+#     # On filtre directement sur le modèle Editeur, car il est le point central.
+#     # Les champs 'role', 'vedette' et 'valid' sont sur le modèle Utilisateur,
+#     # on y accède via le champ de relation 'utilisateur'.
+#     editeurs_vedettes_principaux = Editeur.objects.filter(
+#         utilisateur__role="editeur", 
+#         utilisateur__vedette=True, 
+#         utilisateur__valid=True
+#     ).select_related('utilisateur')[:6] # select_related optimise la récupération des données utilisateur
+    
+#     # IDs des utilisateurs vedettes (pour les exclure des listes secondaires)
+#     # On récupère l'ID de l'objet User lié.
+#     vedettes_ids = [editeur.utilisateur.id for editeur in editeurs_vedettes_principaux]
+
+#     # --- Préparation de la liste d'éditeurs "aléatoires" par pays ---
+    
+#     # On travaille sur le modèle Editeur pour inclure les détails nécessaires
+#     # et on filtre sur les champs du modèle Utilisateur.
+#     # On exclut les Utilisateurs vedettes (en utilisant leur ID)
+#     users_editeurs_actifs_non_vedettes = Editeur.objects.filter(
+#         utilisateur__role="editeur", 
+#         utilisateur__valid=True
+#     ).exclude(utilisateur__id__in=vedettes_ids) # CORRECTION : exclure l'ID de l'UTILISATEUR
+
+#     editeurs_par_pays_list = []
+    
+#     # Récupération des pays avec des éditeurs (groupement par le champ 'pays' de l'utilisateur)
+#     editeurs_par_pays = users_editeurs_actifs_non_vedettes.values('utilisateur__pays').annotate(
+#         count=Count('id')
+#     ).order_by('utilisateur__pays') # CORRECTION : Grouper et ordonner par 'utilisateur__pays'
+    
+#     for pays_data in editeurs_par_pays:
+#         pays_code = pays_data['utilisateur__pays']
+        
+#         # Récupère 2 éditeurs aléatoires pour ce pays (hors vedettes)
+#         editeurs_du_pays = users_editeurs_actifs_non_vedettes.filter(
+#             utilisateur__pays=pays_code # CORRECTION : Filtrer par 'utilisateur__pays'
+#         ).order_by('?')[:2]
+        
+#         # On ajoute les objets Editeur complets à la liste
+#         editeurs_par_pays_list.extend(editeurs_du_pays)
+
+#     # 2. BASE DE DONNÉES COMPLÈTE pour la pagination et le filtrage
+#     tous_les_editeurs = Editeur.objects.filter(
+#         utilisateur__role="editeur", 
+#         utilisateur__valid=True
+#     ).select_related('utilisateur') # select_related est clé ici
+    
+#     # --- Application des filtres ---
+
+#     # Exclure les éditeurs vedettes
+#     exclude_vedettes = request.GET.get('exclude_vedettes')
+#     if exclude_vedettes == 'true':
+#         # Le champ 'vedette' est sur Utilisateur, on y accède via 'utilisateur__vedette'
+#         tous_les_editeurs = tous_les_editeurs.exclude(utilisateur__vedette=True)
+
+#     # Filtrage par pays
+#     pays_filtre = request.GET.get('pays', '')
+#     if pays_filtre:
+#         # Le champ 'pays' est sur Utilisateur, on y accède via 'utilisateur__pays'
+#         tous_les_editeurs = tous_les_editeurs.filter(utilisateur__pays=pays_filtre)
+
+#     # Recherche par nom d'utilisateur ou email
+#     q = request.GET.get('q', '')
+#     if q:
+#         # Les champs 'username' et 'email' sont sur Utilisateur
+#         tous_les_editeurs = tous_les_editeurs.filter(
+#             Q(utilisateur__username__icontains=q) | Q(utilisateur__email__icontains=q)
+#         ).distinct()
+
+#     # 3. Pagination
+#     paginator = Paginator(tous_les_editeurs, 30)
+#     page_number = request.GET.get('page')
+#     editeurs_paginated = paginator.get_page(page_number)
+
+#     # 4. Contextes additionnels
+#     genres = Genre.objects.all()
+#     # Le modèle User doit avoir la constante PAYS_AFRICAINS définie.
+#     pays_list = dict(User.PAYS_AFRICAINS)
+    
+#     context = {
+#         'editeurs_paginated': editeurs_paginated, # Renommé pour clarté dans le template
+#         'genres': genres,
+#         'pays_list': pays_list,
+#         'user_authenticate': request.user.is_authenticated,
+#         'user': request.user,
+#         'profil': request.user if request.user.is_authenticated else None,
+#         'editeurs_vedettes_principaux': editeurs_vedettes_principaux, 
+#         'editeurs_par_pays_list': editeurs_par_pays_list,
+#     }
+
+#     return render(request, 'gestion_content/editeur2.html', context)
+
+
+
 def editeur(request):
     User = get_user_model()
 
-    # 1. ÉDITEURS VEDETTES PRINCIPAUX
-    # On filtre directement sur le modèle Editeur, car il est le point central.
-    # Les champs 'role', 'vedette' et 'valid' sont sur le modèle Utilisateur,
-    # on y accède via le champ de relation 'utilisateur'.
-    editeurs_vedettes_principaux = Editeur.objects.filter(
-        utilisateur__role="editeur", 
-        utilisateur__vedette=True, 
-        utilisateur__valid=True
-    ).select_related('utilisateur')[:6] # select_related optimise la récupération des données utilisateur
-    
-    # IDs des utilisateurs vedettes (pour les exclure des listes secondaires)
-    # On récupère l'ID de l'objet User lié.
-    vedettes_ids = [editeur.utilisateur.id for editeur in editeurs_vedettes_principaux]
+    editeurs_vedettes_principaux = User.objects.filter(role="editeur", vedette=True, valid=True)[:6]
+    vedettes_ids = [editeur.id for editeur in editeurs_vedettes_principaux]
 
-    # --- Préparation de la liste d'éditeurs "aléatoires" par pays ---
-    
-    # On travaille sur le modèle Editeur pour inclure les détails nécessaires
-    # et on filtre sur les champs du modèle Utilisateur.
-    # On exclut les Utilisateurs vedettes (en utilisant leur ID)
-    users_editeurs_actifs_non_vedettes = Editeur.objects.filter(
-        utilisateur__role="editeur", 
-        utilisateur__valid=True
-    ).exclude(utilisateur__id__in=vedettes_ids) # CORRECTION : exclure l'ID de l'UTILISATEUR
-
+    editeurs_par_pays = User.objects.filter(role="editeur", valid=True).exclude(id__in=vedettes_ids).values('pays').annotate(count=Count('id')).order_by('pays')
     editeurs_par_pays_list = []
-    
-    # Récupération des pays avec des éditeurs (groupement par le champ 'pays' de l'utilisateur)
-    editeurs_par_pays = users_editeurs_actifs_non_vedettes.values('utilisateur__pays').annotate(
-        count=Count('id')
-    ).order_by('utilisateur__pays') # CORRECTION : Grouper et ordonner par 'utilisateur__pays'
-    
     for pays_data in editeurs_par_pays:
-        pays_code = pays_data['utilisateur__pays']
-        
-        # Récupère 2 éditeurs aléatoires pour ce pays (hors vedettes)
-        editeurs_du_pays = users_editeurs_actifs_non_vedettes.filter(
-            utilisateur__pays=pays_code # CORRECTION : Filtrer par 'utilisateur__pays'
-        ).order_by('?')[:2]
-        
-        # On ajoute les objets Editeur complets à la liste
+        editeurs_du_pays = User.objects.filter(role="editeur", pays=pays_data['pays'], valid=True).exclude(id__in=vedettes_ids).order_by('?')[:2]
         editeurs_par_pays_list.extend(editeurs_du_pays)
 
-    # 2. BASE DE DONNÉES COMPLÈTE pour la pagination et le filtrage
-    tous_les_editeurs = Editeur.objects.filter(
-        utilisateur__role="editeur", 
-        utilisateur__valid=True
-    ).select_related('utilisateur') # select_related est clé ici
-    
-    # --- Application des filtres ---
-
-    # Exclure les éditeurs vedettes
+    tous_les_editeurs = User.objects.filter(role="editeur", valid=True)
+    # .exclude(id__in=vedettes_ids)
     exclude_vedettes = request.GET.get('exclude_vedettes')
     if exclude_vedettes == 'true':
-        # Le champ 'vedette' est sur Utilisateur, on y accède via 'utilisateur__vedette'
-        tous_les_editeurs = tous_les_editeurs.exclude(utilisateur__vedette=True)
+        tous_les_editeurs = tous_les_editeurs.exclude(vedette=True)
 
-    # Filtrage par pays
     pays_filtre = request.GET.get('pays', '')
     if pays_filtre:
-        # Le champ 'pays' est sur Utilisateur, on y accède via 'utilisateur__pays'
-        tous_les_editeurs = tous_les_editeurs.filter(utilisateur__pays=pays_filtre)
+        tous_les_editeurs = tous_les_editeurs.filter(pays=pays_filtre)
 
-    # Recherche par nom d'utilisateur ou email
     q = request.GET.get('q', '')
     if q:
-        # Les champs 'username' et 'email' sont sur Utilisateur
-        tous_les_editeurs = tous_les_editeurs.filter(
-            Q(utilisateur__username__icontains=q) | Q(utilisateur__email__icontains=q)
-        ).distinct()
+        tous_les_editeurs = tous_les_editeurs.filter(username__icontains=q) | tous_les_editeurs.filter(email__icontains=q)
 
-    # 3. Pagination
     paginator = Paginator(tous_les_editeurs, 30)
     page_number = request.GET.get('page')
     editeurs_paginated = paginator.get_page(page_number)
 
-    # 4. Contextes additionnels
     genres = Genre.objects.all()
-    # Le modèle User doit avoir la constante PAYS_AFRICAINS définie.
     pays_list = dict(User.PAYS_AFRICAINS)
-    
+    usere = request.user
+    profil = None
+    if usere.is_authenticated:
+        try:
+            profil = User.objects.get(id=usere.id)
+        except User.DoesNotExist:
+            profil = None
+
     context = {
-        'editeurs_paginated': editeurs_paginated, # Renommé pour clarté dans le template
+        'editeurs_paginated': editeurs_paginated,
         'genres': genres,
         'pays_list': pays_list,
         'user_authenticate': request.user.is_authenticated,
         'user': request.user,
-        'profil': request.user if request.user.is_authenticated else None,
-        'editeurs_vedettes_principaux': editeurs_vedettes_principaux, 
+        'profil': profil,
+        'editeurs_vedettes_principaux': editeurs_vedettes_principaux,
         'editeurs_par_pays_list': editeurs_par_pays_list,
     }
+
 
     return render(request, 'gestion_content/editeur2.html', context)
 
