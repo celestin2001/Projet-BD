@@ -328,7 +328,7 @@ class Genre(models.Model):
             self.slug = slugify(self.nom)
         super().save(*args, **kwargs)
 
-class Livre(models.Model):
+class Bdtheque(models.Model):
     TITRES_CHOIX = [
         ('BD', 'Bande Dessinée'),
         ('Roman', 'Roman'),
@@ -345,7 +345,7 @@ class Livre(models.Model):
     couverture = models.ImageField(upload_to='livres/couvertures/', blank=True, null=True)
     
     # Relations
-    editeur = models.ForeignKey(Editeur, on_delete=models.CASCADE, related_name='livres_publies')
+    edition = models.ForeignKey(Editeur, on_delete=models.CASCADE, related_name='livres_publies')
     # Clé étrangère vers l'Auteur (via le modèle Auteur que nous avons créé)
     auteur_principal = models.ForeignKey(Auteur, on_delete=models.SET_NULL, null=True, related_name='livres_principaux')
     auteurs_secondaires = models.ManyToManyField(Auteur, blank=True, related_name='livres_secondaires', verbose_name="Auteurs Additionnels")
@@ -357,10 +357,10 @@ class Livre(models.Model):
     isbn = models.CharField(max_length=13, unique=True, blank=True, null=True, verbose_name="ISBN (13 chiffres)")
     
     class Meta:
-        verbose_name = "Livre"
-        verbose_name_plural = "Livres"
+        verbose_name = "Bdtheque"
+        verbose_name_plural = "Bdtheque"
         ordering = ['-date_publication', 'titre']
-        unique_together = ('editeur', 'titre')
+        unique_together = ('edition', 'titre')
 
     def __str__(self):
         return f"{self.titre} ({self.editeur.nom})"

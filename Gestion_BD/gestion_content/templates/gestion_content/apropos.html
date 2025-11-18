@@ -549,7 +549,7 @@
                                
         
                                 <li class="nav-item">
-                                    <strong><a class="nav-link" href="#">BDthèque</a></strong>
+                                    <strong><a class="nav-link" href="{% url "bdtheque" %}">BDthèque</a></strong>
                                 </li>
                                  <li class="nav-item">
                                     <strong><a class="nav-link" href="{% url "Librairie" %}"> Librairies</a></strong>
@@ -591,15 +591,15 @@
             <div class="text-section">
                 <h2 class="section-title">Qui sommes-nous ?</h2>
                 <p>
-                    L'association MABD (Maison Africaine de la Bande Dessinée) est une **structure à but non lucratif dédiée à la reconnaissance, la conservation et la promotion du Neuvième Art africain**.
+                    L'association MABD (Maison Africaine de la Bande Dessinée) est une structure à but non lucratif dédiée à la reconnaissance, la conservation et la promotion du Neuvième Art africain.
                 </p>
                 <p>
-                    Elle porte le projet MABD, un **espace culturel et patrimonial unique** visant à faire vivre et rayonner la création en bande dessinée sur le continent africain, de ses débuts à nos jours.
+                    Elle porte le projet MABD, un espace culturel et patrimonial unique visant à faire vivre et rayonner la création en bande dessinée sur le continent africain, de ses débuts à nos jours.
                 </p>
 
                 <h2 class="section-title mt-5">Pourquoi le projet MABD ?</h2>
                 <p>
-                    Aujourd'hui, **il n'existe pas de structure dédiée à la conservation de la bande dessinée en Afrique**. Pourtant, le continent dispose :
+                    Aujourd'hui, il n'existe pas de structure dédiée à la conservation de la bande dessinée en Afrique. Pourtant, le continent dispose :
                     <ul>
                         <li>D'une <span class="highlight">histoire riche</span> de la création graphique et narrative ;</li>
                         <li>D'un <span class="highlight">vivier d'auteurs talentueux</span>, anciens comme émergents ;</li>
@@ -607,12 +607,12 @@
                     </ul>
                 </p>
                 <p>
-                    Face à ce constat, la MABD propose la création de la **Maison Africaine de la Bande Dessinée (MABD)** : un <span class="highlight">lieu de référence</span> pour les auteurs, les chercheurs, les institutions culturelles et le grand public.
+                    Face à ce constat, la MABD propose la création de la Maison Africaine de la Bande Dessinée (MABD) : un <span class="highlight">lieu de référence</span> pour les auteurs, les chercheurs, les institutions culturelles et le grand public.
                 </p>
 
                 <h2 class="section-title mt-5">Une dynamique culturelle et patrimoniale</h2>
                 <p>
-                    À travers le projet MABD, l'association entend **inscrire durablement la bande dessinée africaine dans le paysage culturel mondial**, en faisant émerger une <span class="highlight">mémoire collective</span>, un <span class="highlight">réseau d'acteurs</span> et un <span class="highlight">lieu emblématique</span> consacré à ce medium universel.
+                    À travers le projet MABD, l'association entend inscrire durablement la bande dessinée africaine dans le paysage culturel mondial, en faisant émerger une <span class="highlight">mémoire collective</span>, un <span class="highlight">réseau d'acteurs</span> et un <span class="highlight">lieu emblématique</span> consacré à ce medium universel.
                 </p>
             </div>
         </div>
@@ -629,11 +629,11 @@
                 </p>
                 <div class="mt-4">
                     <h4 class="text-danger"><i class="fas fa-phone-alt me-2"></i> Téléphone</h4>
-                    <p class="fs-4">**+224 626 26 95 80** (provisoire)</p>
+                    <p class="fs-4">+224 626 26 95 80</p>
                 </div>
-                <p class="small mt-3">
+                {% comment %} <p class="small mt-3">
                     Pour les questions complexes ou les dossiers, veuillez utiliser le formulaire ci-contre.
-                </p>
+                </p> {% endcomment %}
             </div>
 
             {# Colonne de Droite (Formulaire de contact) - Inspiré du modèle Cité BD #}
@@ -714,10 +714,10 @@
                 </div>
                 <div class="col-12 footer-support-logos">
                     {# Logos tirés de footer9.png #}
-                    <img src="{% static "gestion_content/images/logo_bilibd.png" %}" alt="Bili BD Festival Logo">
-                    <img src="{% static "gestion_content/images/logo_afd.png" %}" alt="AFD Logo">
-                    <img src="{% static "gestion_content/images/logo_cibdi.png" %}" alt="CIBDI Logo"> 
-                    <img src="{% static "gestion_content/images/logo_ifc.png" %}" alt="IFC Logo">
+                    <img src="{% static "gestion_content/images/logo.png" %}" alt="Bili BD Festival Logo">
+                    <img src="{% static "gestion_content/images/logo.png" %}" alt="AFD Logo">
+                    <img src="{% static "gestion_content/images/logo.png" %}" alt="CIBDI Logo"> 
+                    <img src="{% static "gestion_content/images/logo.png" %}" alt="IFC Logo">
                 </div>
             </div>
 

@@ -237,12 +237,12 @@
         <div class="detail-header">
             <div class="container">
                 <h1 class="main-title">{{ librairie.nom }}</h1>
-                <p class="subtitle-enseigne">Enseigne : **{{ librairie.enseigne|default:"Non spécifiée" }}**</p>
+                <p class="subtitle-enseigne">Enseigne : {{ librairie.enseigne|default:"Non spécifiée" }}</p>
                 
                 <div class="info-location">
                     {# Assurez-vous que librairie.pays est un code pays ISO 3166-1 alpha-2, en minuscules #}
                     <span class="flag-icon flag-icon-{{ librairie.pays|lower }}"></span>
-                    {{ librairie.ville }}, **{{ nom_pays }}**
+                    {{ librairie.ville }}, {{ nom_pays }}
                 </div>
             </div>
         </div>
@@ -281,7 +281,7 @@
                         {# BLOC POUR LES JOURS D'OUVERTURE #}
                         <h5 class="mt-2 mb-2 text-muted"><i class="fas fa-calendar-alt me-2"></i> Jours d'ouverture :</h5>
                         <ul class="opening-days-list">
-                            <li>**{{ librairie.jours_ouverture|default:"Non renseignés" }}**</li>
+                            <li>{{ librairie.jours_ouverture|default:"Non renseignés" }}</li>
                         </ul>
                         
                         <h5 class="mt-4 mb-2 text-muted"><i class="fas fa-clock me-2"></i> Horaires quotidiens :</h5>
@@ -314,7 +314,7 @@
                         <h5 class="mt-4 mb-2 text-muted"><i class="fas fa-location-dot me-2"></i> Adresse complète</h5>
                         <p>
                             {{ librairie.adresse|default:"Adresse non renseignée." }}<br>
-                            **{{ librairie.ville }}**, **{{ nom_pays }}**
+                            {{ librairie.ville }}, {{ nom_pays }}
                         </p>
                     </div>
                     

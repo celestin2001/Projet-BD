@@ -136,7 +136,7 @@ def signup(request):
             last_name=lastname,
             bio = bio,
             profil_picture = profil_picture,
-            token = token,
+            
             date_naissance = date_naissance,
             ville_residence = ville_residence,
             telephone = telephone,
@@ -203,9 +203,10 @@ def signin(request):
         user=authenticate(request,email=email,password=password)
         if user is not None:
             login(request,user)
-            if user.role == 'editeur':
+            if user.role == 'editeur' and user.vedette == True:
                  return redirect('editeur')
-            
+            if user.role == 'auteur' and user.vedette == True:
+                 return redirect('auteur')
             return redirect('home')
         else:
             messages.error(request,"votre email ou mot de passe est incorecte")

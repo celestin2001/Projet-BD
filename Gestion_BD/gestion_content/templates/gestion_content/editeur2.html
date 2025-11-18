@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auteurs - Maison Africaine de la BD</title>
+    <title>Éditeurs - Maison Africaine de la BD</title>
     
     {# Liens Bootstrap et Icônes #}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aVvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
     
     {# Police de Caractères #}
@@ -53,13 +53,7 @@
     }
 
     /* ------------------------------------------- */
-    /* STYLES DU HEADER (Double Barre) */
-    /* ------------------------------------------- */
-
-   
-    
-    /* ------------------------------------------- */
-    /* STYLES DE LA PAGE AUTEURS (MAIN) */
+    /* STYLES DE LA PAGE ÉDITEURS (MAIN) */
     /* ------------------------------------------- */
 
     main {
@@ -67,7 +61,7 @@
         padding-top: 1.5rem; 
         padding-bottom: 2rem; 
     }
-    .titre-auteurs {
+    .titre-auteurs { /* Renommé mais conservé pour le style existant */
         text-align: center;
         color: var(--dark-blue);
         font-size: 2.5rem; 
@@ -75,7 +69,7 @@
         font-weight: 700;
         animation: fadeIn 1s ease-out; 
     }
-    .section-auteur-contenu {
+    .section-auteur-contenu { /* Renommé mais conservé pour le style existant */
         margin-top: 2rem;
         background-color: white;
         padding: 2rem;
@@ -92,7 +86,7 @@
         padding-bottom: 0.5rem;
     }
 
-    /* Card Auteur */
+    /* Card Éditeur */
     .auteur-card-wrapper {
         height: 100%;
         display: flex;
@@ -221,7 +215,7 @@
         border-color: var(--dark-blue);
     }
 
-    .section-auteurs-categorie h2 {
+    .section-auteurs-categorie h2 { /* Renommé mais conservé pour le style existant */
         color: var(--primary-blue);
         margin-top: 3rem;
         margin-bottom: 1.5rem;
@@ -251,7 +245,7 @@
         transition: all 0.2s ease;
     }
 
-    /* Media Queries pour affinements Auteurs */
+    /* Media Queries pour affinements */
     @media (max-width: 767.98px) { 
         .recherche-section form {
             flex-direction: column; 
@@ -267,7 +261,7 @@
     }
     
     /* ------------------------------------------- */
-    /* STYLES DU FOOTER (Mis à jour pour le fond bleu foncé) */
+    /* STYLES DU FOOTER */
     /* ------------------------------------------- */
     
     .custom-footer {
@@ -407,44 +401,47 @@
     </style>
 </head>
 <body>
- 
-   {% include "gestion_content/header.html" %}
+    
+    {% include "gestion_content/header.html" %}
 
-   
+    
     <main class="flex-shrink-0"> 
         <div class="container mt-4">
-            <h1 class="titre-auteurs">Découvrez nos Auteurs Talentueux</h1>
+            <h1 class="titre-auteurs">Découvrez nos Maisons d'Édition</h1>
 
             <div class="section-auteur-contenu">
                 <section class="section-vedettes mb-4">
-                    <h2>Nos Auteurs Vedettes</h2>
+                    <h2>Nos Éditeurs Vedettes</h2>
                     <div class="row g-3">
-                        {# Simuler des données pour l'affichage, à remplacer par votre boucle réelle #}
-                        {% for auteur in auteurs_vedettes_principaux %}
+                        {% for editeur in editeurs_vedettes_principaux %}
                         <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <div class="auteur-card-wrapper">
                                 <div class="auteur-card">
-                                    <img src="{{ auteur.profil_picture.url }}" alt="{{ auteur.username }}" class="img-fluid">
+                                    <img src="{{ editeur.utilisateur.profil_picture.url }}" alt="{{ editeur.nom }}" class="img-fluid">
                                     <div class="auteur-info">
-                                        <h5>{{ auteur.username }}</h5>
-                                        <p><span class="flag-icon flag-icon-{{ auteur.pays|lower }}"></span> {{ auteur.get_pays_display }}</p>
-                                        <a href="{% url 'detail_auteur' auteur.id %}" class="btn btn-primary">PLUS D'INFOS</a>
+                                        <h5>{{ editeur.nom }}</h5>
+                                        <p>
+                                            <span class="flag-icon flag-icon-{{ editeur.utilisateur.pays|lower }}"></span> 
+                                            {{ editeur.utilisateur.get_pays_display }}
+                                        </p>
+                                        <a href="{% url 'detail_auteur' editeur.id %}" class="btn btn-primary">PLUS D'INFOS</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {% empty %}
                         <div class="col-12">
-                            <p class="text-center text-muted">Aucun auteur vedette principal pour le moment.</p>
+                            <p class="text-center text-muted">Aucun éditeur vedette principal pour le moment.</p>
                         </div>
                         {% endfor %}
                     </div>
                 </section>
 
                 <div class="filtres-section">
-                    <h2>Filtres</h2>
-                    <p class="filter-description">Filtrer les auteurs par pays :</p>
-                    <form method="get" action="{% url 'auteur' %}#auteurs-par-pays-section">
+                    <h2>Filtrer les Éditeurs</h2>
+                    <p class="filter-description">Filtrer les éditeurs par pays :</p>
+                    {# L'action doit pointer vers l'URL de la vue 'editeur' #}
+                    <form method="get" action="{% url 'editeur' %}#auteurs-par-pays-section">
                         <div class="filtres-pays">
                             <button type="submit" name="pays" value="" class="btn {% if not request.GET.pays %}active{% endif %}">
                                 <i class="fas fa-globe-africa me-1"></i> Tous
@@ -461,12 +458,12 @@
                 </div>
 
                 <div class="recherche-section">
-                    <form method="get" action="{% url 'auteur' %}" class="row g-2 align-items-center justify-content-md-end">
+                    <form method="get" action="{% url 'editeur' %}" class="row g-2 align-items-center justify-content-md-end">
                         <div class="col-auto">
-                            <label for="q" class="visually-hidden">Rechercher un auteur</label>
+                            <label for="q" class="visually-hidden">Rechercher un éditeur</label>
                         </div>
                         <div class="col-md-4 col-sm-6 col-12">
-                            <input type="text" id="q" name="q" value="{{ request.GET.q }}" placeholder="Nom ou email de l'auteur" class="form-control form-control-sm">
+                            <input type="text" id="q" name="q" value="{{ request.GET.q }}" placeholder="Nom ou email de l'éditeur" class="form-control form-control-sm">
                         </div>
                         <div class="col-auto">
                             <button type="submit" class="btn btn-sm"><i class="fas fa-search me-1"></i> Rechercher</button>
@@ -477,39 +474,45 @@
                 </div>
 
                 <section class="section-auteurs-categorie" id="auteurs-par-pays-section">
-                    <h2>Auteurs {% if request.GET.pays %}- {{ request.GET.pays_display_name|default:request.GET.pays }} {% elif request.GET.q %}- Résultats pour "{{request.GET.q}}" {% else %}par Pays{% endif %}</h2>
+                    {# CORRECTION ERREUR DE FILTRE : Remplacé par request.GET.pays|upper #}
+                    <h2>Éditeurs {% if request.GET.pays %}- {{ request.GET.pays|upper }} {% elif request.GET.q %}- Résultats pour "{{request.GET.q}}" {% else %}par Pays{% endif %}</h2>
                     <div class="row g-3">
-                        {% for auteur in auteurs_filtrés %}
+                        {# Utilisation de la variable de pagination correcte #}
+                        {% for editeur in editeurs_paginated %}
                         <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <div class="auteur-card-wrapper">
                                 <div class="auteur-card">
-                                    <img src="{{ auteur.profil_picture.url }}" alt="{{ auteur.username }}" class="img-fluid">
+                                    <img src="{{ editeur.utilisateur.profil_picture.url }}" alt="{{ editeur.nom }}" class="img-fluid">
                                     <div class="auteur-info">
-                                        <h5>{{ auteur.username }}</h5>
-                                        <p><span class="flag-icon flag-icon-{{ auteur.pays|lower }}"></span> {{ auteur.get_pays_display }}</p>
-                                        <a href="{% url 'detail_auteur' auteur.id %}" class="btn btn-primary">PLUS D'INFOS</a>
+                                        <h5>{{ editeur.nom }}</h5>
+                                        <p>
+                                            <span class="flag-icon flag-icon-{{ editeur.utilisateur.pays|lower }}"></span> 
+                                            {{ editeur.utilisateur.get_pays_display }}
+                                        </p>
+                                        <a href="" class="btn btn-primary">PLUS D'INFOS</a>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         {% empty %}
                         <div class="col-12">
-                            <p class="text-center text-muted">Aucun auteur trouvé avec ces critères.</p>
+                            <p class="text-center text-muted">Aucun éditeur trouvé avec ces critères.</p>
                         </div>
                         {% endfor %}
                     </div>
                 </section>
 
                 {# PAGINATION #}
-                {% if auteurs_filtrés.has_other_pages %}
+                {% if editeurs_paginated.has_other_pages %}
                 <nav id="pagination-section" aria-label="Page navigation" class="mt-5">
                     <ul class="pagination">
+                        {# Le filtre 'get_params' gère la conservation des filtres (q, pays, etc.) #}
                         {% with get_params='&'|join:request.GET.items|slice:'1:'|join:'&' %}
                         
                             {# Bouton Précédent #}
-                            {% if auteurs_filtrés.has_previous %}
+                            {% if editeurs_paginated.has_previous %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ auteurs_filtrés.previous_page_number }}{{ get_params }}" aria-label="Précédent">
+                                <a class="page-link" href="?page={{ editeurs_paginated.previous_page_number }}{{ get_params }}" aria-label="Précédent">
                                     <span aria-hidden="true">&laquo;</span>
                                 </a>
                             </li>
@@ -517,17 +520,17 @@
                             <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
                             {% endif %}
 
-                            {# Boucle des numéros de page (logique pour afficher les pages adjacentes et les points de suspension) #}
-                            {% for i in auteurs_filtrés.paginator.page_range %}
-                                {% if auteurs_filtrés.number == i %}
+                            {# Boucle des numéros de page #}
+                            {% for i in editeurs_paginated.paginator.page_range %}
+                                {% if editeurs_paginated.number == i %}
                                     <li class="page-item active" aria-current="page"><span class="page-link">{{ i }}</span></li>
-                                {% elif i > auteurs_filtrés.number|add:'-3' and i < auteurs_filtrés.number|add:'3' %}
+                                {% elif i > editeurs_paginated.number|add:'-3' and i < editeurs_paginated.number|add:'3' %}
                                     <li class="page-item"><a class="page-link" href="?page={{ i }}{{ get_params }}">{{ i }}</a></li>
                                 {% elif forloop.first or forloop.last %}
-                                    {% if forloop.first and auteurs_filtrés.number > 4 %}
+                                    {% if forloop.first and editeurs_paginated.number > 4 %}
                                         <li class="page-item"><a class="page-link" href="?page={{ i }}{{ get_params }}">{{ i }}</a></li>
                                         <li class="page-item disabled"><span class="page-link">...</span></li>
-                                    {% elif forloop.last and auteurs_filtrés.number < auteurs_filtrés.paginator.num_pages|add:'-3' %}
+                                    {% elif forloop.last and editeurs_paginated.number < editeurs_paginated.paginator.num_pages|add:'-3' %}
                                         <li class="page-item disabled"><span class="page-link">...</span></li>
                                         <li class="page-item"><a class="page-link" href="?page={{ i }}{{ get_params }}">{{ i }}</a></li>
                                     {% endif %}
@@ -535,9 +538,9 @@
                             {% endfor %}
 
                             {# Bouton Suivant #}
-                            {% if auteurs_filtrés.has_next %}
+                            {% if editeurs_paginated.has_next %}
                             <li class="page-item">
-                                <a class="page-link" href="?page={{ auteurs_filtrés.next_page_number }}{{ get_params }}" aria-label="Suivant">
+                                <a class="page-link" href="?page={{ editeurs_paginated.next_page_number }}{{ get_params }}" aria-label="Suivant">
                                     <span aria-hidden="true">&raquo;</span>
                                 </a>
                             </li>
@@ -553,7 +556,7 @@
     </main>
 
     {# ========================================== #}
-    {#                FOOTER (Corrigé)             #}
+    {#                FOOTER             #}
     {# ========================================== #}
     <footer class="custom-footer">
         <div class="container text-center">
@@ -561,11 +564,11 @@
             {# Section Soutien (Soutenu par) #}
             <p class="soutenu-par-title">SOUTENU PAR</p>
             <div class="logos-partenaires d-flex justify-content-center align-items-center flex-wrap mb-4">
-                    <img src="{% static "gestion_content/images/logo.png" %}" alt="Bili BD Festival Logo">
-                    <img src="{% static "gestion_content/images/logo.png" %}" alt="AFD Logo">
-                    <img src="{% static "gestion_content/images/logo.png" %}" alt="CIBDI Logo"> 
-                    <img src="{% static "gestion_content/images/logo.png" %}" alt="IFC Logo">
                 {# Assurez-vous que les chemins d'accès statiques sont corrects #}
+                <img src="{% static "gestion_content/images/logo.png" %}" alt="Bili BD Festival Logo">
+                <img src="{% static "gestion_content/images/logo.png" %}" alt="AFD Logo">
+                <img src="{% static "gestion_content/images/logo.png" %}" alt="CIBDI Logo"> 
+                <img src="{% static "gestion_content/images/logo.png" %}" alt="IFC Logo">
             </div>
 
             <div class="row pt-4 text-md-start">
@@ -581,7 +584,6 @@
                         <a href="https://www.instagram.com/bilibdfestival/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
                         <a href="https://www.tiktok.com/@bilibd_festival" target="_blank" rel="noopener noreferrer" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
                         <a href="https://www.linkedin.com/company/bili-bd-festival/?viewAsMember=true" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                        {# Ajouté pour être cohérent avec le lien dans footer10.png #}
                         <a href="https://www.youtube.com/@bilibdfestival5030" target="_blank" rel="noopener noreferrer" aria-label="Youtube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
@@ -611,13 +613,12 @@
                     </ul>
                 </div>
 
-                {# Colonne CONTACT (CORRIGÉE avec le bon numéro de téléphone) #}
+                {# Colonne CONTACT #}
                 <div class="col-lg-3 col-md-6 order-md-4 mt-4 mt-lg-0">
                     <h5>CONTACT</h5>
                     <div class="contact-info">
                         <p><i class="fas fa-map-marker-alt"></i> Adr.: [Votre adresse complète]</p>
                         <p><i class="fas fa-envelope"></i> Email: <a href="mailto:contact@mabd.org">contact@mabd.org</a></p>
-                        {# CORRECTION: Mise à jour du numéro de téléphone provisoire #}
                         <p><i class="fas fa-phone"></i> Tél.: +224 626 26 95 80</p>
                     </div>
                 </div>

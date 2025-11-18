@@ -68,7 +68,7 @@
             text-align: center;
         }
 
-        /* --- FullCalendar & Search Styles --- (Laissées intactes car non affectées) */
+        /* --- FullCalendar & Search Styles --- */
         #calendar {
             width: 100%;
             margin: 0 auto;
@@ -106,6 +106,54 @@
             font-weight: 600;
             padding: 8px;
             color: var(--dark-blue);
+        }
+
+        /* --- CURSEUR CLICABLE POUR ÉVÉNEMENTS --- */
+        .fc-event,
+        .fc-list-event-graphic,
+        .fc-list-event-title,
+        .fc-daygrid-event-harness,
+        .fc-list-event-time,
+        .fc-list-item {
+            cursor: pointer !important;
+        }
+
+        .fc-event:hover {
+            opacity: 0.9;
+            transition: opacity 0.2s ease;
+        }
+
+        /* +++++ STYLES POUR L'IMAGE DANS L'ÉVÉNEMENT (Corrigé pour FullCalendar 6) +++++ */
+        
+        /* Conteneur personnalisé pour l'image et le titre dans les événements */
+        .event-custom-content {
+            display: flex;
+            align-items: center;
+            gap: 5px; /* Espace entre l'image et le titre */
+            width: 100%;
+            /* Nécessaire pour forcer l'alignement dans la vue liste */
+        }
+        
+        /* Style de la miniature */
+        .event-thumbnail {
+            width: 20px; /* Taille de la miniature */
+            height: 20px;
+            object-fit: cover;
+            border-radius: 3px;
+            flex-shrink: 0; /* Empêche l'image de rétrécir */
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        /* Cacher l'icône de base dans la vue liste si on utilise l'image */
+        .fc-list-event-title .fc-list-event-graphic {
+            display: none !important;
+        }
+
+        /* Assurer que le titre prenne l'espace restant */
+        .event-title-text {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
         }
 
         /* --- MODALE FULLCALENDAR --- */
@@ -152,7 +200,7 @@
         }
 
 
-        /* --- HEADER STYLES --- */
+        /* --- HEADER/FOOTER STYLES (Inchangés) --- */
         .top-bar {
             background-color: var(--header-top-bg); 
             color: white;
@@ -195,20 +243,61 @@
             font-weight: 500;
             padding: 0.5rem 0.75rem !important;
         }
-
-        /* --- FOOTER STYLES CORRIGÉS (footer11.png) --- */
-       
+    </style>
+    <style>
+        .tooltip {
+            position: absolute;
+            z-index: 10000;
+            background: #212529;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            pointer-events: none;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.1s;
+            max-width: 300px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            text-align: left;
+        }
+        .tooltip.visible {
+            opacity: 1;
+        }
+        .tooltip.tooltip-top:before {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 8px solid #212529;
+        }
+        .tooltip.tooltip-bottom:before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid #212529;
+        }
     </style>
 </head>
 <body>
 
-     {% include "gestion_content/header.html" %}
+    {% include "gestion_content/header.html" %}
 
 
     <div class="page-container">
         <h1 class="page-title">Calendrier des Événements 🗓️</h1>
         <p class="page-subtitle">
-            Découvrez tous les événements à venir organisés par la **Maison Africaine de la BD**. Naviguez mois par mois pour ne rien manquer !
+            Découvrez tous les événements à venir organisés par la Maison Africaine de la BD. Naviguez mois par mois pour ne rien manquer !
         </p>
         <input type="text" id="eventSearch" class="form-control" placeholder="🔍 Rechercher un événement par titre, lieu ou description...">
         <div id="calendar" class="mt-4"></div>
@@ -228,10 +317,7 @@
              <a href="#" id="modalLink" class="btn btn-sm btn-primary" target="_blank" style="display:none; font-weight: 600;">Voir les détails</a>
         </div>
     </div>
-    </div>
-    
-
- {% include "gestion_content/footer.html" %}
+    {% include "gestion_content/footer.html" %}
     
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -245,6 +331,7 @@
         document.addEventListener('DOMContentLoaded', function () {
             const calendarEl = document.getElementById('calendar');
             const tooltipEl = document.createElement('div');
+            // Le style CSS pour la classe 'tooltip' a été ajouté dans le <head>
             tooltipEl.className = 'tooltip';
             document.body.appendChild(tooltipEl);
 
@@ -260,6 +347,37 @@
                 buttonText: {
                     today: "Aujourd'hui", month: "Mois", week: "Semaine", day: "Jour", list: "Liste"
                 },
+                
+                // +++++ CORRECTION 2: Logique de eventContent pour FullCalendar 6 (utilisation de createElement) +++++
+                eventContent: function(arg) {
+                    const event = arg.event;
+                    const eventImage = event.extendedProps.image;
+                    const eventTitle = event.title;
+                    
+                    // Crée le conteneur personnalisé
+                    const containerEl = document.createElement('div');
+                    containerEl.className = 'event-custom-content';
+
+                    // Crée l'élément image
+                    const imgEl = document.createElement('img');
+                    imgEl.src = eventImage;
+                    imgEl.alt = eventTitle;
+                    imgEl.className = 'event-thumbnail';
+                    
+                    // Crée l'élément titre
+                    const titleEl = document.createElement('span');
+                    titleEl.className = 'event-title-text';
+                    titleEl.textContent = eventTitle;
+
+                    containerEl.appendChild(imgEl);
+                    containerEl.appendChild(titleEl);
+                    
+                    // FullCalendar insérera cet élément dans le wrapper de l'événement.
+                    // Cela fonctionne pour toutes les vues (dayGrid, timeGrid, list).
+                    return { domNodes: [containerEl] };
+                },
+                // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
                 events: [
                     {% for e in evenements %}
                     {

@@ -42,9 +42,9 @@ class Utilisateur(AbstractUser):
     genres = models.ManyToManyField("gestion_content.Genre", related_name="auteurs", blank=True, null=True)
    
     # password_confirme = models.CharField(max_length=50)
-    token = models.CharField(max_length=120)
+    # token = models.CharField(max_length=120,null=True)
     pays = models.CharField(max_length=100, choices=PAYS_AFRICAINS, default="Cameroun",null=True)
-    valid_auteur = models.BooleanField(default=False)
+    valid = models.BooleanField(default=False)
     vedette = models.BooleanField(default=False)
     date_naissance = models.DateField(null=True, blank=True)
     telephone = models.CharField(max_length=20, null=True, blank=True)

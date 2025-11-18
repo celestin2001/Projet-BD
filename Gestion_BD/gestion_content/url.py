@@ -15,7 +15,10 @@ urlpatterns = [
   path('librairies',Librairies,name="Librairie"),
   path('librairie/<int:librairie_id>/',detail_librairie, name='detail_librairie'),
   path('editeur',editeur, name='editeur'),
+  # path('editeur2',editeurs, name='editeur2'),
   path('editeur/<int:id>/', editeur_detail_view, name='editeur_detail'),
+  # path('editeur/<int:id>/', editeur_detail, name='editeur_detail'),
   path('bdtheque',bdtheque , name='bdtheque'),
+  path('auteur/<str:username>/galerie/',auteur_galerie_view, name='auteur_galerie_oeuvres'),
  
 ]

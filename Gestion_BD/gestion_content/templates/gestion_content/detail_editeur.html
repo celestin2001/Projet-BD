@@ -214,10 +214,10 @@
                     {% with code_pays=editeur.utilisateur.pays|lower %}
                         <span class="flag-icon flag-icon-{{ code_pays }}"></span> 
                     {% endwith %}
-                    <i class="fas fa-map-marker-alt me-2"></i> Siège à **{{ editeur.ville_siege }}**, **{{ editeur.pays_siege }}**
+                    <i class="fas fa-map-marker-alt me-2"></i> Siège à {{ editeur.adresse_siege }},{{ editeur.pays_siege }}
                 </div>
                 <p class="mt-1 small text-muted">
-                    <i class="fas fa-calendar-alt me-1"></i> Fondé en **{{ editeur.annee_fondation|default:"Non spécifié" }}**
+                    <i class="fas fa-calendar-alt me-1"></i> Fondé en {{ editeur.annee_fondation|default:"Non spécifié" }}
                 </p>
                 
                 <div class="social-links mt-4">
@@ -273,7 +273,7 @@
                                 {% for auteur in auteurs_editeur %}
                                     <a href="{% url 'detail_auteur' auteur.id %}" class="author-badge">
                                         <i class="fas fa-user-circle me-2"></i> 
-                                        **{{ auteur.get_full_name|default:auteur.username }}**
+                                        {{ auteur.get_full_name|default:auteur.username }}
                                     </a>
                                 {% endfor %}
                                 {% if tous_livres_count > 10 %}
@@ -338,8 +338,10 @@
                         <h5 class="mt-4 mb-2 text-muted"><i class="fas fa-location-dot me-2"></i> Adresse du Siège</h5>
                         <p>
                             {{ editeur.adresse_siege|default:"Adresse non spécifiée" }}<br>
-                            **{{ editeur.ville_siege|default:"Ville inconnue" }}**, **{{ editeur.pays_siege|default:"Pays inconnu" }}**
+                          
                         </p>
+                        <h5 class="mt-4 mb-2 text-muted">Pays</h5>
+                        <p> {{ editeur.pays_siege|default:"Pays inconnu" }}</p>
                     </div>
 
                     <div class="content-card-editor" style="border-left-color: var(--yellow-accent);">

@@ -17,17 +17,17 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 def auteur(request):
     User = get_user_model()
 
-    auteurs_vedettes_principaux = User.objects.filter(role="auteur", vedette=True, valid_auteur=True)[:6]
+    auteurs_vedettes_principaux = User.objects.filter(role="auteur", vedette=True, valid=True)[:6]
     vedettes_ids = [auteur.id for auteur in auteurs_vedettes_principaux]
 
-    auteurs_par_pays = User.objects.filter(role="auteur", valid_auteur=True).exclude(id__in=vedettes_ids).values('pays').annotate(count=Count('id')).order_by('pays')
+    auteurs_par_pays = User.objects.filter(role="auteur", valid=True).exclude(id__in=vedettes_ids).values('pays').annotate(count=Count('id')).order_by('pays')
     auteurs_par_pays_list = []
     for pays_data in auteurs_par_pays:
-        auteurs_du_pays = User.objects.filter(role="auteur", pays=pays_data['pays'], valid_auteur=True).exclude(id__in=vedettes_ids).order_by('?')[:2]
+        auteurs_du_pays = User.objects.filter(role="auteur", pays=pays_data['pays'], valid=True).exclude(id__in=vedettes_ids).order_by('?')[:2]
         auteurs_par_pays_list.extend(auteurs_du_pays)
 
-    tous_les_auteurs = User.objects.filter(role="auteur", valid_auteur=True).exclude(id__in=vedettes_ids)
-
+    tous_les_auteurs = User.objects.filter(role="auteur", valid=True)
+    # .exclude(id__in=vedettes_ids)
     exclude_vedettes = request.GET.get('exclude_vedettes')
     if exclude_vedettes == 'true':
         tous_les_auteurs = tous_les_auteurs.exclude(vedette=True)
@@ -86,7 +86,7 @@ def detail_auteur(request, auteur_id):
 
     # Récupérer toutes les œuvres de cet auteur avec la moyenne des notations
     oeuvres = Work.objects.filter(author=auteur).annotate(moyenne_note=Avg('notation__rating'))
-    auteur_oeuvre = Work.objects.filter(author=auteur)
+    auteur_oeuvre = Work.objects.filter(author=auteur).all()[:2]
     print(auteur_oeuvre)
     # Récupérer toutes les notations liées aux œuvres de cet auteur
     notations = Notation.objects.filter(work__in=oeuvres).select_related('user', 'work')
@@ -419,66 +419,66 @@ def apropos(request):
 
 # vue pour edition
 
-def editeur(request):
-    """
-    Vue affichant la liste des éditeurs avec options de recherche et de filtrage.
-    """
+# def editeur(request):
+#     """
+#     Vue affichant la liste des éditeurs avec options de recherche et de filtrage.
+#     """
     
-    # 1. Préparation des données de base
-    editeurs_list = Editeur.objects.all().order_by('nom')
-    user_authenticate = request.user.is_authenticated
+#     # 1. Préparation des données de base
+#     editeurs_list = Editeur.objects.all().order_by('nom')
+#     user_authenticate = request.user.is_authenticated
     
-    # Récupérer les options de pays pour le filtre (depuis votre modèle Utilisateur)
-    # Assurez-vous que PAYS_AFRICAINS est accessible ici, par exemple en l'important depuis settings
-    pays_options = getattr(settings, 'PAYS_AFRICAINS', Editeur.utilisateur.field.related_model.PAYS_AFRICAINS)
+#     # Récupérer les options de pays pour le filtre (depuis votre modèle Utilisateur)
+#     # Assurez-vous que PAYS_AFRICAINS est accessible ici, par exemple en l'important depuis settings
+#     pays_options = getattr(settings, 'PAYS_AFRICAINS', Editeur.utilisateur.field.related_model.PAYS_AFRICAINS)
 
 
-    # 2. Gestion de la Recherche (query) et des Filtres (country)
+#     # 2. Gestion de la Recherche (query) et des Filtres (country)
     
-    # Recherche par nom
-    query = request.GET.get('q')
-    if query:
-        editeurs_list = editeurs_list.filter(
-            Q(nom__icontains=query) |
-            Q(description__icontains=query)
-        ).distinct()
+#     # Recherche par nom
+#     query = request.GET.get('q')
+#     if query:
+#         editeurs_list = editeurs_list.filter(
+#             Q(nom__icontains=query) |
+#             Q(description__icontains=query)
+#         ).distinct()
         
-    # Filtrage par pays
-    country_code = request.GET.get('country')
-    if country_code and country_code != 'all':
-        # Le pays est stocké dans le modèle Utilisateur, nous filtrons donc sur le OneToOneField
-        editeurs_list = editeurs_list.filter(utilisateur__pays__iexact=country_code)
+#     # Filtrage par pays
+#     country_code = request.GET.get('country')
+#     if country_code and country_code != 'all':
+#         # Le pays est stocké dans le modèle Utilisateur, nous filtrons donc sur le OneToOneField
+#         editeurs_list = editeurs_list.filter(utilisateur__pays__iexact=country_code)
 
-    # Note : Ajoutons les annotations pour le nombre de livres/auteurs (si les modèles Livre et Auteur existent)
-    # editeurs_list = editeurs_list.annotate(
-    #     num_livres=Count('livre', distinct=True), 
-    #     num_auteurs=Count('auteur', distinct=True)
-    # )
+#     # Note : Ajoutons les annotations pour le nombre de livres/auteurs (si les modèles Livre et Auteur existent)
+#     # editeurs_list = editeurs_list.annotate(
+#     #     num_livres=Count('livre', distinct=True), 
+#     #     num_auteurs=Count('auteur', distinct=True)
+#     # )
 
 
-    # 3. Gestion de la Pagination
-    page = request.GET.get('page', 1)
-    paginator = Paginator(editeurs_list, 10) # 10 éditeurs par page
+#     # 3. Gestion de la Pagination
+#     page = request.GET.get('page', 1)
+#     paginator = Paginator(editeurs_list, 10) # 10 éditeurs par page
     
-    try:
-        editeurs = paginator.page(page)
-    except PageNotAnInteger:
-        editeurs = paginator.page(1)
-    except EmptyPage:
-        editeurs = paginator.page(paginator.num_pages)
+#     try:
+#         editeurs = paginator.page(page)
+#     except PageNotAnInteger:
+#         editeurs = paginator.page(1)
+#     except EmptyPage:
+#         editeurs = paginator.page(paginator.num_pages)
         
         
-    # 4. Contexte à passer au template
-    context = {
-        'editeurs': editeurs, # Liste paginée des éditeurs
-        'nombre_total': editeurs_list.count(),
-        'query_recherche': query if query else '',
-        'pays_selectionne': country_code if country_code else 'all',
-        'pays_options': pays_options, # La liste complète des pays pour la boucle du sélecteur
-        'user_authenticate':request.user.is_authenticated
-    }
+#     # 4. Contexte à passer au template
+#     context = {
+#         'editeurs': editeurs, # Liste paginée des éditeurs
+#         'nombre_total': editeurs_list.count(),
+#         'query_recherche': query if query else '',
+#         'pays_selectionne': country_code if country_code else 'all',
+#         'pays_options': pays_options, # La liste complète des pays pour la boucle du sélecteur
+#         'user_authenticate':request.user.is_authenticated
+#     }
     
-    return render(request, 'gestion_content/editeur.html', context)
+#     return render(request, 'gestion_content/editeur.html', context)
 
 
 
@@ -500,7 +500,7 @@ def editeur_detail_view(request, id): # J'utilise 'id' car c'est ce que vous ave
     # 2. Préparation des données complexes (Logique de la vue)
     
     # A. Catalogue de livres
-    tous_livres_qs = Livre.objects.filter(editeur=editeur)
+    tous_livres_qs = Bdtheque.objects.filter(editeur=editeur)
     tous_livres_count = tous_livres_qs.count()
     livres_publies = tous_livres_qs.order_by('-date_publication')[:10]
 
@@ -567,7 +567,7 @@ def bdtheque(request):
     
     
     # 1. Requête de base (QuerySet)
-    queryset = Livre.objects.all().select_related('editeur', 'auteur_principal__utilisateur').prefetch_related('genres')
+    queryset = Bdtheque.objects.all().select_related('edition', 'auteur_principal__utilisateur').prefetch_related('genres')
     
     # 2. Récupération des paramètres de requête (Filtres)
     query = request.GET.get('q')
@@ -637,10 +637,137 @@ def bdtheque(request):
         'current_auteur': auteur_id if auteur_id is not None else '',
         'current_editeur': editeur_id if editeur_id is not None else '',
         'current_genre': genre_slug if genre_slug is not None else '',
+        'user_authenticate':request.user.is_authenticated
     }
 
     # 6. Rendu du template
     return render(request,'gestion_content/bd.html',context)
 
+
+
+def editeur(request):
+    User = get_user_model()
+
+    # 1. ÉDITEURS VEDETTES PRINCIPAUX
+    # On filtre directement sur le modèle Editeur, car il est le point central.
+    # Les champs 'role', 'vedette' et 'valid' sont sur le modèle Utilisateur,
+    # on y accède via le champ de relation 'utilisateur'.
+    editeurs_vedettes_principaux = Editeur.objects.filter(
+        utilisateur__role="editeur", 
+        utilisateur__vedette=True, 
+        utilisateur__valid=True
+    ).select_related('utilisateur')[:6] # select_related optimise la récupération des données utilisateur
     
+    # IDs des utilisateurs vedettes (pour les exclure des listes secondaires)
+    # On récupère l'ID de l'objet User lié.
+    vedettes_ids = [editeur.utilisateur.id for editeur in editeurs_vedettes_principaux]
+
+    # --- Préparation de la liste d'éditeurs "aléatoires" par pays ---
+    
+    # On travaille sur le modèle Editeur pour inclure les détails nécessaires
+    # et on filtre sur les champs du modèle Utilisateur.
+    # On exclut les Utilisateurs vedettes (en utilisant leur ID)
+    users_editeurs_actifs_non_vedettes = Editeur.objects.filter(
+        utilisateur__role="editeur", 
+        utilisateur__valid=True
+    ).exclude(utilisateur__id__in=vedettes_ids) # CORRECTION : exclure l'ID de l'UTILISATEUR
+
+    editeurs_par_pays_list = []
+    
+    # Récupération des pays avec des éditeurs (groupement par le champ 'pays' de l'utilisateur)
+    editeurs_par_pays = users_editeurs_actifs_non_vedettes.values('utilisateur__pays').annotate(
+        count=Count('id')
+    ).order_by('utilisateur__pays') # CORRECTION : Grouper et ordonner par 'utilisateur__pays'
+    
+    for pays_data in editeurs_par_pays:
+        pays_code = pays_data['utilisateur__pays']
+        
+        # Récupère 2 éditeurs aléatoires pour ce pays (hors vedettes)
+        editeurs_du_pays = users_editeurs_actifs_non_vedettes.filter(
+            utilisateur__pays=pays_code # CORRECTION : Filtrer par 'utilisateur__pays'
+        ).order_by('?')[:2]
+        
+        # On ajoute les objets Editeur complets à la liste
+        editeurs_par_pays_list.extend(editeurs_du_pays)
+
+    # 2. BASE DE DONNÉES COMPLÈTE pour la pagination et le filtrage
+    tous_les_editeurs = Editeur.objects.filter(
+        utilisateur__role="editeur", 
+        utilisateur__valid=True
+    ).select_related('utilisateur') # select_related est clé ici
+    
+    # --- Application des filtres ---
+
+    # Exclure les éditeurs vedettes
+    exclude_vedettes = request.GET.get('exclude_vedettes')
+    if exclude_vedettes == 'true':
+        # Le champ 'vedette' est sur Utilisateur, on y accède via 'utilisateur__vedette'
+        tous_les_editeurs = tous_les_editeurs.exclude(utilisateur__vedette=True)
+
+    # Filtrage par pays
+    pays_filtre = request.GET.get('pays', '')
+    if pays_filtre:
+        # Le champ 'pays' est sur Utilisateur, on y accède via 'utilisateur__pays'
+        tous_les_editeurs = tous_les_editeurs.filter(utilisateur__pays=pays_filtre)
+
+    # Recherche par nom d'utilisateur ou email
+    q = request.GET.get('q', '')
+    if q:
+        # Les champs 'username' et 'email' sont sur Utilisateur
+        tous_les_editeurs = tous_les_editeurs.filter(
+            Q(utilisateur__username__icontains=q) | Q(utilisateur__email__icontains=q)
+        ).distinct()
+
+    # 3. Pagination
+    paginator = Paginator(tous_les_editeurs, 30)
+    page_number = request.GET.get('page')
+    editeurs_paginated = paginator.get_page(page_number)
+
+    # 4. Contextes additionnels
+    genres = Genre.objects.all()
+    # Le modèle User doit avoir la constante PAYS_AFRICAINS définie.
+    pays_list = dict(User.PAYS_AFRICAINS)
+    
+    context = {
+        'editeurs_paginated': editeurs_paginated, # Renommé pour clarté dans le template
+        'genres': genres,
+        'pays_list': pays_list,
+        'user_authenticate': request.user.is_authenticated,
+        'user': request.user,
+        'profil': request.user if request.user.is_authenticated else None,
+        'editeurs_vedettes_principaux': editeurs_vedettes_principaux, 
+        'editeurs_par_pays_list': editeurs_par_pays_list,
+    }
+
+    return render(request, 'gestion_content/editeur2.html', context)
+
+# def editeur_detail(request,id):
+#     utilisateur = get_object_or_404(Utilisateur,id=id)
+#     editeur = Bdtheque.objects.filter(editeur=utilisateur)
+#     edition_user = editeur.livres_publies.all()
+#     context = {
+#         'utilisateur':utilisateur,
+#         'editions':edition_user
+#     }
+#     return render(request,'gestion_content/detail_editeur2.html')
+
+
+def auteur_galerie_view(request, username):
+    """Affiche toutes les oeuvres (Work) d'un auteur dans une galerie."""
+    
+    # Récupérer l'auteur par son nom d'utilisateur
+    auteur = get_object_or_404(Utilisateur, username=username)
+    
+    # Récupérer toutes les oeuvres (Work) de cet auteur en utilisant related_name='works'
+    # Utilisation de .works.all()
+    oeuvres = auteur.works.filter(valid=True).order_by('-publication_date')
+    
+    
+    context = {
+        'auteur': auteur,
+        'oeuvres': oeuvres,
+        # Vous pourriez avoir besoin d'ajouter d'autres éléments comme 'pays_list' si votre header/footer en a besoin
+    }
+    
+    return render(request, 'gestion_content/oeuvre_detail.html', context)
 

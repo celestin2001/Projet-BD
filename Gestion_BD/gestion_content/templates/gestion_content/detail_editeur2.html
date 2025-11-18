@@ -437,35 +437,35 @@
         <div class="container mt-5">
             <div class="section-green">
                 <div class="profile-card mx-auto p-4">
-                    <h4 class="fw-bold section-title">Découvrez {{auteur.username|default:"cet Auteur"}}</h4>
+                    <h4 class="fw-bold section-title">Découvrez {{utilisateur.username|default:"cet Auteur"}}</h4>
 
                     <div class="row">
                         <div class="col-md-4 text-center">
-                            {% if auteur.profil_picture %}
-                            <img src="{{auteur.profil_picture.url}}" class="d-block w-100" alt="Profile Picture">
+                            {% if utilisateur.profil_picture %}
+                            <img src="{{utilisateur.profil_picture.url}}" class="d-block w-100" alt="Profile Picture">
                             {% else %}
                             <img src="{% static "gestion_content/images/prof.png" %}" class="d-block w-100" alt="Default Profile Picture">
                             {% endif %}
                         </div>
                         <div class="col-md-8">
                             <div class="mb-2 icon-text">
-                                <i class="bi bi-person-circle"></i> <span>**Rôle :** {{auteur.role|default:"Non spécifié"}}</span>
+                                <i class="bi bi-person-circle"></i> <span>Rôle : {{utilisateur.role|default:"Non spécifié"}}</span>
                             </div>
                             <div class="mb-2 icon-text">
-                                <i class="bi bi-flag-fill"></i> <span>**Pays :** {{auteur.get_pays_display|default:"Non spécifié"}}</span>
+                                <i class="bi bi-flag-fill"></i> <span>Pays : {{utilisateur.get_pays_display|default:"Non spécifié"}}</span>
                             </div>
                             <h5 class="mt-4">Biographie</h5>
                             <p>{{auteur.bio|default:"La biographie de cet auteur n'est pas encore disponible."}}</p>
                             
                             {# --- NOUVELLE SECTION : Affichage des Réseaux Sociaux --- #}
-                            <h5 class="mt-4">Réseaux Sociaux</h5>
-                            <div class="mb-3" style="display: flex; flex-direction: row; gap: 15px;">
+                            {% comment %} <h5 class="mt-4">Réseaux Sociaux</h5>
+                            <div class="mb-3" style="display: flex; flex-direction: row; gap: 15px;"> {% endcomment %}
                                 {% comment %} 
                                     Ici, vous devez itérer sur une liste de liens sociaux fournis par le contexte Django.
                                     Par exemple, 'auteur.liens_sociaux.all' ou une variable 'liens_sociaux'.
                                 {% endcomment %}
                                 
-                                {% for lien in liens_sociaux %}
+                                {% comment %} {% for lien in liens_sociaux %}
                                     <div class="social-link-item ">
                                         {# Déterminer l'icône en fonction de la plateforme #}
                                         {% if lien.plateforme == 'Facebook' %}
@@ -502,9 +502,9 @@
                                             {{ lien.plateforme }}: {{ lien.url|truncatechars:50 }}
                                         </a> {% endcomment %}
                                     </div>
-                                {% empty %}
+                                {% comment %} {% empty %}
                                     <p class="text-muted">Aucun lien de réseau social n'est encore enregistré.</p>
-                                {% endfor %}
+                                {% endfor %} {% endcomment %} 
                             </div>
                             {# --- FIN NOUVELLE SECTION : Affichage des Réseaux Sociaux --- #}
                             
@@ -578,19 +578,19 @@
                             
                         </div>
                     </div>
-                    {% if request.user.is_authenticated and request.user == author %}
+                    {% comment %} {% if request.user.is_authenticated and request.user == author %}
                     <div class="text-end mb-3">
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajouterOeuvreModal">
                             <i class="bi bi-plus-circle me-2"></i> Ajouter une œuvre
                         </button>
                     </div>
                     
-                    {% endif %}
+                    {% endif %} {% endcomment %}
 
                     {# MODAL AJOUT OEUVRE (Existant) #}
                    
                     
-                     {% if author %}
+                     {% comment %} {% if author %}
                     <div class="text-end mb-3">
                         <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#ajouterReseauModal">
                             <i class="bi bi-plus-circle me-2"></i> Ajouter un Reseau
@@ -632,11 +632,11 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </div> {% endcomment %}
 
 
                      {# --- NOUVEAU MODAL : AJOUT DES oeuvres --- #}
-                    <div class="modal fade" id="ajouterOeuvreModal" tabindex="-1" aria-labelledby="ajouteroeuvreModalLabel" aria-hidden="true">
+                    {% comment %} <div class="modal fade" id="ajouterOeuvreModal" tabindex="-1" aria-labelledby="ajouteroeuvreModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
                                 <div class="modal-header bg-primary text-white">
@@ -704,7 +704,7 @@
                                 </form>
                             </div>
                         </div>
-                    </div>
+                    </div> {% endcomment %}
                     
                     
 
@@ -712,21 +712,23 @@
                     
                     <h5 class="fw-bold section-title mt-4">Œuvres publiées</h5>
                     <div class="row g-4 mt-3">
-                        {% for oeuvre in auteur_oeuvre %}
-                        {% if oeuvre.valid %}
+                        {% for edition in editions %}
+                        {% comment %} {% if oeuvre.valid %} {% endcomment %}
                             <div class="col-lg-4 col-md-6">
-                                <a href="{% url "auteur_galerie_oeuvres" username=oeuvre.author.username %}" style="text-decoration: none; color: inherit;">
+                                <a href="" style="text-decoration: none; color: inherit;">
                                     <div class="bibliographie-card">
-                                        <img src="{{oeuvre.cover_image.url}}" alt="{{ oeuvre.title }} Cover"> 
+                                        {% if edition.couverture.url %}
+                                        <img src="{{edition.couverture.url}}" alt="{{ oeuvre.title }} Cover"> 
+                                        {% endif %}
                                         <div>
-                                            <div class="title">**{{ oeuvre.title }}** ({{ oeuvre.publication_date|date:"Y" }})</div>
+                                            <div class="title">{{ edition.title }} ({{ edition.date_publication|date:"Y" }})</div>
                                             {# Ajout de la description tronquée ou non pour améliorer l'affichage #}
-                                            <p class="description mb-0">{{ oeuvre.description|truncatechars:50|default:"Pas de description courte disponible." }}</p>
+                                            <p class="description mb-0">{{ edition.resumé|truncatechars:50|default:"Pas de description courte disponible." }}</p>
                                         </div>
                                     </div>
                                 </a>
                             </div>
-                        {% endif %}
+                        {% comment %} {% endif %} {% endcomment %}
                         {% empty %}
                             <div class="col-12">
                                 <p class="text-center text-muted">Aucune œuvre valide trouvée pour cet auteur.</p>
@@ -738,7 +740,7 @@
 
             {% comment %} Section commentaire des auteurs {% endcomment %}
 
-            <div class="container mt-4 mb-4 avis">
+            {% comment %} <div class="container mt-4 mb-4 avis">
                 <h3 class="fw-bold">Avis des lecteurs</h3>
 
                 {% if user_authenticate %}
@@ -789,7 +791,7 @@
                         <p class="text-center text-muted">Aucun avis n'a encore été publié pour cet auteur.</p>
                     {% endfor %}
                 </div>
-            </div>
+            </div> {% endcomment %}
         </div>
     </main>
 
