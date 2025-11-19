@@ -363,7 +363,7 @@ class Bdtheque(models.Model):
         unique_together = ('edition', 'titre')
 
     def __str__(self):
-        return f"{self.titre} ({self.editeur.nom})"
+        return f"{self.titre} ({self.edition.nom})"
         
     def save(self, *args, **kwargs):
         if not self.slug:

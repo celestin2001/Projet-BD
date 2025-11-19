@@ -709,7 +709,7 @@
                     
 
 
-                    
+                    {% if auteur.role == 'auteur' %}
                     <h5 class="fw-bold section-title mt-4">Œuvres publiées</h5>
                     <div class="row g-4 mt-3">
                         {% for oeuvre in auteur_oeuvre %}
@@ -733,6 +733,32 @@
                             </div>
                         {% endfor %}
                     </div>
+                    {% else %}
+                    <h5 class="fw-bold section-title mt-4">Editions publiées</h5>
+                    <div class="row g-4 mt-3">
+                        {% for oeuvre in auteur_oeuvre %}
+                        {% if oeuvre.valid %}
+                            <div class="col-lg-4 col-md-6">
+                                <a href="{% url "auteur_galerie_oeuvres" username=oeuvre.author.username %}" style="text-decoration: none; color: inherit;">
+                                    <div class="bibliographie-card">
+                                        <img src="{{oeuvre.cover_image.url}}" alt="{{ oeuvre.title }} Cover"> 
+                                        <div>
+                                            <div class="title">**{{ oeuvre.title }}** ({{ oeuvre.publication_date|date:"Y" }})</div>
+                                            {# Ajout de la description tronquée ou non pour améliorer l'affichage #}
+                                            <p class="description mb-0">{{ oeuvre.description|truncatechars:50|default:"Pas de description courte disponible." }}</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endif %}
+                        {% empty %}
+                            <div class="col-12">
+                                <p class="text-center text-muted">Aucune edition valide trouvée pour cet auteur.</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    
                 </div>
             </div>
 

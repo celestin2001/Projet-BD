@@ -200,6 +200,12 @@
             <h2 class="login-title">Inscription</h2>
             <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                 {% csrf_token %}
+                  <div class="mb-3 profile-pic-container">
+                        <label for="profile_pic" class="form-label profile-pic-label">Photo de profil</label>
+                        <img id="profile_pic_preview" class="profile-pic-preview" src="{% static 'gestion_content/images/prof.png' %}" alt="Prévisualisation photo de profil">
+                        <input type="file" class="form-control" id="profile_pic" name="profile_pic" accept="image/*">
+                        <div class="invalid-feedback">Veuillez télécharger une photo de profil.</div>
+                    </div>
                 <div class="mb-3">
                     <label for="username" class="form-label">Nom d'utilisateur</label>
                     <input type="text" class="form-control" id="username" placeholder="Entrez votre nom d'utilisateur" name="username" required>
@@ -223,7 +229,7 @@
                     <div class="invalid-feedback">Veuillez entrer votre nom complet.</div>
                 </div>
 
-                  <div class="mb-3">
+                 <div class="mb-3">
                         <label for="nationalite" class="form-label">Pays d'origine</label>
                         <select class="form-select" id="nationalite" name="nationalite">
                             <option value="" selected disabled>Sélectionnez une option</option>
@@ -257,16 +263,7 @@
                         <textarea class="form-control" id="bio" rows="3" placeholder="Parlez-nous de votre parcours..." name="bio"></textarea>
                     </div>
 
-                    <div class="mb-3">
-                        <label for="nationalite" class="form-label">Pays d'origine</label>
-                        <select class="form-select" id="nationalite" name="nationalite">
-                            <option value="" selected disabled>Sélectionnez une option</option>
-                            {% for value, label in pays %}
-                            <option value="{{ value }}">{{ label }}</option>
-                            {% endfor %}
-                        </select>
-                        <div class="invalid-feedback">Veuillez sélectionner un pays.</div>
-                    </div>
+                  
                     
                     
 
@@ -282,12 +279,7 @@
                         <div class="invalid-feedback">Veuillez entrer votre ville de résidence.</div>
                     </div>
 
-                    <div class="mb-3 profile-pic-container">
-                        <label for="profile_pic" class="form-label profile-pic-label">Photo de profil</label>
-                        <img id="profile_pic_preview" class="profile-pic-preview" src="{% static 'path/to/default_profile_pic.png' %}" alt="Prévisualisation photo de profil">
-                        <input type="file" class="form-control" id="profile_pic" name="profile_pic" accept="image/*">
-                        <div class="invalid-feedback">Veuillez télécharger une photo de profil.</div>
-                    </div>
+                  
                 </div>
 
                 <button type="submit" class="btn btn-submit">S'inscrire</button>
