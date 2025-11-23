@@ -4,214 +4,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galerie des Œuvres de {{ auteur.nom }} - MABD</title>
+    <title>Galerie des Œuvres de {{ auteur.username }} - MABD</title>
     
-    {# Liens Bootstrap et Icônes (Les mêmes que vos autres pages) #}
+    <!-- Bootstrap + Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aVvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
-    {# NOUVEAU : Lien vers la librairie SimpleLightbox #}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.css" integrity="sha512-4o6uVzhcIM5E2OeIg4S9FBjJ/Z9yvWkE0s/t0U2Wc2t/S/fG9pQ49vM9c/t/w82s/4oQ2+P0tH3pDk2/Y0w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- SimpleLightbox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.css">
 
     <style>
-        /* Styles de base de vos templates précédents */
         :root {
-            --primary-blue: #007bff; 
+            --primary-blue: #007bff;
             --dark-blue: #0056b3;
-            --text-color: #343a40; 
-            --content-max-width: 1200px; 
-        }
-        body {
-            font-family: 'Montserrat', sans-serif; 
-            color: var(--text-color);
-            background-color: #f4f7f9; 
-            min-height: 100vh; 
-            display: flex;
-            flex-direction: column; 
-        }
-        main {
-            flex-grow: 1; 
-            padding-top: 1.5rem; 
-            padding-bottom: 3rem; 
-        }
-        .container {
-            max-width: var(--content-max-width); 
+            --text-color: #343a40;
         }
 
-        /* ------------------------------------------- */
-        /* STYLES SPÉCIFIQUES À LA GALERIE */
-        /* ------------------------------------------- */
-        
-        .gallery-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            padding-top: 1rem;
+        body {
+            background: #f4f7f9;
+            font-family: 'Montserrat', sans-serif;
         }
-        .gallery-header h1 {
-            color: var(--dark-blue);
-            font-weight: 700;
-            font-size: 2.5rem;
-        }
-        .gallery-header p {
-            font-size: 1.1rem;
-            color: #6c757d;
-        }
-        
-        /* Conteneur pour la grille d'images */
+
+        /* --- Galerie --- */
         .gallery-container {
-            background-color: white;
+            background: white;
             padding: 2rem;
             border-radius: 12px;
-            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-            border: 1px solid #dee2e6;
+            box-shadow: 0 6px 18px rgba(0,0,0,.08);
         }
-        
-        /* Style pour chaque élément de la galerie */
+
         .oeuvre-item {
             position: relative;
             overflow: hidden;
             border-radius: 8px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .oeuvre-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-        
-        .oeuvre-item img {
-            width: 100%;
-            height: 100%; /* Important pour que l'aspect-ratio fonctionne */
-            object-fit: cover;
-            aspect-ratio: 1 / 1.4; /* Format classique d'une couverture de BD */
             display: block;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            transition: .3s;
         }
 
-        /* Overlay d'information au survol */
-        .oeuvre-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .oeuvre-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .oeuvre-item img {
             width: 100%;
             height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            color: white;
+            object-fit: cover;
+            aspect-ratio: 1 / 1.4;
+        }
+
+        .oeuvre-overlay {
+            position: absolute;
+            bottom: 0;
+            height: 100%;
+            width: 100%;
+            padding: 1rem;
             display: flex;
             flex-direction: column;
             justify-content: flex-end;
-            padding: 1rem;
+            color: white;
+            background: rgba(0,0,0,0.55);
             opacity: 0;
-            transition: opacity 0.3s ease;
-            text-align: center;
+            transition: .3s;
         }
 
         .oeuvre-item:hover .oeuvre-overlay {
             opacity: 1;
         }
-        
-        .oeuvre-overlay h5 {
-            font-weight: 600;
-            margin-bottom: 0.25rem;
-            font-size: 1.1rem;
-        }
-        .oeuvre-overlay p {
-            font-size: 0.9rem;
-            margin-bottom: 0;
-            color: #ddd;
-        }
-        
-        .btn-return {
-            margin-top: 2rem;
-            display: inline-flex;
-            align-items: center;
-            background-color: var(--primary-blue);
-            border-color: var(--primary-blue);
-            transition: background-color 0.2s;
-        }
-        .btn-return:hover {
-            background-color: var(--dark-blue);
-            border-color: var(--dark-blue);
+
+        /* --- Bouton personnalisé Lightbox --- */
+        #custom-sl-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999999;
+            display: none;
+            background: rgba(0,0,0,0.75);
+            color: white;
+            font-size: 32px;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
         }
 
+        /* désactiver le bouton intégré */
+        .sl-close {
+            display: none !important;
+        }
     </style>
+
 </head>
 <body>
-    
+
     {% include "gestion_content/header.html" %}
 
-    <main class="flex-shrink-0"> 
-        <div class="container">
-            
-            <div class="gallery-header">
-                <h1>
-                    <i class="fas fa-book-open text-primary me-2"></i> 
-                    Galerie des Œuvres
-                </h1>
-                <p>Découvrez toutes les créations de {{ auteur.username }} ({{ auteur.utilisateur.get_pays_display }}).</p>
-                {# Bouton de retour vers la page de détails de l'auteur (adapter l'URL si besoin) #}
-                {% comment %} <a href="{% url 'detail_auteur' auteur.slug %}" class="btn btn-primary btn-return">
-                    <i class="fas fa-arrow-left me-2"></i> Retour à la page de l'auteur
-                </a> {% endcomment %}
-            </div>
+    <main class="container py-4">
 
-            <div class="gallery-container">
-                
-                {# Vérifier si l'auteur a des œuvres #}
-                {% if oeuvres %}
-                    
-                    {# Grille Bootstrap Responsive - 3 colonnes sur mobile, 5 sur desktop #}
-                    <div class="row g-3 g-md-4" id="oeuvresGallery">
-                        {% for oeuvre in oeuvres %}
+        <div class="text-center mb-4">
+            <h1 class="fw-bold text-primary">
+                <i class="fas fa-book-open me-2"></i> Galerie des Œuvres
+            </h1>
+            <p>Découvrez les créations de <b>{{ auteur.username }}</b> ({{ auteur.utilisateur.get_pays_display }})</p>
+
+            {% if return_url %}
+                <a href="{{ return_url }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left me-2"></i> Retour
+                </a>
+            {% else %}
+                <a href="{% url 'detail_auteur' auteur.pk %}" class="btn btn-primary">
+                    <i class="fas fa-arrow-left me-2"></i> Retour
+                </a>
+            {% endif %}
+        </div>
+
+        <div class="gallery-container">
+            {% if oeuvres %}
+                <div class="row g-3" id="oeuvresGallery">
+                    {% for oeuvre in oeuvres %}
                         <div class="col-6 col-sm-4 col-md-3 col-lg-2">
-                            {# L'ancre <a> est essentielle pour Lightbox #}
-                            <a href="{{ oeuvre.cover_image.url }}" class="oeuvre-item" title="{{ oeuvre.edition }} - {{ oeuvre.annee_publication }}">
-                                
-                                <img src="{{ oeuvre.cover_image.url }}" 
-                                     alt="Couverture de {{ oeuvre.edition }}" 
-                                     loading="lazy">
-                                
+
+                            <!-- Image principale -->
+                            <a href="{{ oeuvre.cover_image.url }}" class="oeuvre-item" title="{{ oeuvre.title }}">
+                                <img src="{{ oeuvre.cover_image.url }}" alt="{{ oeuvre.title }}">
                                 <div class="oeuvre-overlay">
-                                    <h5>{{ oeuvre.title }}</h5>
-                                    {% comment %} <p>{{ oeuvre.collection|default:"Série non spécifiée" }}</p> {% endcomment %}
-                                    <p class="small mt-1">{{ oeuvre.publication_date  }}</p>
+                                    <h5 class="mb-1">{{ oeuvre.title }}</h5>
+                                    <p class="small">{{ oeuvre.publication_date|date:"Y" }}</p>
                                 </div>
                             </a>
+
+                            <!-- Images supplémentaires -->
+                            {% if oeuvre.image2 %}
+                                <a href="{{ oeuvre.image2.url }}" hidden title="{{ oeuvre.title }}"></a>
+                            {% endif %}
+                            {% if oeuvre.image3 %}
+                                <a href="{{ oeuvre.image3.url }}" hidden title="{{ oeuvre.title }}"></a>
+                            {% endif %}
+
                         </div>
-                        {% endfor %}
-                    </div>
-
-                {% else %}
-                    <div class="alert alert-warning text-center" role="alert">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        Désolé, aucune œuvre n'est actuellement associée à cet auteur.
-                    </div>
-                {% endif %}
-
-            </div>
-            
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="alert alert-warning text-center">
+                    Aucune œuvre disponible pour cet auteur.
+                </div>
+            {% endif %}
         </div>
+
     </main>
 
-    {# Le reste de votre pied de page (footer) devrait être inclus ici #}
     {% include "gestion_content/footer.html" %}
 
-    {# ========================================== #}
-    {#               JS SCRIPTS                   #}
-    {# ========================================== #}
+    <!-- JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
-    {# NOUVEAU : Script SimpleLightbox #}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.js" integrity="sha512-Rz3c8S+m4E6+4UvM0mR2rGk4L8x+9l71jB4y6K+8g1C/N+9S8x/sYF4Pz7j/t+D4Gz0+qJ8/lKxQ4xK4G6pQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.js"></script>
+
     <script>
-        // Initialisation de la galerie SimpleLightbox
-        document.addEventListener('DOMContentLoaded', (event) => {
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // Initialiser SimpleLightbox
             const gallery = new SimpleLightbox('#oeuvresGallery a', {
-                captionsData: 'title', // Utilise l'attribut title de l'ancre pour la légende
-                navText: ['&lsaquo;', '&rsaquo;'], // Flèches personnalisées
-                captionDelay: 100,
+                captionsData: 'title',
+                close: false // cache le bouton intégré
+            });
+
+            // Bouton personnalisé
+            const customCloseBtn = document.createElement("div");
+            customCloseBtn.id = "custom-sl-close";
+            customCloseBtn.innerHTML = "&times;";
+            document.body.appendChild(customCloseBtn);
+
+            customCloseBtn.addEventListener("click", function () {
+                gallery.close();
+            });
+
+            gallery.on('shown.simplelightbox', function () {
+                customCloseBtn.style.display = "block";
+            });
+
+            gallery.on('closed.simplelightbox', function () {
+                customCloseBtn.style.display = "none";
             });
         });
     </script>
+
 </body>
 </html>

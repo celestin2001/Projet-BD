@@ -5,7 +5,7 @@ from .views import *
 
 urlpatterns = [
   path('auteur',auteur,name='auteur'),
-  path('detail/<int:auteur_id>/', detail_auteur, name='detail_auteur'),
+  path('detail/<int:auteur_id>/', detail_auteur_editeur, name='detail_auteur'),
   path('actualite',actualite,name='actualite'),
   path('texte',text_affichage, name='texte'),
   path('texte_mail',texte_mail, name='texte_mail'),

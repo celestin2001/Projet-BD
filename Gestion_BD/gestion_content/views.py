@@ -69,111 +69,120 @@ def auteur(request):
 
 
 
-def detail_auteur(request, auteur_id):
+def detail_auteur_editeur(request, auteur_id):
+    # Choices pour le formulaire
     edition_choice = Work.choix_edition
-    genre_choice =Work.choix_genre
+    genre_choice = Work.choix_genre
     influence_choice = Work.choix_influence
-    totatl_notif = 0
-    nb_notif = 0
+
+    # Infos sur l'utilisateur connecté
     user_authenticate = request.user.is_authenticated
-    usere = request.user
     try:
-     profil = Utilisateur.objects.get(id=usere.id)
+        profil = Utilisateur.objects.get(id=request.user.id)
     except Utilisateur.DoesNotExist:
-     profil = None
-     # Récupérer l'auteur
+        profil = None
+
+    # Récupérer l'auteur ou éditeur cliqué
     auteur = get_object_or_404(Utilisateur, id=auteur_id)
 
-    # Récupérer toutes les œuvres de cet auteur avec la moyenne des notations
+    # Initialisation des variables
+    editeur = None
+    auteur_oeuvre = []
+
+    # Si c'est un éditeur, récupérer ou créer son profil Editeur
+    if auteur.role == "editeur":
+        editeur, created = Editeur.objects.get_or_create(
+            utilisateur=auteur,
+            defaults={
+                "nom": auteur.username,
+                "slug": auteur.username.lower().replace(" ", "-")
+            }
+        )
+        # Récupérer les éditions publiées par cet éditeur
+        auteur_oeuvre = Bdtheque.objects.filter(edition=editeur)
+    
+    # Si c'est un auteur, récupérer ses œuvres Work
+    elif auteur.role == "auteur":
+        oeuvres = Work.objects.filter(author=auteur).annotate(moyenne_note=Avg('notation__rating'))
+        auteur_oeuvre = oeuvres[:2]
+
+    # Toutes les œuvres de l'auteur pour calcul des notes
     oeuvres = Work.objects.filter(author=auteur).annotate(moyenne_note=Avg('notation__rating'))
-    auteur_oeuvre = Work.objects.filter(author=auteur).all()[:2]
-    print(auteur_oeuvre)
-    # Récupérer toutes les notations liées aux œuvres de cet auteur
+
+    # Notations liées aux œuvres
     notations = Notation.objects.filter(work__in=oeuvres).select_related('user', 'work')
-    # notif = Notation.objects.all().count()
+
+    # Liens sociaux
     liens_sociaux = Social_link.objects.filter(user=auteur)
 
-
-    # print(notations.all().count())
-    # Gestion du formulaire de notation sans utiliser Django Forms
+    # Gestion des formulaires POST
     if request.method == 'POST':
         form_type = request.POST.get('form_type')
 
         if form_type == 'notation':
             comment = request.POST.get('comment')
             rating = request.POST.get('rating')
-            if comment and rating:
-                work = oeuvres.first()
-                if work:
-                    Notation.objects.create(
-                        user=request.user,
-                        work=work,
-                        rating=int(rating),
-                        comment=comment
-                    )
+            if comment and rating and oeuvres.exists():
+                Notation.objects.create(
+                    user=request.user,
+                    work=oeuvres.first(),
+                    rating=int(rating),
+                    comment=comment
+                )
             return redirect('detail_auteur', auteur_id=auteur_id)
-        
+
         elif form_type == 'ajout_reseaux':
-           plateforme = request.POST.get('plateforme')
-           url = request.POST.get('url')
-           reseau = Social_link.objects.create(
-              plateforme = plateforme,
-              url = url,
-              user = auteur
-           )
-           reseau.save()
-           return redirect('detail_auteur',auteur_id=auteur_id)
-           
+            plateforme = request.POST.get('plateforme')
+            url = request.POST.get('url')
+            if plateforme and url:
+                Social_link.objects.create(
+                    plateforme=plateforme,
+                    url=url,
+                    user=auteur
+                )
+            return redirect('detail_auteur', auteur_id=auteur_id)
 
         elif form_type == 'ajout_oeuvre':
+            titre = request.POST.get('titre')
+            contenue = request.POST.get('description')
             edition = request.POST.get('edition')
             genre = request.POST.get('genre')
             influence = request.POST.get('influence')
-            titre = request.POST.get('titre')
-            contenue = request.POST.get('description')  # correspond à "name='description'" dans le HTML
             image = request.FILES.get('image')
-            # genre = request.POST.get('genre')  # à adapter si tu l'ajoutes dans le formulaire
-            date = request.POST.get('annee')  # correspond à "name='annee'" dans le HTML
             planche1 = request.FILES.get('planche1')
             planche2 = request.FILES.get('planche2')
+            date = request.POST.get('annee')
 
-            # try:
-            #     genre_instance = Genre.objects.get(id=genre)
-            # except Genre.DoesNotExist:
-            #     genre_instance = None
-
-            oeuvre = Work.objects.create(
-                title=titre,
-                description=contenue,
-                author=auteur,
-                edition = edition,
-                genres = genre,
-                influence = influence,
-                planche1 = planche1,
-                planche2 = planche2,
-                # genres=genre_instance,
-                cover_image=image,
-                publication_date=date
-            )
+            if titre and contenue:
+                Work.objects.create(
+                    title=titre,
+                    description=contenue,
+                    author=auteur,
+                    edition=edition,
+                    genres=genre,
+                    influence=influence,
+                    planche1=planche1,
+                    planche2=planche2,
+                    cover_image=image,
+                    publication_date=date
+                )
             return redirect('detail_auteur', auteur_id=auteur_id)
 
-
-
+    # Rendu du template
     return render(request, 'gestion_content/detail.html', {
         'auteur': auteur,
+        'editeur': editeur,
         'oeuvres': oeuvres,
+        'auteur_oeuvre': auteur_oeuvre,
         'notations': notations,
-        # 'social_links':social_links,
-        'nb_notif':nb_notif,
-        'user_authenticate':user_authenticate,
-        'profil':profil,
+        'liens_sociaux': liens_sociaux,
+        'user_authenticate': user_authenticate,
+        'profil': profil,
         'user': request.user,
-        'auteur_oeuvre':auteur_oeuvre,
-        'liens_sociaux':liens_sociaux,
-        "reseau_choice":Social_link.lien,
-        "edition":edition_choice,
-        'genre':genre_choice,
-        'influence':influence_choice
+        'reseau_choice': Social_link.lien,
+        'edition': edition_choice,
+        'genre': genre_choice,
+        'influence': influence_choice
     })
 
 def detail_auteur2(request):
@@ -500,19 +509,14 @@ def editeur_detail_view(request, id): # J'utilise 'id' car c'est ce que vous ave
     # 2. Préparation des données complexes (Logique de la vue)
     
     # A. Catalogue de livres
-    tous_livres_qs = Bdtheque.objects.filter(editeur=editeur)
+    tous_livres_qs = Bdtheque.objects.filter(edition=editeur)
     tous_livres_count = tous_livres_qs.count()
     livres_publies = tous_livres_qs.order_by('-date_publication')[:10]
 
     # B. Auteurs distincts (CORRIGÉ)
     # L'accès de Utilisateur à Auteur se fait via 'details_auteur'
     auteurs_editeur = Utilisateur.objects.filter(
-        # On filtre les Utilisateurs dont les détails d'auteur ('details_auteur')
-        # ont des livres ('livres_principaux' est le related_name par défaut inversé)
-        # qui sont publiés par cet éditeur.
-        details_auteur__livres_principaux__editeur=editeur 
-        # Si vous vouliez inclure tous les livres (principaux et secondaires) :
-        # Q(details_auteur__livres_principaux__editeur=editeur) | Q(details_auteur__livres_secondaires__editeur=editeur) 
+        details_auteur__livres_principaux__edition__id=editeur.id
     ).distinct().order_by('last_name')[:10]
     
     # C. Événements à venir (Logique supposée)
@@ -597,7 +601,7 @@ def bdtheque(request):
 
     # Filtre par Éditeur
     if editeur_id:
-        queryset = queryset.filter(editeur__pk=editeur_id)
+        queryset = queryset.filter(edition__pk=editeur_id)
 
     # Filtre par Genre (utilise le champ slug)
     if genre_slug:
@@ -811,19 +815,20 @@ def editeur(request):
 def auteur_galerie_view(request, username):
     """Affiche toutes les oeuvres (Work) d'un auteur dans une galerie."""
     
-    # Récupérer l'auteur par son nom d'utilisateur
     auteur = get_object_or_404(Utilisateur, username=username)
-    
-    # Récupérer toutes les oeuvres (Work) de cet auteur en utilisant related_name='works'
-    # Utilisation de .works.all()
     oeuvres = auteur.works.filter(valid=True).order_by('-publication_date')
     
+    # --- LA CORRECTION EST ICI ---
+    # Utilisez 'auteur_id' au lieu de 'pk'
+    return_url = reverse('detail_auteur', kwargs={'auteur_id': auteur.pk}) 
     
     context = {
         'auteur': auteur,
         'oeuvres': oeuvres,
-        # Vous pourriez avoir besoin d'ajouter d'autres éléments comme 'pays_list' si votre header/footer en a besoin
+        'return_url': return_url, # C'est cette variable qui est utilisée dans le template
     }
     
     return render(request, 'gestion_content/oeuvre_detail.html', context)
+
+
 

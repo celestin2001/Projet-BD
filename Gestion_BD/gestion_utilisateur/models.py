@@ -103,6 +103,7 @@ class BlogPost(models.Model):
     def __str__(self):
         return self.title
 
+from colorfield.fields import ColorField
 class Evenement(models.Model):
     titre_evenement = models.CharField(max_length=125)
     description = models.TextField()
@@ -112,6 +113,10 @@ class Evenement(models.Model):
     lieu_evenement = models.CharField(max_length=255, null=True, blank=True)
     date_publication = models.DateField(auto_now=True)
     heure_evenement = models.TimeField(null=True, blank=True)
+    couleur_evenement = ColorField(
+        default='#007bff', 
+        verbose_name="Couleur de l'événement"
+    )
 
 class ParticipationEvenement(models.Model):
     evenement = models.ForeignKey(Evenement,on_delete=models.CASCADE)

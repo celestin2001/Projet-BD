@@ -48,172 +48,6 @@
             max-width: var(--content-max-width); /* Apply max-width to Bootstrap containers */
         }
 
-        /* Styles for the header (AJUSTEMENT ICI pour la compacité et les deux couleurs) */
-        /* Le header complet englobe le tout */
-        header {
-            background-color: transparent !important; /* Enlève la couleur sur le <header> parent */
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
-            position: sticky;
-            top: 0;
-            z-index: 1030;
-            padding: 0; 
-        }
-
-        /* 1. TOP BAR (Boutons Donateurs/Déconnexion) */
-        .top-bar-custom {
-            background-color: var(--top-bar-bg-color); /* Utilise la nouvelle variable */
-            width: 100%;
-            display: flex;
-            justify-content: flex-end; 
-            align-items: center;
-            padding: 0.3rem 2rem 0.3rem 0; /* Espacement ajusté */
-        }
-
-        /* Boutons Donateurs / Déconnexion */
-        .btn-donateurs-custom {
-            color: white !important;
-            border-color: white !important;
-            font-weight: 500;
-            margin-right: 0.5rem; 
-            padding: 0.2rem 0.6rem; 
-            font-size: 0.8rem;
-        }
-        .btn-deconnexion-custom {
-            background-color: #ffc107 !important; 
-            border-color: #ffc107 !important;
-            color: var(--dark-blue) !important;
-            font-weight: 600;
-            padding: 0.2rem 0.6rem; 
-            font-size: 0.8rem;
-        }
-        .btn-deconnexion-custom:hover {
-            background-color: #e0a800 !important;
-            border-color: #d39e00 !important;
-        }
-        .btn-donateurs-custom:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-
-        /* 2. MAIN NAV BAR (Logo et Menu) - Conteneur pour la couleur bleue principale */
-        .main-nav-bar-wrapper {
-            background-color: var(--header-bg-color); /* Applique la couleur bleue principale ici */
-            width: 100%;
-        }
-
-        .navbar-custom {
-            padding: 0; 
-            background-color: transparent !important; /* Transparent car la couleur est sur .main-nav-bar-wrapper */
-        }
-
-        /* Logo du site */
-        .logo-header-custom {
-            max-height: 70px; 
-            width: auto;
-            filter: brightness(0) invert(1); 
-            margin-left: 2rem; 
-            padding: 0.5rem 0; 
-        }
-
-        /* Styles pour les liens de navigation (menu) */
-        .navbar-custom .navbar-collapse {
-            flex-grow: 1; 
-            margin-left: 3rem; 
-            margin-right: 2rem;
-            background-color: transparent !important; 
-        }
-
-        .navbar-custom .navbar-nav .nav-link {
-            color: white !important; 
-            font-weight: 500; 
-            /* Padding vertical réduit pour l'alignement sur l'axe horizontal */
-            padding: 1rem 1.1rem !important; 
-            transition: background-color 0.2s ease, color 0.2s ease;
-            text-align: center; 
-            line-height: 1; 
-            font-size: 0.95rem;
-        }
-
-        /* Hover/Active state for links */
-        .navbar-custom .navbar-nav .nav-link.active,
-        .navbar-custom .navbar-nav .nav-link:hover,
-        .navbar-custom .navbar-nav .nav-link:focus {
-            color: #ffffff !important;
-            background-color: rgba(255,255,255,0.15); 
-            border-radius: 4px;
-        }
-
-        /* Styles pour le Toggler (Menu mobile) */
-        .navbar-toggler {
-            border-color: rgba(255,255,255,0.2) !important;
-            margin-right: 1rem;
-        }
-        .navbar-toggler-icon {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(255,255,255,0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e") !important;
-        }
-
-        /* ------------------------------------------- */
-        /* MEDIA QUERIES pour mobile et tablette */
-        /* ------------------------------------------- */
-
-        @media (min-width: 992px) { 
-            .navbar-expand-lg .container-fluid {
-                padding-right: 0; 
-                padding-left: 0; 
-            }
-            /* Cacher le toggler sur les grands écrans */
-            .navbar-toggler {
-                display: none;
-            }
-            /* Aligner le contenu de la nav principale correctement */
-            .navbar-custom .container-fluid {
-                display: flex;
-                justify-content: flex-start;
-                align-items: stretch;
-            }
-        }
-
-        @media (max-width: 991.98px) { 
-            /* Cacher la top bar en mobile */
-            .top-bar-custom {
-                display: none !important; 
-            }
-            /* Rendre le toggler visible et le positionner correctement */
-            .navbar-toggler {
-                display: block;
-                margin-left: auto; 
-                margin-right: 1rem;
-            }
-            /* Ajuster le logo en mobile */
-            .logo-header-custom {
-                max-height: 60px;
-                margin-left: 1rem;
-            }
-
-            /* Menu déroulant en mobile */
-            .main-nav-bar-wrapper { /* Appliquer la couleur sur le wrapper en mobile aussi */
-                background-color: var(--dark-blue); 
-            }
-            .navbar-collapse {
-                background-color: var(--dark-blue); 
-                border-top: 1px solid rgba(255,255,255,0.1); 
-                padding-bottom: 0.5rem;
-                margin: 0; 
-                width: 100%; 
-            }
-            .navbar-custom .navbar-nav {
-                flex-direction: column; 
-                align-items: stretch;
-            }
-            .navbar-custom .navbar-nav .nav-link {
-                padding: 0.8rem 1rem !important; 
-                text-align: left;
-                border-bottom: 1px solid rgba(255,255,255,0.05); 
-            }
-            .navbar-custom .navbar-nav .nav-item:last-child {
-                border-bottom: none;
-            }
-        }
-
         /* Existing styles with minor adjustments for consistency/readability */
         .custom-card {
             border: 1px solid #ddd;
@@ -425,12 +259,29 @@
         .icon-text i {
             color: var(--primary-blue);
         }
-       
+        
+        /* --- NOUVEAU STYLE POUR AFFICHER LES ICÔNES DE RÉSEAUX SOCIAUX PLUS GRANDES --- */
+        .social-link-item .social-icon {
+            font-size: 2rem; /* Taille de police pour les icônes de réseaux sociaux */
+            color: var(--primary-blue); /* Couleur par défaut (peut être surchargée par les styles en ligne) */
+            transition: transform 0.2s; /* Ajout d'une petite transition pour un effet visuel */
+        }
+        .social-link-item a:hover .social-icon {
+            transform: scale(1.1); /* Légère augmentation de taille au survol */
+        }
+        
+        /* Styles spécifiques pour les couleurs des icônes (si non défini dans le HTML/template) */
+        .fa-facebook { color: #1877f2; }
+        .fa-instagram { color: #c32aa3; }
+        .fa-tiktok { color: #fe2c55; }
+        .fa-linkedin-in { color: #0a66c2; }
+        .fa-globe { color: #6c757d; }
+        /* -------------------------------------------------------------------------------- */
     </style>
 </head>
 <body>
 
-     {% include "gestion_content/header.html" %}
+    {% include "gestion_content/header.html" %}
 
 
     <main class="flex-shrink-0">
@@ -460,10 +311,6 @@
                             {# --- NOUVELLE SECTION : Affichage des Réseaux Sociaux --- #}
                             <h5 class="mt-4">Réseaux Sociaux</h5>
                             <div class="mb-3" style="display: flex; flex-direction: row; gap: 15px;">
-                                {% comment %} 
-                                    Ici, vous devez itérer sur une liste de liens sociaux fournis par le contexte Django.
-                                    Par exemple, 'auteur.liens_sociaux.all' ou une variable 'liens_sociaux'.
-                                {% endcomment %}
                                 
                                 {% for lien in liens_sociaux %}
                                     <div class="social-link-item ">
@@ -474,27 +321,27 @@
                                         </a>
                                             
                                         {% elif lien.plateforme == 'Instagram' %}
-                                         <a href="{{ lien.url }}" target="_blank" rel="noopener noreferrer">
-                                             <i class="fab fa-instagram social-icon"></i>
-                                        </a>
-                                           
+                                            <a href="{{ lien.url }}" target="_blank" rel="noopener noreferrer">
+                                                <i class="fab fa-instagram social-icon"></i>
+                                            </a>
+                                            
                                         {% elif lien.plateforme == 'TikTok' %}
-                                           <a href="{{ lien.url }}" target="_blank" rel="noopener noreferrer">
-                                           <i class="fab fa-tiktok social-icon"></i>
-                                        </a>
+                                            <a href="{{ lien.url }}" target="_blank" rel="noopener noreferrer">
+                                            <i class="fab fa-tiktok social-icon"></i>
+                                            </a>
                                             
                                         {% elif lien.plateforme == 'LinkedIn' %}
-                                         <a href="{{ lien.url }}" target="_blank" rel="noopener noreferrer">
-                                           <i class="fab fa-linkedin-in social-icon"></i>
-                                        </a>
+                                            <a href="{{ lien.url }}" target="_blank" rel="noopener noreferrer">
+                                               <i class="fab fa-linkedin-in social-icon"></i>
+                                            </a>
                                             
                                         {% elif lien.plateforme == 'Site-web' or lien.plateforme == 'Website' %}
-                                          <a href="{{ lien.url }}" target="_blank" rel="noopener noreferrer">
-                                            <i class="fas fa-globe social-icon"></i>
-                                        </a>
-                                           
+                                            <a href="{{ lien.url }}" target="_blank" rel="noopener noreferrer">
+                                                <i class="fas fa-globe social-icon"></i>
+                                            </a>
+                                            
                                         {% else %}
-                                            <i class="fas fa-link social-icon"></i>
+                                             <i class="fas fa-link social-icon"></i>
                                         {% endif %}
                                         
                                         {# Afficher le lien avec le nom de la plateforme #}
@@ -509,97 +356,33 @@
                             {# --- FIN NOUVELLE SECTION : Affichage des Réseaux Sociaux --- #}
                             
                             
-                            {# --- NOUVEAU BOUTON D'AJOUT POUR LES RÉSEAUX SOCIAUX --- #}
-                            {% comment %} 
-                                J'ajoute une condition pour vérifier si l'utilisateur authentifié est bien l'auteur.
-                                Supposons que `user_is_auteur` est vrai si `user_authenticate` est l'auteur actuel (`auteur`).
-                            {% endcomment %}
-                          
-                                {% comment %} <div class="text-end mb-3">
-                                    <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#ajouterReseauModal">
-                                        <i class="bi bi-link-45deg me-2"></i> Ajouter/Modifier Réseaux Sociaux
-                                    </button>
-                                </div> {% endcomment %}
-                                
-                            
-                            {# --- FIN NOUVEAU BOUTON D'AJOUT POUR LES RÉSEAUX SOCIAUX --- #}
-
-                            {# --- NOUVEAU MODAL : AJOUT DES RÉSEAUX SOCIAUX --- #}
-                    <!-- {% if user_is_auteur %} -->
-                    {% comment %} <div class="modal fade" id="ajouterReseauModal" tabindex="-1" aria-labelledby="ajouterReseauModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header bg-info text-white">
-                                    <h5 class="modal-title" id="ajouterReseauModalLabel">Ajouter/Modifier vos Réseaux Sociaux</h5>
-                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    <div class="modal-body">
-                                        <p class="text-muted">Entrez l'URL complète de votre page professionnelle pour chaque réseau. Si vous laissez un champ vide, le lien ne sera pas affiché.</p>
-                                        
-                                        <div class="mb-3">
-                                            <label for="facebook_url" class="form-label"><i class="fab fa-facebook me-2 text-primary"></i> Facebook URL</label>
-                                            <input type="url" class="form-control" id="facebook_url" name="facebook_url" value="{{ liens_sociaux.Facebook.url|default:'' }}" placeholder="Ex: https://facebook.com/moncompte">
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="instagram_url" class="form-label"><i class="fab fa-instagram me-2" style="color: #c32aa3;"></i> Instagram URL</label>
-                                            <input type="url" class="form-control" id="instagram_url" name="instagram_url" value="{{ liens_sociaux.Insta.url|default:'' }}" placeholder="Ex: https://instagram.com/moncompte">
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="tiktok_url" class="form-label"><i class="fab fa-tiktok me-2" style="color: #fe2c55;"></i> TikTok URL</label>
-                                            <input type="url" class="form-control" id="tiktok_url" name="tiktok_url" value="{{ liens_sociaux.TikTok.url|default:'' }}" placeholder="Ex: https://tiktok.com/@moncompte">
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="linkedin_url" class="form-label"><i class="fab fa-linkedin-in me-2" style="color: #0a66c2;"></i> LinkedIn URL</label>
-                                            <input type="url" class="form-control" id="linkedin_url" name="linkedin_url" value="{{ liens_sociaux.LinkedIn.url|default:'' }}" placeholder="Ex: https://linkedin.com/in/monprofil">
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="website_url" class="form-label"><i class="fas fa-globe me-2 text-secondary"></i> Site web personnel/professionnel URL</label>
-                                            <input type="url" class="form-control" id="website_url" name="website_url" value="{{ liens_sociaux.Site_web.url|default:'' }}" placeholder="Ex: https://mon-site.com">
-                                        </div>
-                                        
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                        <button type="submit" class="btn btn-info text-white">Enregistrer les liens</button>
-                                        <input type="hidden" name="form_type" value="ajout_reseaux">
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </div> {% endcomment %}
-                    <!-- {% endif %} -->
-                    {# --- FIN NOUVEAU MODAL : AJOUT DES RÉSEAUX SOCIAUX --- #}
-                            
                         </div>
                     </div>
-                    {% if request.user.is_authenticated and request.user == author %}
+                </div>
+            
+                {% if request.user.is_authenticated and request.user == auteur %}
+
+                    {# BLOC : Ajouter une œuvre #}
+                    {% if request.user.role == "auteur" %}
                     <div class="text-end mb-3">
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajouterOeuvreModal">
                             <i class="bi bi-plus-circle me-2"></i> Ajouter une œuvre
                         </button>
                     </div>
-                    
                     {% endif %}
-
-                    {# MODAL AJOUT OEUVRE (Existant) #}
-                   
                     
-                     {% if author %}
+                    {# BLOC : Ajouter un Réseau #}
                     <div class="text-end mb-3">
                         <button class="btn btn-info text-white" data-bs-toggle="modal" data-bs-target="#ajouterReseauModal">
                             <i class="bi bi-plus-circle me-2"></i> Ajouter un Reseau
                         </button>
                     </div>
-                    
-                    {% endif %}
 
-                     {# --- NOUVEAU MODAL : AJOUT DES RÉSEAUX SOCIAUX --- #}
+                {% endif %}
+                    
+                    
+
+                    {# --- NOUVEAU MODAL : AJOUT DES RÉSEAUX SOCIAUX (GARDER SEULEMENT CETTE DÉFINITION) --- #}
                     <div class="modal fade" id="ajouterReseauModal" tabindex="-1" aria-labelledby="ajouterReseauModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -614,11 +397,11 @@
                                             <label for="plateforme" class="form-label">Selectionner la plateforme</label>
                                             <select name="plateforme" id="plateforme" class="form-control">
                                                 {% for value, label in reseau_choice %}
-                                                    <option value="{{ value }}">{{ label }}</option>
+                                                     <option value="{{ value }}">{{ label }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
-            
+                            
                                         <div class="mb-3">
                                             <label for="url" class="form-label">Entrer le lien</label>
                                             <input class="form-control" type="text" id="url" name="url">
@@ -635,7 +418,7 @@
                     </div>
 
 
-                     {# --- NOUVEAU MODAL : AJOUT DES oeuvres --- #}
+                    {# --- NOUVEAU MODAL : AJOUT DES oeuvres (TEXTE DES LABELS CORRIGÉ) --- #}
                     <div class="modal fade" id="ajouterOeuvreModal" tabindex="-1" aria-labelledby="ajouteroeuvreModalLabel" aria-hidden="true">
                         <div class="modal-dialog modal-lg">
                             <div class="modal-content">
@@ -647,54 +430,56 @@
                                     {% csrf_token %}
                                     <div class="modal-body">
                                         <div class="mb-3">
-                                            <label for="edition" class="form-label">Selectionner la plateforme</label>
+                                            <label for="edition" class="form-label">Selectionner l'édition</label>
                                             <select name="edition" id="edition" class="form-control">
                                                 {% for value, label in edition %}
-                                                    <option value="{{ value }}">{{ label }}</option>
+                                                     <option value="{{ value }}">{{ label }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
+                            
                                         <div class="mb-3">
-                                            <label for="genre" class="form-label">Selectionner la plateforme</label>
+                                            <label for="genre" class="form-label">Selectionner le genre</label>
                                             <select name="genre" id="genre" class="form-control">
                                                 {% for value, label in genre %}
-                                                    <option value="{{ value }}">{{ label }}</option>
+                                                     <option value="{{ value }}">{{ label }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
+                            
                                         <div class="mb-3">
-                                            <label for="influence" class="form-label">Selectionner la plateforme</label>
+                                            <label for="influence" class="form-label">Selectionner l'influence</label>
                                             <select name="influence" id="influence" class="form-control">
                                                 {% for value, label in influence %}
-                                                    <option value="{{ value }}">{{ label }}</option>
+                                                     <option value="{{ value }}">{{ label }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
-            
+                            
                                         <div class="mb-3">
                                             <label for="titre" class="form-label">Entrer le titre</label>
                                             <input class="form-control" type="text" id="titre" name="titre">
                                         </div>
                                          <div class="mb-3">
-                                            <label for="annee" class="form-label">Entrer l'annee</label>
-                                            <input class="form-control" type="date" id="annee" name="annee">
-                                        </div>
+                                             <label for="annee" class="form-label">Entrer l'année</label>
+                                             <input class="form-control" type="date" id="annee" name="annee">
+                                         </div>
                                          <div class="mb-3">
-                                            <label for="description" class="form-label">Entrer la description</label>
-                                            <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
-                                        </div>
-                                           <div class="mb-3">
-                                            <label for="image" class="form-label">Selectionner l'image</label>
-                                            <input class="form-control" type="file" id="image" name="image">
-                                        </div>
-                                          <div class="mb-3">
-                                            <label for="planche1" class="form-label">Selectionner une planche</label>
-                                            <input class="form-control" type="file" id="planche1" name="planche1">
-                                        </div>
-                                          <div class="mb-3">
-                                            <label for="planche2" class="form-label">Selectionner l'image</label>
-                                            <input class="form-control" type="file" id="planche2" name="planche2">
-                                        </div>
+                                             <label for="description" class="form-label">Entrer la description</label>
+                                             <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
+                                         </div>
+                                             <div class="mb-3">
+                                             <label for="image" class="form-label">Selectionner l'image de couverture</label>
+                                             <input class="form-control" type="file" id="image" name="image">
+                                         </div>
+                                         <div class="mb-3">
+                                             <label for="planche1" class="form-label">Selectionner une planche (1)</label>
+                                             <input class="form-control" type="file" id="planche1" name="planche1">
+                                         </div>
+                                         <div class="mb-3">
+                                             <label for="planche2" class="form-label">Selectionner une planche (2)</label>
+                                             <input class="form-control" type="file" id="planche2" name="planche2">
+                                         </div>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
@@ -706,127 +491,64 @@
                         </div>
                     </div>
                     
-                    
-
 
                     {% if auteur.role == 'auteur' %}
-                    <h5 class="fw-bold section-title mt-4">Œuvres publiées</h5>
-                    <div class="row g-4 mt-3">
-                        {% for oeuvre in auteur_oeuvre %}
-                        {% if oeuvre.valid %}
-                            <div class="col-lg-4 col-md-6">
-                                <a href="{% url "auteur_galerie_oeuvres" username=oeuvre.author.username %}" style="text-decoration: none; color: inherit;">
-                                    <div class="bibliographie-card">
-                                        <img src="{{oeuvre.cover_image.url}}" alt="{{ oeuvre.title }} Cover"> 
-                                        <div>
-                                            <div class="title">**{{ oeuvre.title }}** ({{ oeuvre.publication_date|date:"Y" }})</div>
-                                            {# Ajout de la description tronquée ou non pour améliorer l'affichage #}
-                                            <p class="description mb-0">{{ oeuvre.description|truncatechars:50|default:"Pas de description courte disponible." }}</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endif %}
-                        {% empty %}
-                            <div class="col-12">
-                                <p class="text-center text-muted">Aucune œuvre valide trouvée pour cet auteur.</p>
-                            </div>
-                        {% endfor %}
+    <h5 class="fw-bold section-title mt-4">Œuvres publiées</h5>
+    <div class="row g-4 mt-3">
+        {% for oeuvre in auteur_oeuvre %}
+            {% if oeuvre.valid %}
+            <div class="col-lg-4 col-md-6">
+                <a href="{% url 'auteur_galerie_oeuvres' username=oeuvre.author.username %}" style="text-decoration: none; color: inherit;">
+                    <div class="bibliographie-card">
+                        <img src="{{ oeuvre.cover_image.url }}" alt="{{ oeuvre.title }} Cover"> 
+                        <div>
+                            <div class="title">{{ oeuvre.title }} ({{ oeuvre.publication_date|date:"Y" }})</div>
+                            <p class="description mb-0">{{ oeuvre.description|truncatechars:50|default:"Pas de description courte disponible." }}</p>
+                        </div>
                     </div>
-                    {% else %}
-                    <h5 class="fw-bold section-title mt-4">Editions publiées</h5>
-                    <div class="row g-4 mt-3">
-                        {% for oeuvre in auteur_oeuvre %}
-                        {% if oeuvre.valid %}
-                            <div class="col-lg-4 col-md-6">
-                                <a href="{% url "auteur_galerie_oeuvres" username=oeuvre.author.username %}" style="text-decoration: none; color: inherit;">
-                                    <div class="bibliographie-card">
-                                        <img src="{{oeuvre.cover_image.url}}" alt="{{ oeuvre.title }} Cover"> 
-                                        <div>
-                                            <div class="title">**{{ oeuvre.title }}** ({{ oeuvre.publication_date|date:"Y" }})</div>
-                                            {# Ajout de la description tronquée ou non pour améliorer l'affichage #}
-                                            <p class="description mb-0">{{ oeuvre.description|truncatechars:50|default:"Pas de description courte disponible." }}</p>
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                        {% endif %}
-                        {% empty %}
-                            <div class="col-12">
-                                <p class="text-center text-muted">Aucune edition valide trouvée pour cet auteur.</p>
-                            </div>
-                        {% endfor %}
-                    </div>
+                </a>
+            </div>
+            {% endif %}
+        {% empty %}
+            <div class="col-12">
+                <p class="text-center text-muted">Aucune œuvre valide trouvée pour cet auteur.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <h5 class="fw-bold section-title mt-4">Éditions publiées</h5>
+    <div class="row g-4 mt-3">
+        {% for edition in auteur_oeuvre %}
+        <div class="col-lg-4 col-md-6">
+            <a href="{% url 'editeur_detail' id=edition.id %}" style="text-decoration: none; color: inherit;">
+                <div class="bibliographie-card">
+                    {% if edition.couverture %}
+                        <img src="{{ edition.couverture.url }}" alt="{{ edition.titre }} Cover"> 
                     {% endif %}
-                    
+                    <div>
+                        <div class="title">{{ edition.titre }} ({{ edition.date_publication|date:"Y" }})</div>
+                        <p class="description mb-0">{{ edition.resumé|truncatechars:50|default:"Pas de résumé disponible." }}</p>
+                    </div>
                 </div>
-            </div>
-
-            {% comment %} Section commentaire des auteurs {% endcomment %}
-
-            <div class="container mt-4 mb-4 avis">
-                <h3 class="fw-bold">Avis des lecteurs</h3>
-
-                {% if user_authenticate %}
-                <form method="post" class="mb-4 form-container">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <label class="form-label">Votre avis</label>
-                        <textarea name="comment" class="form-control" placeholder="Donnez votre avis..." required></textarea>
-                    </div>
-
-                    <div class="mb-3">
-                        <label class="form-label">Note</label>
-                        <div class="rating">
-                            <input type="radio" name="rating" id="star5" value="5" required><label for="star5" class="fas fa-star"></label>
-                            <input type="radio" name="rating" id="star4" value="4"><label for="star4" class="fas fa-star"></label>
-                            <input type="radio" name="rating" id="star3" value="3"><label for="star3" class="fas fa-star"></label>
-                            <input type="radio" name="rating" id="star2" value="2"><label for="star2" class="fas fa-star"></label>
-                            <input type="radio" name="rating" id="star1" value="1"><label for="star1" class="fas fa-star"></label>
-                        </div>
-                    </div>
-
-                    <button type="submit" class="submit-btn">Publier</button>
-                    <input type="hidden" name="form_type" value="notation">
-                </form>
-                {% else %}
-                    <p class="text-center alert alert-info">**Connectez-vous** pour laisser un avis sur cet auteur.</p>
-                {% endif %}
-
-                <div class="review p-3 avis">
-                    {% for notation in notations %}
-                    <div class="mb-3 pb-3 {% if not forloop.last %}border-bottom{% endif %}">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <strong>{{ notation.user.username }}</strong>
-                            <div class="rating-display">
-                                {% for i in "12345"|make_list %}
-                                    {% if forloop.counter <= notation.rating %}
-                                        <i class="fas fa-star" style="color:#FFD700;"></i>
-                                    {% else %}
-                                        <i class="far fa-star" style="color:#ccc;"></i>
-                                    {% endif %}
-                                {% endfor %}
-                            </div>
-                        </div>
-                        <p class="mt-2 mb-1">{{ notation.comment }}</p>
-                        <small class="text-muted">Publié le {{ notation.created_at|date:"d M Y" }}</small>
-                    </div>
-                    {% empty %}
-                        <p class="text-center text-muted">Aucun avis n'a encore été publié pour cet auteur.</p>
-                    {% endfor %}
-                </div>
-            </div>
+            </a>
         </div>
-    </main>
+        {% empty %}
+            <div class="col-12">
+                <p class="text-center text-muted">Aucune édition trouvée pour cet éditeur.</p>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+</div> 
+ </div>
+ </main>
+ {% include "gestion_content/footer.html" %} 
 
-    {# --- DÉBUT DU PIED DE PAGE CORRIGÉ ET STRUCTURÉ --- #}
-   {% include "gestion_content/footer.html" %}
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static "gestion_content/js/bootstrap.min.js"%}"></script>
-    <script src="{% static "gestion_content/js/jquery-3.2.1.min.js"%}"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
-    <script>
-        // Scripts JS si nécessaire
-    </script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<script>
+ AOS.init({
+ // Paramètres par défaut de AOS (optionnel)
+ });</script>
 </body>
 </html>

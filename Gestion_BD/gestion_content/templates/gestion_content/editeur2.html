@@ -124,6 +124,12 @@
         margin-bottom: 0.3rem;
         font-size: 1.15rem;
         font-weight: 600;
+        /* --- CORRECTION POUR LE DÉBORDEMENT DU NOM --- */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0; /* Fixe le débordement de mot long dans Flexbox */
+        /* ------------------------------------------ */
     }
     .auteur-info .flag-icon {
         font-size: 1.1em;
@@ -133,6 +139,12 @@
         font-size: 0.9rem;
         color: #555;
         margin-bottom: 0.75rem;
+        /* --- CORRECTION POUR LE DÉBORDEMENT DU PAYS --- */
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0; /* Fixe le débordement de mot long dans Flexbox */
+        /* ------------------------------------------ */
     }
     .auteur-info .btn-primary {
         background-color: var(--primary-blue);

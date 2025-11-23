@@ -24,18 +24,13 @@
             --primary-blue: #007bff;
             --light-blue: #e3f2fd;
             --dark-blue: #0056b3;
-            --darker-blue: #004d99; /* Ajout/Correction pour le fond du footer (plus foncé que primary) */
+            --darker-blue: #004d99;
             --text-color: #343a40;
             --header-bg-color: #007bff;
             --header-top-bg: #212529; 
             --content-max-width: 1240px;
             --shadow-color: rgba(0, 0, 0, 0.08);
-            --footer-bg-color: var(--primary-blue);
-            --footer-text-color: #f8f9fa;
-            --footer-link-color: #e9ecef;
-            --footer-link-hover-color: #ffffff;
-            --yellow-accent: #ffc107; /* Couleur jaune pour l'accentuation des titres du footer */
-            --footer-text-light: #e9ecef; /* Couleur du texte et des liens légers */
+            --yellow-accent: #ffc107;
         }
 
         body {
@@ -123,24 +118,23 @@
             transition: opacity 0.2s ease;
         }
 
-        /* +++++ STYLES POUR L'IMAGE DANS L'ÉVÉNEMENT (Corrigé pour FullCalendar 6) +++++ */
+        /* +++++ STYLES POUR L'IMAGE DANS L'ÉVÉNEMENT (CORRECTION 1: Taille Affiche) +++++ */
         
         /* Conteneur personnalisé pour l'image et le titre dans les événements */
         .event-custom-content {
             display: flex;
             align-items: center;
-            gap: 5px; /* Espace entre l'image et le titre */
+            gap: 8px; /* Espace augmenté */
             width: 100%;
-            /* Nécessaire pour forcer l'alignement dans la vue liste */
         }
         
         /* Style de la miniature */
         .event-thumbnail {
-            width: 20px; /* Taille de la miniature */
-            height: 20px;
+            width: 30px; /* Taille augmentée */
+            height: 30px; /* Taille augmentée */
             object-fit: cover;
-            border-radius: 3px;
-            flex-shrink: 0; /* Empêche l'image de rétrécir */
+            border-radius: 4px; /* Légère augmentation */
+            flex-shrink: 0;
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
@@ -200,51 +194,7 @@
         }
 
 
-        /* --- HEADER/FOOTER STYLES (Inchangés) --- */
-        .top-bar {
-            background-color: var(--header-top-bg); 
-            color: white;
-            padding: 0.25rem 0;
-            font-size: 0.9rem;
-        }
-        .top-bar .container {
-            max-width: var(--content-max-width);
-        }
-        .top-bar .btn {
-            font-weight: 600;
-            padding: 0.25rem 0.75rem;
-            font-size: 0.85rem;
-        }
-        .top-bar .btn-outline-light {
-            color: white;
-            border-color: rgba(255, 255, 255, 0.5);
-        }
-        .top-bar .btn-warning {
-            color: var(--text-color) !important;
-        }
-
-        .navbar {
-            background-color: var(--header-bg-color) !important;
-            padding: 0.5rem 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-        }
-        .navbar-brand img {
-            height: 60px;
-            max-height: 60px;
-            filter: brightness(0) invert(1);
-        }
-        .navbar-nav {
-            flex-direction: row; 
-            margin-left: 2.5rem;
-            gap: 0.5rem;
-        }
-        .navbar .nav-link {
-            color: white !important;
-            font-weight: 500;
-            padding: 0.5rem 0.75rem !important;
-        }
-    </style>
-    <style>
+        /* --- TOOLTIP STYLES --- */
         .tooltip {
             position: absolute;
             z-index: 10000;
@@ -322,7 +272,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Fonction pour fermer la modale (VÉRIFIÉE)
+        // Fonction pour fermer la modale
         function closeEventModal() {
             document.getElementById('eventModal').style.display = 'none';
             document.getElementById('eventModal-backdrop').style.display = 'none';
@@ -331,7 +281,6 @@
         document.addEventListener('DOMContentLoaded', function () {
             const calendarEl = document.getElementById('calendar');
             const tooltipEl = document.createElement('div');
-            // Le style CSS pour la classe 'tooltip' a été ajouté dans le <head>
             tooltipEl.className = 'tooltip';
             document.body.appendChild(tooltipEl);
 
@@ -348,23 +297,20 @@
                     today: "Aujourd'hui", month: "Mois", week: "Semaine", day: "Jour", list: "Liste"
                 },
                 
-                // +++++ CORRECTION 2: Logique de eventContent pour FullCalendar 6 (utilisation de createElement) +++++
+                // +++++ eventContent: Logique ajustée pour la nouvelle taille d'image (CORRECTION 1) +++++
                 eventContent: function(arg) {
                     const event = arg.event;
                     const eventImage = event.extendedProps.image;
                     const eventTitle = event.title;
                     
-                    // Crée le conteneur personnalisé
                     const containerEl = document.createElement('div');
                     containerEl.className = 'event-custom-content';
 
-                    // Crée l'élément image
                     const imgEl = document.createElement('img');
                     imgEl.src = eventImage;
                     imgEl.alt = eventTitle;
-                    imgEl.className = 'event-thumbnail';
+                    imgEl.className = 'event-thumbnail'; // Utilise le style mis à jour 30x30
                     
-                    // Crée l'élément titre
                     const titleEl = document.createElement('span');
                     titleEl.className = 'event-title-text';
                     titleEl.textContent = eventTitle;
@@ -372,21 +318,23 @@
                     containerEl.appendChild(imgEl);
                     containerEl.appendChild(titleEl);
                     
-                    // FullCalendar insérera cet élément dans le wrapper de l'événement.
-                    // Cela fonctionne pour toutes les vues (dayGrid, timeGrid, list).
                     return { domNodes: [containerEl] };
                 },
-                // +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+                // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
                 events: [
                     {% for e in evenements %}
                     {
                         title: '{{ e.titre_evenement|escapejs }}',
+                        // Format ISO 8601 requis par FullCalendar
                         start: '{{ e.date_evenement|date:"Y-m-d" }}{% if e.heure_evenement %}T{{ e.heure_evenement|time:"H:i:s" }}{% endif %}',
                         {% if e.date_fin_evenement %}
-                        end: '{{ e.date_fin_evenement|date:"Y-m-d" }}T23:59:59',
+                        end: '{{ e.date_fin_evenement|date:"Y-m-d" }}T23:59:59', // Fin du jour pour les événements sur plusieurs jours
                         {% endif %}
-                        color: '{{ e.couleur_evenement|default:"#007bff" }}',
+                        // +++++ Couleur dynamique (CONFIRMATION 2) +++++
+                        color: '{{ e.couleur_evenement|default:"#007bff" }}', 
+                        // +++++++++++++++++++++++++++++++++++++++++++++
+
                         extendedProps: {
                             location: '{{ e.lieu_evenement|escapejs|default:"Non spécifié" }}',
                             description: `{{ e.description|escapejs|default:"Aucune description." }}`,
@@ -399,7 +347,8 @@
                     }{% if not forloop.last %},{% endif %}
                     {% endfor %}
                 ],
-                // LOGIQUE D'AFFICHAGE DE LA MODALE AU CLIC (VÉRIFIÉE)
+
+                // LOGIQUE D'AFFICHAGE DE LA MODALE AU CLIC
                 eventClick: function (info) {
                     const e = info.event.extendedProps;
                     document.getElementById('modalTitle').textContent = info.event.title;
@@ -419,15 +368,14 @@
                         modalLink.style.display = 'none';
                     }
 
-                    // Assure l'affichage correct de la modale et du backdrop
                     document.getElementById('eventModal').style.display = 'block';
                     document.getElementById('eventModal-backdrop').style.display = 'block';
                     
-                    // Cache le tooltip si visible
                     tooltipEl.classList.remove('visible');
                     tooltipEl.style.display = 'none';
                 },
-                // Logique du tooltip au survol (laissée intacte et stable)
+
+                // Logique du tooltip au survol
                 eventMouseEnter: function (info) {
                     const e = info.event.extendedProps;
                     let timeStr = e.date_debut_formatted;
@@ -475,7 +423,8 @@
                         }
                     }, 50);
                 },
-                // Logique de recherche et responsive (VÉRIFIÉE)
+
+                // Logique responsive
                 windowResize: function(view) {
                     tooltipEl.classList.remove('visible');
                     tooltipEl.style.display = 'none';
@@ -488,6 +437,7 @@
             });
             calendar.render();
 
+            // Logique de recherche
             document.getElementById('eventSearch').addEventListener('input', function (e) {
                 const search = e.target.value.toLowerCase().trim();
                 calendar.getEvents().forEach(event => {
