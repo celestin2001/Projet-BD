@@ -14,6 +14,7 @@ from django.db.models import Count
 from django.template.loader import render_to_string
 from django.db.models import Q, Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.exceptions import ObjectDoesNotExist
 
 def auteur(request):
     User = get_user_model()
@@ -840,24 +841,27 @@ def input_editeur(request):
     if not request.user.is_authenticated or request.user.role != 'editeur':
         return redirect('home')
 
-    # 2. Récupération du profil éditeur
+    # 2. Récupération ou Création automatique du profil éditeur
     try:
         editeur = request.user.details_editeur
-    except Editeur.DoesNotExist:
-        return render(request, 'gestion_utilisateur/erreur_profil.html')
+    except (ObjectDoesNotExist, AttributeError):
+        # On crée le profil avec les vrais noms de ton modèle : 'utilisateur', 'nom' et 'slug'
+        nom_par_defaut = f"Édition {request.user.username}"
+        editeur = Editeur.objects.create(
+            utilisateur=request.user,
+            nom=nom_par_defaut,
+            slug=slugify(nom_par_defaut)
+        )
 
     # 3. Récupération des livres de cet éditeur
-    mes_livres = Bdtheque.objects.filter(edition=editeur,valide=True).order_by('-date_publication')
+    mes_livres = Bdtheque.objects.filter(edition=editeur, valide=True).order_by('-date_publication')
 
     # 4. Statistiques
     nb_livres = mes_livres.count()
-    
-    # On récupère les auteurs qui ont publié chez cet éditeur
-    # (via la related_name 'livres_principaux' de ton modèle Bdtheque)
     auteurs_lies = Auteur.objects.filter(livres_principaux__edition=editeur).distinct()
     nb_auteurs = auteurs_lies.count()
 
-    # 5. Pour la Modal d'ajout : on a besoin de tous les auteurs et genres
+    # 5. Données pour les Modals
     tous_les_auteurs = Auteur.objects.all()
     tous_les_genres = Genre.objects.all()
 
@@ -866,11 +870,11 @@ def input_editeur(request):
         'livres': mes_livres,
         'nb_livres': nb_livres,
         'nb_auteurs': nb_auteurs,
-        'auteurs_lies': auteurs_lies, # Pour l'onglet "Mes Auteurs"
-        'tous_les_auteurs': tous_les_auteurs, # Pour la liste déroulante Modal
+        'auteurs_lies': auteurs_lies,
+        'tous_les_auteurs': tous_les_auteurs,
         'tous_les_genres': tous_les_genres,
     }
-    # /!\ Attention : bien passer 'context' ici
+    
     return render(request, 'gestion_content/input_editeur.html', context)
 
 
