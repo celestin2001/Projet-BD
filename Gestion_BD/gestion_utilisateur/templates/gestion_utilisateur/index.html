@@ -510,6 +510,24 @@
             </button>
         </div>
 
+        {% if user.is_authenticated %}
+            {% if user.role == 'editeur' %}
+            <div class="container mt-4" data-aos="fade-left">
+                <div class="alert d-flex align-items-center justify-content-between shadow-sm" style="background-color: var(--light-blue); border-left: 5px solid var(--yellow-accent); border-radius: 8px;">
+                    <div>
+                        <h5 class="mb-1" style="color: var(--darker-blue); font-weight: 700;">
+                            <i class="bi bi-shield-check me-2"></i>Espace de gestion
+                        </h5>
+                        <p class="mb-0 text-muted" style="font-size: 0.9rem;">Bonjour <strong>{{ user.username }}</strong>, accédez à vos outils d'édition.</p>
+                    </div>
+                    <a href="/gestion_content/editeur_input?tab=profil" class="btn btn-primary d-flex align-items-center fw-bold">
+                        <i class="bi bi-pencil-square me-2"></i> Alimenter le contenu
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        {% endif %}
+
         {# Section Bienvenue #}
         <div class="container mt-4 welcome-section" data-aos="fade-up" data-aos-delay="200">
             <h2>Bienvenue à la Maison Africaine de la BD</h2>

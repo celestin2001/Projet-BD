@@ -1,4 +1,5 @@
 from datetime import timezone
+from pyexpat.errors import messages
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render,redirect
 from Gestion_BD.settings import EMAIL_HOST_USER
@@ -829,6 +830,144 @@ def auteur_galerie_view(request, username):
     }
     
     return render(request, 'gestion_content/oeuvre_detail.html', context)
+
+# vue spécifique aux editeur pour alimenter la bd
+from django.contrib import messages
+from .models import Bdtheque, Editeur, Auteur, Genre
+
+def input_editeur(request):
+    # 1. Vérification du rôle
+    if not request.user.is_authenticated or request.user.role != 'editeur':
+        return redirect('home')
+
+    # 2. Récupération du profil éditeur
+    try:
+        editeur = request.user.details_editeur
+    except Editeur.DoesNotExist:
+        return render(request, 'gestion_utilisateur/erreur_profil.html')
+
+    # 3. Récupération des livres de cet éditeur
+    mes_livres = Bdtheque.objects.filter(edition=editeur,valide=True).order_by('-date_publication')
+
+    # 4. Statistiques
+    nb_livres = mes_livres.count()
+    
+    # On récupère les auteurs qui ont publié chez cet éditeur
+    # (via la related_name 'livres_principaux' de ton modèle Bdtheque)
+    auteurs_lies = Auteur.objects.filter(livres_principaux__edition=editeur).distinct()
+    nb_auteurs = auteurs_lies.count()
+
+    # 5. Pour la Modal d'ajout : on a besoin de tous les auteurs et genres
+    tous_les_auteurs = Auteur.objects.all()
+    tous_les_genres = Genre.objects.all()
+
+    context = {
+        'editeur': editeur,
+        'livres': mes_livres,
+        'nb_livres': nb_livres,
+        'nb_auteurs': nb_auteurs,
+        'auteurs_lies': auteurs_lies, # Pour l'onglet "Mes Auteurs"
+        'tous_les_auteurs': tous_les_auteurs, # Pour la liste déroulante Modal
+        'tous_les_genres': tous_les_genres,
+    }
+    # /!\ Attention : bien passer 'context' ici
+    return render(request, 'gestion_content/input_editeur.html', context)
+
+
+def ajouter_bd(request):
+    if request.method == 'POST':
+        try:
+            editeur = request.user.details_editeur
+            auteur = get_object_or_404(Auteur, id=request.POST.get('auteur_principal'))
+            
+            nouvelle_bd = Bdtheque.objects.create(
+                titre=request.POST.get('titre'),
+                edition=editeur,
+                auteur_principal=auteur,
+                date_publication=request.POST.get('date_publication'),
+                isbn=request.POST.get('isbn'),
+                resumé=request.POST.get('resume'), # Respect du champ 'resumé' avec accent
+                type_oeuvre=request.POST.get('type_oeuvre'),
+                couverture=request.FILES.get('couverture')
+            )
+            
+            # Gestion des ManyToMany (Champs manquants dans ta version)
+            nouvelle_bd.genres.set(request.POST.getlist('genres'))
+            nouvelle_bd.auteurs_secondaires.set(request.POST.getlist('auteurs_secondaires'))
+            
+            messages.success(request, f"L'œuvre '{nouvelle_bd.titre}' a été ajoutée !")
+        except Exception as e:
+            messages.error(request, f"Erreur lors de l'ajout : {e}")
+
+    return redirect('/gestion_content/editeur_input?tab=biblio')
+
+# --- MODIFIER UNE BD ---
+def modifier_bd(request, id):
+    livre = get_object_or_404(Bdtheque, id=id)
+    if request.method == "POST":
+        try:
+            livre.titre = request.POST.get('titre')
+            livre.isbn = request.POST.get('isbn')
+            livre.type_oeuvre = request.POST.get('type_oeuvre')
+            livre.resumé = request.POST.get('resume')
+            
+            if request.POST.get('date_publication'):
+                livre.date_publication = request.POST.get('date_publication')
+            
+            if request.FILES.get('couverture'):
+                livre.couverture = request.FILES.get('couverture')
+            
+            # Mise à jour des relations multiples
+            livre.genres.set(request.POST.getlist('genres'))
+            livre.auteurs_secondaires.set(request.POST.getlist('auteurs_secondaires'))
+            
+            livre.save()
+            messages.success(request, "Mise à jour réussie.")
+        except Exception as e:
+            messages.error(request, f"Erreur : {e}")
+            
+    return redirect('/gestion_content/editeur_input?tab=biblio')
+
+# --- NOUVELLE VUE : MODIFIER LE PROFIL ÉDITEUR ---
+def modifier_profil_editeur(request):
+    editeur = get_object_or_404(Editeur, utilisateur=request.user)
+    if request.method == 'POST':
+        try:
+            # Infos Principales
+            editeur.nom = request.POST.get('nom')
+            editeur.slogan = request.POST.get('slogan')
+            editeur.description = request.POST.get('description')
+            editeur.adresse_siege = request.POST.get('adresse_siege')
+            
+            # Contacts 1 & 2 (Tes champs spécifiques)
+            editeur.nom_contact_1 = request.POST.get('nom_contact_1')
+            editeur.role_contact_1 = request.POST.get('role_contact_1')
+            editeur.tel_contact_1 = request.POST.get('tel_contact_1')
+            editeur.email_contact_1 = request.POST.get('email_contact_1')
+            editeur.role_contact_1 = request.POST.get('role_contact_1')
+            
+            # Sociaux
+            editeur.facebook = request.POST.get('facebook')
+            editeur.instagram = request.POST.get('instagram')
+            editeur.site_web = request.POST.get('site_web')
+
+            if request.FILES.get('logo'):
+                editeur.logo = request.FILES.get('logo')
+
+            editeur.save()
+            messages.success(request, "Profil de la maison d'édition mis à jour.")
+        except Exception as e:
+            messages.error(request, f"Erreur : {e}")
+            
+    return redirect('/gestion_content/editeur_input?tab=profil')
+
+# VUE POUR SUPPRIMER
+def supprimer_bd(request, id):
+    livre = get_object_or_404(Bdtheque, id=id)
+    titre = livre.titre
+    livre.delete()
+    messages.warning(request, f"L'œuvre '{titre}' a été définitivement supprimée.")
+    return redirect('/gestion_content/editeur_input?tab=biblio')
 
 
 

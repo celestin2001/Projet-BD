@@ -255,6 +255,15 @@ class Editeur(models.Model):
         null=True,
         verbose_name="Longitude du siège"
     )
+    nom_contact_1 = models.CharField(max_length=255, verbose_name="Nom/Prénom Contact Principal", null=True, blank=True)
+    role_contact_1 = models.CharField(max_length=50, choices=[('Propriétaire','Propriétaire'), ('Employé','Employé')], null=True, blank=True)
+    tel_contact_1 = models.CharField(max_length=50, null=True, blank=True)
+    email_contact_1 = models.EmailField(null=True, blank=True)
+
+    nom_contact_2 = models.CharField(max_length=255, verbose_name="Nom/Prénom Contact Secondaire", null=True, blank=True)
+    role_contact_2 = models.CharField(max_length=50, choices=[('Propriétaire','Propriétaire'), ('Employé','Employé')], null=True, blank=True)
+    tel_contact_2 = models.CharField(max_length=50, null=True, blank=True)
+    email_contact_2 = models.EmailField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Éditeur (Détail)"
@@ -345,7 +354,28 @@ class Bdtheque(models.Model):
     couverture = models.ImageField(upload_to='livres/couvertures/', blank=True, null=True)
     
     # Relations
-    edition = models.ForeignKey(Editeur, on_delete=models.CASCADE, related_name='livres_publies')
+    edition = models.ForeignKey(
+        Editeur, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='livres_publies',
+        verbose_name="Maison d'Édition enregistrée"
+    )
+
+    # 2. On ajoute ce champ pour le cas "Autre" (éditeur pas encore enregistré)
+    autre_editeur_nom = models.CharField(
+        max_length=255, 
+        blank=True, 
+        null=True, 
+        verbose_name="Nom de l'éditeur (si non listé)"
+    )
+
+    # 3. Le champ de validation demandé par le client
+    valide = models.BooleanField(
+        default=False, 
+        verbose_name="Est validé par l'admin"
+    )
     # Clé étrangère vers l'Auteur (via le modèle Auteur que nous avons créé)
     auteur_principal = models.ForeignKey(Auteur, on_delete=models.SET_NULL, null=True, related_name='livres_principaux')
     auteurs_secondaires = models.ManyToManyField(Auteur, blank=True, related_name='livres_secondaires', verbose_name="Auteurs Additionnels")

@@ -1,0 +1,580 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Éditeur - {{ editeur.nom }}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --dark-blue: #004a99;
+            --yellow-accent: #ffc107;
+            --bg-light: #f4f7f6;
+            --sidebar-width: 260px;
+        }
+
+        body { font-family: 'Montserrat', sans-serif; background-color: var(--bg-light); margin: 0; }
+
+        /* --- SIDEBAR --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            background: var(--dark-blue);
+            position: fixed;
+            color: white;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .sidebar .brand-section {
+            text-align: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sidebar .editeur-logo {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            background: white;
+            margin-bottom: 10px;
+            border: 3px solid var(--yellow-accent);
+        }
+
+        .nav-link-custom {
+            color: rgba(255,255,255,0.8);
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: block;
+            text-decoration: none;
+            transition: 0.3s;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .nav-link-custom:hover, .nav-link-custom.active {
+            background: rgba(255,255,255,0.1);
+            color: var(--yellow-accent);
+        }
+
+        .nav-link-custom i { margin-right: 10px; width: 20px; }
+
+        /* --- MAIN CONTENT --- */
+        .main-content { margin-left: var(--sidebar-width); padding: 40px; min-height: 100vh; }
+
+        .header-action { display: flex; justify-content: space-between; align-items: center; margin-bottom: 35px; }
+
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            height: 100%;
+        }
+
+        .content-table-wrapper {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+
+        .img-cover {
+            width: 50px; height: 70px;
+            object-fit: cover;
+            border-radius: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .btn-add {
+            background-color: var(--yellow-accent);
+            color: #000; font-weight: 700; border: none;
+            padding: 12px 25px; border-radius: 8px;
+            transition: 0.3s;
+        }
+        .btn-add:hover { background-color: #e0a800; transform: translateY(-2px); }
+
+        .author-card {
+            background: white; border-radius: 12px; padding: 20px;
+            text-align: center; border: 1px solid #eee; transition: 0.3s;
+        }
+
+        .author-avatar {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: #f0f0f0; margin: 0 auto 15px;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden; border: 2px solid var(--bg-light);
+        }
+
+        @media (max-width: 992px) {
+            .sidebar { width: 80px; padding: 10px; }
+            .sidebar span, .sidebar .brand-text { display: none; }
+            .main-content { margin-left: 80px; padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar">
+        <div class="brand-section">
+            {% if editeur.logo %}
+                <img src="{{ editeur.logo.url }}" class="editeur-logo" alt="Logo">
+            {% else %}
+                <div class="editeur-logo d-flex align-items-center justify-content-center bg-white m-auto mb-2">
+                    <i class="fas fa-building text-primary fa-2x"></i>
+                </div>
+            {% endif %}
+            <p class="brand-text fw-bold mb-0" style="font-size: 0.8rem;">ESPACE ÉDITEUR</p>
+        </div>
+        
+        <nav>
+            <a href="?tab=home" class="nav-link-custom {% if request.GET.tab == 'home' or not request.GET.tab %}active{% endif %}">
+                <i class="fas fa-home"></i> <span>Vue d'ensemble</span>
+            </a>
+            <a href="?tab=biblio" class="nav-link-custom {% if request.GET.tab == 'biblio' %}active{% endif %}">
+                <i class="fas fa-book"></i> <span>Ma Bibliothèque</span>
+            </a>
+            <a href="?tab=auteurs" class="nav-link-custom {% if request.GET.tab == 'auteurs' %}active{% endif %}">
+                <i class="fas fa-users"></i> <span>Mes Auteurs</span>
+            </a>
+            <a href="?tab=profil" class="nav-link-custom {% if request.GET.tab == 'profil' %}active{% endif %}">
+                <i class="fas fa-cog"></i> <span>Profil Éditeur</span>
+            </a>
+            <hr style="opacity: 0.1;">
+            <a href="{% url 'deconnexion' %}" class="nav-link-custom text-danger">
+                <i class="fas fa-sign-out-alt"></i> <span>Déconnexion</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show mb-4 shadow-sm" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        {% if request.GET.tab == 'home' or not request.GET.tab %}
+            <header class="header-action">
+                <div>
+                    <h2 class="fw-bold">Bonjour, {{ editeur.nom }} </h2>
+                    <p class="text-muted">Voici l'état actuel de votre catalogue.</p>
+                </div>
+                <button type="button" class="btn btn-add" data-bs-toggle="modal" data-bs-target="#addBookModal">
+                    <i class="fas fa-plus-circle me-2"></i> PUBLIER UNE ŒUVRE
+                </button>
+            </header>
+
+            <section class="row mb-5 g-4">
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <h3 class="fw-bold mb-0">{{ nb_livres }}</h3>
+                        <p class="text-muted small mb-0">Titres au catalogue</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card">
+                        <h3 class="fw-bold mb-0">{{ nb_auteurs }}</h3>
+                        <p class="text-muted small mb-0">Auteurs actifs</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="stat-card text-success">
+                        <h3 class="fw-bold mb-0">Compte Actif</h3>
+                        <p class="text-muted small mb-0">Statut de la maison d'édition</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="content-table-wrapper">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h5 class="fw-bold mb-0">Dernières publications</h5>
+                    <a href="?tab=biblio" class="btn btn-sm btn-link text-primary">Voir tout</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Couverture</th>
+                                <th>Titre</th>
+                                <th>Auteur</th>
+                                <th>Type</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for livre in livres|slice:":5" %}
+                            <tr>
+                                <td>
+                                    {% if livre.couverture %}
+                                        <img src="{{ livre.couverture.url }}" class="img-cover">
+                                    {% else %}
+                                        <div class="img-cover bg-light d-flex align-items-center justify-content-center text-muted small">IMG</div>
+                                    {% endif %}
+                                </td>
+                                <td><div class="fw-bold">{{ livre.titre }}</div></td>
+                                <td>{{ livre.auteur_principal.utilisateur.username }}</td>
+                                <td><span class="badge bg-primary-subtle text-primary">{{ livre.get_type_oeuvre_display }}</span></td>
+                                <td class="text-end">
+                                    <button class="btn btn-sm btn-light border" title="Aperçu"><i class="fas fa-eye"></i></button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                                <tr><td colspan="5" class="text-center py-5 text-muted">Aucune œuvre publiée pour le moment.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+        {% elif request.GET.tab == 'biblio' %}
+            <header class="header-action">
+                <div>
+                    <h2 class="fw-bold">Ma Bibliothèque</h2>
+                    <p class="text-muted">Gérez l'ensemble de vos {{ nb_livres }} publications.</p>
+                </div>
+                <button type="button" class="btn btn-add" data-bs-toggle="modal" data-bs-target="#addBookModal">
+                    <i class="fas fa-plus-circle me-2"></i> AJOUTER
+                </button>
+            </header>
+            
+            <div class="content-table-wrapper">
+                <div class="row mb-4">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="fas fa-search text-muted"></i></span>
+                            <input type="text" id="searchBook" class="form-control border-start-0" placeholder="Rechercher par titre ou ISBN...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table align-middle" id="tableBiblio">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Couverture</th>
+                                <th>Titre & ISBN</th>
+                                <th>Auteur</th>
+                                <th>Année</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for livre in livres %}
+                            <tr>
+                                <td>
+                                    {% if livre.couverture %}
+                                        <img src="{{ livre.couverture.url }}" class="img-cover">
+                                    {% else %}
+                                        <div class="img-cover bg-light d-flex align-items-center justify-content-center">N/A</div>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="fw-bold title-text">{{ livre.titre }}</div>
+                                    <span class="text-muted small isbn-text">ISBN: {{ livre.isbn|default:"Non renseigné" }}</span>
+                                </td>
+                                <td>{{ livre.auteur_principal.utilisateur.username }}</td>
+                                <td>{{ livre.date_publication|date:"Y" }}</td>
+                                <td class="text-end">
+                                    <button type="button" class="btn btn-sm btn-outline-primary me-1" data-bs-toggle="modal" data-bs-target="#editModal{{ livre.id }}">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal{{ livre.id }}">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            {% empty %}
+                                <tr><td colspan="5" class="text-center py-5">Votre bibliothèque est vide.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        {% elif request.GET.tab == 'auteurs' %}
+            <header class="mb-4">
+                <h2 class="fw-bold">Nos Auteurs</h2>
+                <p class="text-muted">Retrouvez les créateurs qui collaborent avec vous.</p>
+            </header>
+            <div class="row g-4">
+                {% for auteur in auteurs_lies %}
+                <div class="col-xl-3 col-lg-4 col-md-6">
+                    <div class="author-card">
+                        <div class="author-avatar">
+                            {% if auteur.utilisateur.profil_picture %}
+                                <img src="{{ auteur.utilisateur.profil_picture.url }}" class="w-100 h-100" style="object-fit: cover;">
+                            {% else %}
+                                <i class="fas fa-user text-secondary fa-2x"></i>
+                            {% endif %}
+                        </div>
+                        <h6 class="fw-bold mb-1">{{ auteur.utilisateur.get_full_name|default:auteur.utilisateur.username }}</h6>
+                        <p class="small text-muted mb-0"><i class="fas fa-map-marker-alt me-1"></i> {{ auteur.utilisateur.get_pays_display }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12">
+                    <div class="alert alert-light text-center py-5 border">
+                        <i class="fas fa-users-slash fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Aucun auteur n'est encore lié à vos publications.</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+        {% elif request.GET.tab == 'profil' %}
+            <header class="mb-4">
+                <h2 class="fw-bold">Profil de la Maison d'Édition</h2>
+                <p class="text-muted">Gérez vos informations publiques et vos contacts.</p>
+            </header>
+
+            <div class="content-table-wrapper">
+                <form method="POST" action="{% url 'modifier_profil_editeur' %}" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row g-4">
+                        <div class="col-md-4 text-center border-end">
+                            <div class="mb-3">
+                                {% if editeur.logo %}
+                                    <img src="{{ editeur.logo.url }}" class="rounded-circle mb-3 border shadow-sm" style="width: 150px; height: 150px; object-fit: cover;">
+                                {% endif %}
+                                <label class="form-label d-block fw-bold">Logo de l'éditeur</label>
+                                <input type="file" name="logo" class="form-control form-control-sm">
+                            </div>
+                        </div>
+                        <div class="col-md-8">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Nom de la maison</label>
+                                    <input type="text" name="nom" class="form-control" value="{{ editeur.nom }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Slogan</label>
+                                    <input type="text" name="slogan" class="form-control" value="{{ editeur.slogan|default:'' }}">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">Description / Biographie</label>
+                                    <textarea name="description" class="form-control" rows="4">{{ editeur.description }}</textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">Adresse du siège</label>
+                                    <input type="text" name="adresse_siege" class="form-control" value="{{ editeur.adresse_siege|default:'' }}">
+                                </div>
+                                
+                                <h6 class="mt-4 fw-bold border-bottom pb-2">Contact Principal</h6>
+                                <div class="col-md-6">
+                                    <label class="form-label">Nom du contact</label>
+                                    <input type="text" name="nom_contact_1" class="form-control" value="{{ editeur.nom_contact_1|default:'' }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Email de contact</label>
+                                    <input type="email" name="email_contact_1" class="form-control" value="{{ editeur.email_contact_1|default:'' }}">
+                                </div>
+                                <div class="col-md-4">
+                                <label class="form-label">Rôle du contact</label>
+                                <select name="role_contact_1" class="form-select">
+                                    <option value="" {% if not editeur.role_contact_1 %}selected{% endif %}>---------</option>
+                                    <option value="Propriétaire" {% if editeur.role_contact_1 == "Propriétaire" %}selected{% endif %}>Propriétaire</option>
+                                    <option value="Employé" {% if editeur.role_contact_1 == "Employé" %}selected{% endif %}>Employé</option>
+                                </select>
+                            </div>
+
+                                <h6 class="mt-4 fw-bold border-bottom pb-2">Réseaux Sociaux & Web</h6>
+                                <div class="col-md-4">
+                                    <label class="form-label">Site Web</label>
+                                    <input type="url" name="site_web" class="form-control" value="{{ editeur.site_web|default:'' }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Instagram</label>
+                                    <input type="text" name="instagram" class="form-control" value="{{ editeur.instagram|default:'' }}">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Facebook</label>
+                                    <input type="text" name="facebook" class="form-control" value="{{ editeur.facebook|default:'' }}">
+                                </div>
+                            </div>
+                            <div class="mt-4 text-end">
+                                <button type="submit" class="btn btn-primary px-5">Mettre à jour le profil</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    </main>
+
+    <div class="modal fade" id="addBookModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-dark text-white">
+                    <h5 class="modal-title fw-bold">Nouvelle Publication</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="POST" enctype="multipart/form-data" action="{% url 'ajouter_bd' %}">
+                    {% csrf_token %}
+                    <div class="modal-body p-4">
+                        <div class="row g-3">
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">Titre de l'œuvre</label>
+                                <input type="text" name="titre" class="form-control" placeholder="Ex: Les Chroniques de..." required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Auteur Principal</label>
+                                <select name="auteur_principal" class="form-select" required>
+                                    <option value="">Sélectionner un auteur...</option>
+                                    {% for auteur in tous_les_auteurs %}
+                                        <option value="{{ auteur.id }}">{{ auteur.utilisateur.username }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Type d'œuvre</label>
+                                <select name="type_oeuvre" class="form-select">
+                                    <option value="BD">Bande Dessinée</option>
+                                    <option value="Manga">Manga</option>
+                                    <option value="Webtoon">Webtoon</option>
+                                    <option value="Roman">Roman</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">ISBN</label>
+                                <input type="text" name="isbn" class="form-control">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-bold">Date de publication</label>
+                                <input type="date" name="date_publication" class="form-control" required>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label fw-bold">Auteurs secondaires (Optionnel)</label>
+                                <select name="auteurs_secondaires" class="form-select" multiple>
+                                    {% for auteur in tous_les_auteurs %}
+                                        <option value="{{ auteur.id }}">{{ auteur.utilisateur.username }}</option>
+                                    {% endfor %}
+                                </select>
+                                <small class="text-muted">Maintenez Ctrl pour en sélectionner plusieurs.</small>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Résumé</label>
+                                <textarea name="resume" class="form-control" rows="3" placeholder="Écrivez un court résumé..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-bold">Image de couverture</label>
+                                <input type="file" name="couverture" class="form-control" accept="image/*">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer bg-light">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                        <button type="submit" class="btn btn-primary px-5">PUBLIER MAINTENANT</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    {% if request.GET.tab == 'biblio' %}
+        {% for livre in livres %}
+            <div class="modal fade" id="editModal{{ livre.id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <form method="POST" action="{% url 'modifier_bd' livre.id %}" enctype="multipart/form-data" class="modal-content border-0 shadow">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h5 class="modal-title fw-bold">Modifier : {{ livre.titre }}</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body p-4">
+                            <div class="row g-3">
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">Titre</label>
+                                    <input type="text" name="titre" class="form-control" value="{{ livre.titre }}" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">ISBN</label>
+                                    <input type="text" name="isbn" class="form-control" value="{{ livre.isbn|default:'' }}">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-bold">Type</label>
+                                    <select name="type_oeuvre" class="form-select">
+                                        <option value="BD" {% if livre.type_oeuvre == 'BD' %}selected{% endif %}>Bande Dessinée</option>
+                                        <option value="Manga" {% if livre.type_oeuvre == 'Manga' %}selected{% endif %}>Manga</option>
+                                        <option value="Webtoon" {% if livre.type_oeuvre == 'Webtoon' %}selected{% endif %}>Webtoon</option>
+                                        <option value="Roman" {% if livre.type_oeuvre == 'Roman' %}selected{% endif %}>Roman</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label fw-bold">Date de publication</label>
+                                    <input type="date" name="date_publication" class="form-control" value="{{ livre.date_publication|date:'Y-m-d' }}" required>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">Résumé</label>
+                                    <textarea name="resume" class="form-control" rows="3">{{ livre.resumé }}</textarea>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-bold">Couverture (Optionnel)</label>
+                                    <input type="file" name="couverture" class="form-control" accept="image/*">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                            <button type="submit" class="btn btn-primary">Enregistrer les modifications</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="modal fade" id="deleteModal{{ livre.id }}" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title">Action irréversible</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center p-4">
+                            <i class="fas fa-exclamation-triangle text-danger fa-3x mb-3"></i>
+                            <p class="mb-0">Supprimer définitivement <br><strong class="fs-5">{{ livre.titre }}</strong> ?</p>
+                        </div>
+                        <div class="modal-footer justify-content-center">
+                            <button type="button" class="btn btn-light" data-bs-dismiss="modal">Annuler</button>
+                            <a href="{% url 'supprimer_bd' livre.id %}" class="btn btn-danger px-4">Confirmer la suppression</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Recherche dynamique
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('searchBook');
+            const table = document.getElementById('tableBiblio');
+            if (searchInput && table) {
+                const rows = table.getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+                searchInput.addEventListener('keyup', function() {
+                    const filter = searchInput.value.toLowerCase();
+                    for (let i = 0; i < rows.length; i++) {
+                        const contentCell = rows[i].getElementsByTagName('td')[1];
+                        if (contentCell) {
+                            const text = contentCell.textContent || contentCell.innerText;
+                            rows[i].style.display = text.toLowerCase().includes(filter) ? "" : "none";
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

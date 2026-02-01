@@ -20,5 +20,10 @@ urlpatterns = [
   # path('editeur/<int:id>/', editeur_detail, name='editeur_detail'),
   path('bdtheque',bdtheque , name='bdtheque'),
   path('auteur/<str:username>/galerie/',auteur_galerie_view, name='auteur_galerie_oeuvres'),
- 
+  path('editeur_input',input_editeur,name="input_editeur"),
+  path('ajouter_bd',ajouter_bd,name="ajouter_bd"),
+  # path('livre/<slug:slug>/', livre_detail_view, name='livre_detail'),
+  path('modifier_bd/<int:id>/', modifier_bd, name='modifier_bd'),
+  path('supprimer_bd/<int:id>/', supprimer_bd, name='supprimer_bd'),
+  path('modifier_profil_editeur',modifier_profil_editeur,name="modifier_profil_editeur")
 ]
