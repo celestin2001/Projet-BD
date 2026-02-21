@@ -311,7 +311,7 @@ class Auteur(models.Model):
         ordering = ['utilisateur__last_name', 'utilisateur__first_name']
         
     def __str__(self):
-        return self.utilisateur.get_full_name() or self.utilisateur.username
+        return  self.utilisateur.username
         
     def get_absolute_url(self):
         # On pourrait utiliser le slug de l'utilisateur ou un champ généré si nécessaire
@@ -393,7 +393,7 @@ class Bdtheque(models.Model):
         unique_together = ('edition', 'titre')
 
     def __str__(self):
-        return f"{self.titre} ({self.edition.nom})"
+        return f"{self.titre}"
         
     def save(self, *args, **kwargs):
         if not self.slug:

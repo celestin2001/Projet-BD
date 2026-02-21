@@ -9,11 +9,8 @@
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/main.min.css">
 
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
@@ -22,257 +19,119 @@
     <style>
         :root {
             --primary-blue: #007bff;
-            --light-blue: #e3f2fd;
-            --dark-blue: #0056b3;
-            --darker-blue: #004d99;
             --text-color: #343a40;
-            --header-bg-color: #007bff;
-            --header-top-bg: #212529; 
-            --content-max-width: 1240px;
             --shadow-color: rgba(0, 0, 0, 0.08);
-            --yellow-accent: #ffc107;
+            --content-max-width: 1240px;
         }
 
         body {
             font-family: 'Montserrat', sans-serif;
             background-color: #f4f7f9;
             color: var(--text-color);
-            line-height: 1.6;
             overflow-x: hidden;
-            padding-top: 0;
         }
 
         .page-container {
             max-width: var(--content-max-width);
             margin: 0 auto;
-            padding: 2rem 15px;
+            padding: 1rem 10px;
         }
+        @media (min-width: 768px) { .page-container { padding: 2rem 15px; } }
 
         h1.page-title {
             text-align: center;
             color: var(--primary-blue);
-            margin-bottom: 1rem;
             font-weight: 700;
-            font-size: 2.25rem;
+            font-size: 1.8rem;
         }
+        @media (min-width: 768px) { h1.page-title { font-size: 2.25rem; } }
 
-        p.page-subtitle {
-            font-size: 1.1rem;
-            color: #555;
-            margin-bottom: 2.5rem;
-            text-align: center;
-        }
-
-        /* --- FullCalendar & Search Styles --- */
+        /* --- CALENDAR RESPONSIVITY --- */
         #calendar {
-            width: 100%;
-            margin: 0 auto;
             background: #fff;
-            padding: 25px;
+            padding: 10px;
             border-radius: 12px;
             box-shadow: 0 0 25px var(--shadow-color);
             border: 1px solid #dee2e6;
         }
+        @media (min-width: 768px) { #calendar { padding: 25px; } }
 
-        #eventSearch {
-            display: block;
-            margin: 0 auto 2.5rem;
-            padding: 0.75rem 1rem;
-            max-width: 500px;
-            width: 100%;
-            border: 1px solid #ced4da;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            box-shadow: inset 0 1px 2px rgba(0,0,0,.075);
-        }
+        /* Correction toolbar sur mobile */
+        .fc .fc-toolbar { flex-direction: column; gap: 10px; }
+        @media (min-width: 768px) { .fc .fc-toolbar { flex-direction: row; } }
 
-        .fc-theme-bootstrap5 .fc-button {
-            background-color: var(--primary-blue);
-            border-color: var(--dark-blue);
-        }
-        .fc-theme-bootstrap5 .fc-button:hover {
-            background-color: var(--dark-blue);
-            border-color: var(--dark-blue);
-        }
-        .fc .fc-toolbar.fc-header-toolbar {
-            margin-bottom: 1.5em;
-        }
-        .fc-daygrid-day-number {
-            font-weight: 600;
-            padding: 8px;
-            color: var(--dark-blue);
-        }
+        /* --- CURSEUR ET ETATS --- */
+        .fc-event, .fc-list-item { cursor: pointer !important; }
+        .fc-event:hover { opacity: 0.9; transition: opacity 0.2s; }
 
-        /* --- CURSEUR CLICABLE POUR ÉVÉNEMENTS --- */
-        .fc-event,
-        .fc-list-event-graphic,
-        .fc-list-event-title,
-        .fc-daygrid-event-harness,
-        .fc-list-event-time,
-        .fc-list-item {
-            cursor: pointer !important;
-        }
-
-        .fc-event:hover {
-            opacity: 0.9;
-            transition: opacity 0.2s ease;
-        }
-
-        /* +++++ STYLES POUR L'IMAGE DANS L'ÉVÉNEMENT (CORRECTION 1: Taille Affiche) +++++ */
-        
-        /* Conteneur personnalisé pour l'image et le titre dans les événements */
-        .event-custom-content {
-            display: flex;
-            align-items: center;
-            gap: 8px; /* Espace augmenté */
-            width: 100%;
-        }
-        
-        /* Style de la miniature */
+        /* --- MINIATURES --- */
+        .event-custom-content { display: flex; align-items: center; gap: 8px; width: 100%; }
         .event-thumbnail {
-            width: 30px; /* Taille augmentée */
-            height: 30px; /* Taille augmentée */
-            object-fit: cover;
-            border-radius: 4px; /* Légère augmentation */
-            flex-shrink: 0;
+            width: 25px; height: 25px;
+            object-fit: cover; border-radius: 4px; flex-shrink: 0;
             border: 1px solid rgba(255, 255, 255, 0.4);
         }
+        @media (min-width: 768px) { .event-thumbnail { width: 30px; height: 30px; } }
+        .event-title-text { overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 
-        /* Cacher l'icône de base dans la vue liste si on utilise l'image */
-        .fc-list-event-title .fc-list-event-graphic {
-            display: none !important;
-        }
-
-        /* Assurer que le titre prenne l'espace restant */
-        .event-title-text {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
-        /* --- MODALE FULLCALENDAR --- */
-        #eventModal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1050; 
-            display: none;
-        }
-        #eventModal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-            width: 90vw;
-            max-width: 550px;
-            max-height: 90vh;
-            overflow-y: auto;
-            z-index: 1055; 
-        }
-        #eventModal img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-bottom: 1.25rem;
-            background-color: #e9ecef;
-        }
-        #eventModal h3 {
-            color: var(--primary-blue);
-            margin-top: 0;
-            margin-bottom: 1rem;
-            font-weight: 600;
-            font-size: 1.75rem;
-        }
-
-
-        /* --- TOOLTIP STYLES --- */
+        /* --- TOOLTIP (POPOVER) --- */
         .tooltip {
-            position: absolute;
-            z-index: 10000;
-            background: #212529;
-            color: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            pointer-events: none;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.1s;
-            max-width: 300px;
+            position: absolute; z-index: 10000;
+            background: #212529; color: white;
+            padding: 10px 15px; border-radius: 8px;
+            pointer-events: none; display: none; opacity: 0;
+            transition: opacity 0.1s; max-width: 300px;
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            text-align: left;
         }
-        .tooltip.visible {
-            opacity: 1;
+        .tooltip.visible { opacity: 1; }
+        .tooltip-top:before {
+            content: ''; position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%);
+            border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 8px solid #212529;
         }
-        .tooltip.tooltip-top:before {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-top: 8px solid #212529;
+        .tooltip-bottom:before {
+            content: ''; position: absolute; top: -8px; left: 50%; transform: translateX(-50%);
+            border-left: 8px solid transparent; border-right: 8px solid transparent; border-bottom: 8px solid #212529;
         }
-        .tooltip.tooltip-bottom:before {
-            content: '';
-            position: absolute;
-            top: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 0;
-            height: 0;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-            border-bottom: 8px solid #212529;
+
+        /* --- MODALE --- */
+        #eventModal {
+            display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            background: #fff; padding: 25px; border-radius: 10px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            width: 90vw; max-width: 550px; max-height: 90vh; overflow-y: auto; z-index: 1055;
         }
+        #eventModal img { width: 100%; height: 220px; object-fit: cover; border-radius: 8px; margin-bottom: 1rem; }
     </style>
 </head>
 <body>
 
     {% include "gestion_content/header.html" %}
 
-
     <div class="page-container">
         <h1 class="page-title">Calendrier des Événements 🗓️</h1>
-        <p class="page-subtitle">
-            Découvrez tous les événements à venir organisés par la Maison Africaine de la BD. Naviguez mois par mois pour ne rien manquer !
-        </p>
-        <input type="text" id="eventSearch" class="form-control" placeholder="🔍 Rechercher un événement par titre, lieu ou description...">
-        <div id="calendar" class="mt-4"></div>
+        <p class="text-center text-muted mb-4">Découvrez tous nos événements à venir.</p>
+        <input type="text" id="eventSearch" class="form-control mx-auto mb-4" style="max-width:500px;" placeholder="🔍 Rechercher un événement...">
+        <div id="calendar"></div>
     </div>
 
-    <div id="eventModal-backdrop" onclick="closeEventModal()"></div>
+    <div id="eventModal-backdrop" onclick="closeEventModal()" style="position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:1050;display:none;"></div>
     <div id="eventModal">
-        <button type="button" class="btn-close" aria-label="Close" onclick="closeEventModal()" style="position: absolute; top: 15px; right: 15px;"></button>
-        <img id="modalImage" src="" alt="Image de l'événement" class="img-fluid">
-        <h3 id="modalTitle"></h3>
+        <button type="button" class="btn-close" onclick="closeEventModal()" style="position:absolute;top:15px;right:15px;"></button>
+        <img id="modalImage" src="" alt="Affiche">
+        <h3 id="modalTitle" style="color:var(--primary-blue);"></h3>
         <p><strong>Lieu :</strong> <span id="modalLocation"></span></p>
         <p><strong>Début :</strong> <span id="modalStart"></span></p>
         <p><strong>Fin :</strong> <span id="modalEnd"></span></p>
         <p><strong>Description :</strong></p>
         <p id="modalDescription" style="white-space: pre-wrap;"></p>
         <div class="text-end mt-3">
-             <a href="#" id="modalLink" class="btn btn-sm btn-primary" target="_blank" style="display:none; font-weight: 600;">Voir les détails</a>
+             <a href="#" id="modalLink" class="btn btn-sm btn-primary" target="_blank" style="display:none;">Voir les détails</a>
         </div>
     </div>
-    {% include "gestion_content/footer.html" %}
-    
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {% include "gestion_content/footer.html" %}
+
     <script>
-        // Fonction pour fermer la modale
         function closeEventModal() {
             document.getElementById('eventModal').style.display = 'none';
             document.getElementById('eventModal-backdrop').style.display = 'none';
@@ -286,169 +145,111 @@
 
             const calendar = new FullCalendar.Calendar(calendarEl, {
                 locale: 'fr',
-                initialDate: '{% now "Y-m-d" %}',
                 initialView: window.innerWidth < 768 ? 'listWeek' : 'dayGridMonth',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
-                    right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
-                },
-                buttonText: {
-                    today: "Aujourd'hui", month: "Mois", week: "Semaine", day: "Jour", list: "Liste"
+                    right: 'dayGridMonth,timeGridWeek,listWeek'
                 },
                 
-                // +++++ eventContent: Logique ajustée pour la nouvelle taille d'image (CORRECTION 1) +++++
+                // RENDU DU CONTENU (Images + Titre)
                 eventContent: function(arg) {
-                    const event = arg.event;
-                    const eventImage = event.extendedProps.image;
-                    const eventTitle = event.title;
-                    
                     const containerEl = document.createElement('div');
                     containerEl.className = 'event-custom-content';
-
                     const imgEl = document.createElement('img');
-                    imgEl.src = eventImage;
-                    imgEl.alt = eventTitle;
-                    imgEl.className = 'event-thumbnail'; // Utilise le style mis à jour 30x30
-                    
+                    imgEl.src = arg.event.extendedProps.image;
+                    imgEl.className = 'event-thumbnail';
                     const titleEl = document.createElement('span');
                     titleEl.className = 'event-title-text';
-                    titleEl.textContent = eventTitle;
-
+                    titleEl.textContent = arg.event.title;
                     containerEl.appendChild(imgEl);
                     containerEl.appendChild(titleEl);
-                    
                     return { domNodes: [containerEl] };
                 },
-                // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
                 events: [
                     {% for e in evenements %}
                     {
                         title: '{{ e.titre_evenement|escapejs }}',
-                        // Format ISO 8601 requis par FullCalendar
                         start: '{{ e.date_evenement|date:"Y-m-d" }}{% if e.heure_evenement %}T{{ e.heure_evenement|time:"H:i:s" }}{% endif %}',
-                        {% if e.date_fin_evenement %}
-                        end: '{{ e.date_fin_evenement|date:"Y-m-d" }}T23:59:59', // Fin du jour pour les événements sur plusieurs jours
-                        {% endif %}
-                        // +++++ Couleur dynamique (CONFIRMATION 2) +++++
+                        {% if e.date_fin_evenement %}end: '{{ e.date_fin_evenement|date:"Y-m-d" }}T23:59:59',{% endif %}
                         color: '{{ e.couleur_evenement|default:"#007bff" }}', 
-                        // +++++++++++++++++++++++++++++++++++++++++++++
-
                         extendedProps: {
                             location: '{{ e.lieu_evenement|escapejs|default:"Non spécifié" }}',
                             description: `{{ e.description|escapejs|default:"Aucune description." }}`,
                             image: '{% if e.image %}{{ e.image.url }}{% else %}{% static "gestion_content/images/default_event.png" %}{% endif %}',
                             heure: '{{ e.heure_evenement|time:"H:i"|default:"" }}',
                             date_debut_formatted: '{{ e.date_evenement|date:"d/m/Y" }}',
-                            date_fin_formatted: '{% if e.date_fin_evenement %}{{ e.date_fin_evenement|date:"d/m/Y" }}{% else %}{% endif %}',
-                            link: '{% if e.lien_details %}{{ e.lien_details|escapejs }}{% endif %}'
+                            date_fin_formatted: '{% if e.date_fin_evenement %}{{ e.date_fin_evenement|date:"d/m/Y" }}{% endif %}',
+                            link: '{{ e.lien_details|escapejs }}'
                         }
                     }{% if not forloop.last %},{% endif %}
                     {% endfor %}
                 ],
 
-                // LOGIQUE D'AFFICHAGE DE LA MODALE AU CLIC
+                // CLIC : Ouvre la modale
                 eventClick: function (info) {
                     const e = info.event.extendedProps;
                     document.getElementById('modalTitle').textContent = info.event.title;
                     document.getElementById('modalLocation').textContent = e.location;
-                    let startStr = e.date_debut_formatted;
-                    if (e.heure) startStr += ` à ${e.heure}`;
-                    document.getElementById('modalStart').textContent = startStr;
+                    document.getElementById('modalStart').textContent = e.date_debut_formatted + (e.heure ? ` à ${e.heure}` : '');
                     document.getElementById('modalEnd').textContent = e.date_fin_formatted || 'Non précisée';
                     document.getElementById('modalDescription').innerHTML = e.description.replace(/\n/g, '<br>');
                     document.getElementById('modalImage').src = e.image;
-                    
                     const modalLink = document.getElementById('modalLink');
-                    if(e.link) {
+                    if(e.link && e.link !== '') {
                         modalLink.href = e.link;
                         modalLink.style.display = 'inline-block';
-                    } else {
-                        modalLink.style.display = 'none';
-                    }
-
+                    } else { modalLink.style.display = 'none'; }
                     document.getElementById('eventModal').style.display = 'block';
                     document.getElementById('eventModal-backdrop').style.display = 'block';
-                    
                     tooltipEl.classList.remove('visible');
                     tooltipEl.style.display = 'none';
                 },
 
-                // Logique du tooltip au survol
+                // SURVOL : Ton système de popover
                 eventMouseEnter: function (info) {
                     const e = info.event.extendedProps;
                     let timeStr = e.date_debut_formatted;
                     if (e.heure) timeStr += ` ${e.heure}`;
-                    if (e.date_fin_formatted && e.date_fin_formatted !== e.date_debut_formatted) {
-                        timeStr += ` → ${e.date_fin_formatted}`;
-                    } else if (info.event.allDay === false && info.event.end) {
-                        let endDate = new Date(info.event.endStr);
-                        let endTime = endDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-                        if (e.heure && endTime) {
-                           if(e.heure) timeStr = `${e.date_debut_formatted} de ${e.heure} à ${endTime}`;
-                           else timeStr += ` jusqu'à ${endTime}`;
-                        }
-                    }
                     tooltipEl.innerHTML = `
-                        <div style="font-weight: 600; font-size: 1.05em; margin-bottom: 5px; color: ${info.event.backgroundColor || 'var(--primary-blue)'};">${info.event.title}</div>
-                        <div style="font-size: 0.9em;">
-                            <div><i class="fas fa-map-marker-alt me-2" style="color: #6c757d;"></i> ${e.location}</div>
-                            <div><i class="fas fa-clock me-2" style="color: #6c757d;"></i> ${timeStr}</div>
+                        <div style="font-weight:600; margin-bottom:5px; color:${info.event.backgroundColor};">${info.event.title}</div>
+                        <div style="font-size:0.9em;">
+                            <div><i class="fas fa-map-marker-alt me-2"></i> ${e.location}</div>
+                            <div><i class="fas fa-clock me-2"></i> ${timeStr}</div>
                         </div>`;
                     tooltipEl.style.display = 'block';
-                    const eventRect = info.el.getBoundingClientRect();
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                    let top = eventRect.top + scrollTop - tooltipEl.offsetHeight - 12;
-                    let left = eventRect.left + scrollLeft + (eventRect.width / 2) - (tooltipEl.offsetWidth / 2);
-                    let tooltipClass = 'tooltip-top';
-                    if (top < scrollTop + 5) {
-                        top = eventRect.bottom + scrollTop + 12;
-                        tooltipClass = 'tooltip-bottom';
-                    }
-                    if (left < scrollLeft + 5) left = scrollLeft + 5;
-                    if (left + tooltipEl.offsetWidth > scrollLeft + window.innerWidth - 5) {
-                        left = scrollLeft + window.innerWidth - tooltipEl.offsetWidth - 5;
-                    }
-                    tooltipEl.className = 'tooltip visible ' + tooltipClass;
+                    const rect = info.el.getBoundingClientRect();
+                    const top = rect.top + window.scrollY - tooltipEl.offsetHeight - 12;
+                    const left = rect.left + window.scrollX + (rect.width / 2) - (tooltipEl.offsetWidth / 2);
                     tooltipEl.style.left = left + 'px';
                     tooltipEl.style.top = top + 'px';
-                },
-                eventMouseLeave: function () {
-                    tooltipEl.classList.remove('visible');
-                    setTimeout(() => {
-                        if(!tooltipEl.matches(':hover')) {
-                               tooltipEl.style.display = 'none';
-                        }
-                    }, 50);
+                    tooltipEl.className = 'tooltip visible tooltip-top';
                 },
 
-                // Logique responsive
-                windowResize: function(view) {
+                eventMouseLeave: function () {
                     tooltipEl.classList.remove('visible');
-                    tooltipEl.style.display = 'none';
-                    if (window.innerWidth < 768 && calendar.view.type !== 'listWeek') {
+                    setTimeout(() => { tooltipEl.style.display = 'none'; }, 50);
+                },
+
+                // RESPONSIVITÉ
+                windowResize: function() {
+                    if (window.innerWidth < 768) {
                         calendar.changeView('listWeek');
-                    } else if (window.innerWidth >= 768 && calendar.view.type === 'listWeek') {
-                            calendar.changeView('dayGridMonth');
+                    } else {
+                        calendar.changeView('dayGridMonth');
                     }
                 }
             });
             calendar.render();
 
-            // Logique de recherche
+            // RECHERCHE
             document.getElementById('eventSearch').addEventListener('input', function (e) {
                 const search = e.target.value.toLowerCase().trim();
                 calendar.getEvents().forEach(event => {
-                    const title = event.title.toLowerCase();
-                    const location = event.extendedProps.location.toLowerCase();
-                    const description = event.extendedProps.description.toLowerCase();
-                    if (title.includes(search) || location.includes(search) || description.includes(search)) {
-                        event.setProp('display', 'auto');
-                    } else {
-                        event.setProp('display', 'none');
-                    }
+                    const match = event.title.toLowerCase().includes(search) || 
+                                  event.extendedProps.location.toLowerCase().includes(search);
+                    event.setProp('display', match ? 'auto' : 'none');
                 });
             });
         });

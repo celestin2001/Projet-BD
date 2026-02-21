@@ -203,6 +203,8 @@ def signin(request):
         user=authenticate(request,email=email,password=password)
         if user is not None:
             login(request,user)
+            # if user.change_pwd:    
+            #     return redirect('updatepwd')
             if user.role == 'editeur' and user.vedette == True:
                  return redirect('editeur')
             if user.role == 'auteur' and user.vedette == True:
@@ -212,6 +214,35 @@ def signin(request):
             messages.error(request,"votre email ou mot de passe est incorecte")
             return render(request,'gestion_utilisateur/connexion.html')
     return render(request,'gestion_utilisateur/connexion.html')
+
+from django.contrib.auth import update_session_auth_hash
+def updatePWD(request):
+    user = request.user
+
+    if request.method == "POST":
+        password = request.POST.get("new-password")
+        confirm_password = request.POST.get("confirm-password")
+
+        # Vérification correspondance
+        if password != confirm_password:
+            messages.error(request, "Les mots de passe ne sont pas identiques.")
+            return redirect('updatepwd')
+
+        # Mettre à jour le mot de passe
+        user.set_password(password)
+        user.change_pwd = False
+        user.save()
+        # Empêche la déconnexion après changement
+        update_session_auth_hash(request, user)
+
+        messages.success(request, "Mot de passe mis à jour avec succès.")
+        if user.role == 'editeur' and user.vedette == True:
+                 return redirect('editeur')
+        if user.role == 'auteur' and user.vedette == True:
+                 return redirect('auteur')
+        return redirect('home')
+
+    return render(request, 'gestion_utilisateur/updatePwd.html')
 
 @login_required
 def deconnexion(request):
@@ -449,3 +480,65 @@ def inscription_evenement(request, my_id):
         return redirect('event_detail', my_id=my_id)
 
     return render(request, 'gestion_utilisateur/inscription_evenement.html', {'event': event})
+
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes, force_str
+from django.core.mail import EmailMessage
+from django.conf import settings
+
+def reset_password_request(request):
+    if request.method == 'POST':
+        email = request.POST.get('email')
+        users = Utilisateur.objects.filter(email=email)
+        
+        if users.exists():
+            user = users.first()
+            # Création du token et de l'ID encodé
+            token = default_token_generator.make_token(user)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            
+            # Construction du lien (s'adapte au domaine localhost ou prod)
+            domain = request.get_host()
+            link = f"http://{domain}/gestion_utilisateur/password-reset/{uid}/{token}/"
+            
+            suject = "Récupération de mot de passe"
+            message = f"Bonjour {user.username},\n\nCliquez sur le lien ci-dessous pour réinitialiser votre mot de passe :\n{link}\n\nSi vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail."
+            
+            msg = EmailMessage(suject, message, settings.EMAIL_HOST_USER, [email])
+            msg.send()
+
+        # Message ambigu pour la sécurité (ne pas confirmer si l'email existe ou non)
+        info = "Si un compte est associé à cet e-mail, vous recevrez un lien de réinitialisation sous peu veuillez de vérifier votre mail."
+        return render(request, 'gestion_utilisateur/reset_password.html', {'info': info})
+        
+    return render(request, 'gestion_utilisateur/reset_password.html')
+
+def modifier_password_confirm(request, uidb64, token):
+    try:
+        # Décoder l'ID utilisateur
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = Utilisateur.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, Utilisateur.DoesNotExist):
+        user = None
+
+    # Vérification de la validité du token
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            p1 = request.POST.get('password')
+            p2 = request.POST.get('password2')
+
+            if len(p1) < 5:
+                return render(request, 'gestion_utilisateur/password_change.html', {'errors': "Le mot de passe est trop court (min 5)."})
+            
+            if p1 != p2:
+                return render(request, 'gestion_utilisateur/password_change.html', {'errors': "Les mots de passe ne correspondent pas."})
+
+            # Changement effectif du mot de passe
+            user.set_password(p1)
+            user.save()
+            return redirect('signin') # Redirection vers ta page de login
+        
+        return render(request, 'gestion_utilisateur/password_change.html')
+    else:
+        return render(request, 'gestion_utilisateur/reset_password.html', {'errors': "Le lien est invalide ou a expiré."})

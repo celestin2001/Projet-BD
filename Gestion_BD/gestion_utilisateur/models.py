@@ -49,6 +49,7 @@ class Utilisateur(AbstractUser):
     date_naissance = models.DateField(null=True, blank=True)
     telephone = models.CharField(max_length=20, null=True, blank=True)
     ville_residence = models.CharField(max_length=100, null=True, blank=True)
+    # change_pwd = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'  #  l'email pour l'authentification
     REQUIRED_FIELDS = ['username']

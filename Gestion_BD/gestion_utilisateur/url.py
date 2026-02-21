@@ -12,5 +12,9 @@ urlpatterns = [
     path('event_detail/<int:my_id>/',detailEvenement,name='event_detail'),
     path('signin_auteur',signin_auteur,name="signin_auteur"),
     path('inscription_event/<int:my_id>/',inscription_evenement,name='inscription_event'),
-   
+    path('updatepwd',updatePWD,name="updatepwd"),
+    # Page pour demander la réinitialisation
+    path('Compte/reset-password/',reset_password_request, name='reset_password'),
+    # Page de confirmation (cliquée depuis l'email)
+    path('gestion_utilisateur/password-reset/<uidb64>/<token>/',modifier_password_confirm, name='modifier_password_confirm'),
 ]
