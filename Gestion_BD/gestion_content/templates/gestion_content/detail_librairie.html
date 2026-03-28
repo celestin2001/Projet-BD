@@ -280,8 +280,10 @@
                         
                         {# BLOC POUR LES JOURS D'OUVERTURE #}
                         <h5 class="mt-2 mb-2 text-muted"><i class="fas fa-calendar-alt me-2"></i> Jours d'ouverture :</h5>
-                        <ul class="opening-days-list">
-                            <li>{{ librairie.jours_ouverture|default:"Non renseignés" }}</li>
+                        <ul class="opening-days-list" style="display: flex; gap: 10px;">
+                            {% for jour in librairie.jours_ouverture.all %}
+                            <li>{{ jour.jour|default:"Non renseignés" }}</li>
+                            {% endfor %}
                         </ul>
                         
                         <h5 class="mt-4 mb-2 text-muted"><i class="fas fa-clock me-2"></i> Horaires quotidiens :</h5>

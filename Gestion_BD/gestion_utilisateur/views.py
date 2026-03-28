@@ -19,7 +19,7 @@ from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 def Home(request):
-   actualite = BlogPost.objects.filter(valid=True).all()[:2]
+   actualite = BlogPost.objects.all()[:2]
    user_authenticate = request.user.is_authenticated
    
    usere = request.user

@@ -36,6 +36,20 @@ class Work(models.Model):
         ('fusion','fusion'),
         ('alternative','alternative')
     ]
+    editeur = models.ForeignKey(
+        'Editeur', # Nom de ton modèle Editeur
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True, 
+        related_name='works_submitted',
+        verbose_name="Maison d'édition"
+    )
+    other_editor_name = models.CharField(
+        max_length=255, 
+        blank=True, 
+        null=True, 
+        verbose_name="Maison d'édition s'il n'existe pas(listé)"
+    )
     
     edition = models.CharField(max_length=50,choices=choix_edition,default='Physique')
     influence = models.CharField(max_length=50,choices=choix_influence,default='Comic-US')
@@ -48,6 +62,8 @@ class Work(models.Model):
     planche1 = models.ImageField(upload_to='media/', blank=True, null=True)
     planche2 = models.ImageField(upload_to='media/', blank=True, null=True)
     valid = models.BooleanField(default=False)
+    class Meta:
+        verbose_name_plural = "Oeuvres"
 
     def __str__(self):
         return self.title
@@ -66,6 +82,12 @@ class Notation(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.work.title} - {self.rating}"
 
+class Jours(models.Model):
+    jour = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.jour
+
 class Librairie(models.Model):
     nom = models.CharField(max_length=255)
     pays = models.CharField(max_length=100, choices=Utilisateur.PAYS_AFRICAINS)
@@ -77,8 +99,9 @@ class Librairie(models.Model):
     telephone = models.CharField(max_length=50, blank=True, null=True)
     adresse = models.CharField(max_length=255, blank=True, null=True)
     map_url = models.URLField(blank=True, null=True)
-    heures_ouverture = models.TimeField(null=True)
-    heure_fermeture = models.TimeField(null=True)
+    jours_ouverture = models.ManyToManyField(Jours,blank=True)
+    heures_ouverture = models.TimeField(null=True,blank=True)
+    heure_fermeture = models.TimeField(null=True,blank=True)
     latitude = models.DecimalField(
         max_digits=9, 
         decimal_places=6, 
@@ -101,7 +124,7 @@ class Librairie(models.Model):
     linkedin = models.URLField(blank=True, null=True)
     tiktok = models.URLField(blank=True, null=True)
     vedette = models.BooleanField(default=False)
-    valide = models.BooleanField(default=False)
+    # valide = models.BooleanField(default=False)
 
     def __str__(self):
         return self.nom
@@ -114,16 +137,16 @@ class Contact(models.Model):
         ('Grand-public','Grand-public')
     ]
     profile = models.CharField(max_length=50,choices=profil_choice,default='Journaliste')
-    nom = models.CharField(max_length=50)
-    prenom = models.CharField(max_length=50)
-    societe= models.CharField(max_length=50)
-    email = models.EmailField()
-    objet = models.CharField(max_length=100)
-    message = models.TextField()
+    nom = models.CharField(max_length=50,blank=True,null=True)
+    prenom = models.CharField(max_length=50,blank=True,null=True)
+    societe= models.CharField(max_length=50,blank=True,null=True)
+    email = models.EmailField(blank=True,null=True)
+    objet = models.CharField(max_length=100,blank=True,null=True)
+    message = models.TextField(blank=True,null=True)
 
     def __str__(self):
         return self.nom
-
+    
 
 
     
@@ -149,7 +172,7 @@ class Editeur(models.Model):
     
     # RELATION À L'UTILISATEUR (Compte et authentification)
     # OnDelete=CASCADE signifie que si le compte utilisateur est supprimé, l'éditeur l'est aussi.
-    utilisateur = models.OneToOneField(
+    utilisateur = models.ForeignKey(
         settings.AUTH_USER_MODEL, # Fait référence à votre classe Utilisateur(AbstractUser)
         on_delete=models.CASCADE,
         related_name='details_editeur',
@@ -266,8 +289,8 @@ class Editeur(models.Model):
     email_contact_2 = models.EmailField(null=True, blank=True)
 
     class Meta:
-        verbose_name = "Éditeur (Détail)"
-        verbose_name_plural = "Éditeurs (Détails)"
+        verbose_name = "Éditeur (Maison Edition)"
+        verbose_name_plural = "Éditeurs (Maison Edition)"
         ordering = ['nom']
 
     def __str__(self):

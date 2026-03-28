@@ -154,7 +154,13 @@
                 </div>
                 <div class="header-buttons d-flex align-items-center">
                     <a href="#" class="btn btn-outline-light btn-sm me-3 fw-bold px-3">Donateurs</a>
+                    {% if user.is_authenticated %}
+                    {% if user.role == "editeur" %}
+                    <a href="{% url 'input_editeur' %}"target="_blank"rel="noopener noreferrer" class="btn btn-outline-light btn-sm me-3 fw-bold px-3">Espace Editeur</a>
+
+                    {% endif %}
                     
+                    {% endif %}                    
                     {% if user.is_authenticated %}
                         <div class="dropdown user-dropdown">
                             <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -168,6 +174,9 @@
                             <ul class="dropdown-menu dropdown-menu-end">
                                 <li><h6 class="dropdown-header fw-bold text-muted text-uppercase mb-2">Mon Espace</h6></li>
                                 <li><a class="dropdown-item" href="#"><i class="bi bi-person-badge me-2"></i> Mon Profil</a></li>
+                                {% if user.is_staff %}
+                                <li><a class="dropdown-item" href="{% url 'admin:index' %}"target="_blank" rel="noopener noreferrer"><i class="bi bi-person-badge me-2"></i> Espace  Admin</a></li>
+                                {% endif %}
                                 <li><a class="dropdown-item" href="{% url 'updatepwd' %}"><i class="bi bi-key-fill me-2 text-warning"></i> Mot de passe</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger fw-bold" href="{% url 'deconnexion' %}"><i class="bi bi-power me-2"></i> Déconnexion</a></li>

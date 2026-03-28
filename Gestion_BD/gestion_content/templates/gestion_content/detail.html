@@ -429,14 +429,26 @@
                                 <form method="POST" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <div class="modal-body">
+                                        <div class="card bg-light mb-3">
+                                    <div class="card-body">
                                         <div class="mb-3">
-                                            <label for="edition" class="form-label">Selectionner l'édition</label>
-                                            <select name="edition" id="edition" class="form-control">
-                                                {% for value, label in edition %}
-                                                     <option value="{{ value }}">{{ label }}</option>
+                                            <label for="editeur" class="form-label fw-bold">Maison d'édition (si déjà listée)</label>
+                                            <select name="editeur" id="editeur" class="form-control">
+                                                <option value="">-- Sélectionner un éditeur --</option>
+                                                {% for e in editeurs_list %}
+                                                    <option value="{{ e.id }}">{{ e.nom }}</option>
                                                 {% endfor %}
                                             </select>
                                         </div>
+
+                                        <div class="text-center my-2"><span class="badge bg-secondary">OU</span></div>
+
+                                        <div class="mb-0">
+                                            <label for="other_editor_name" class="form-label fw-bold">Nom de l'éditeur (si absent de la liste)</label>
+                                            <input type="text" name="other_editor_name" id="other_editor_name" class="form-control" placeholder="Ex: Auto-édition, Éditeur X...">
+                                        </div>
+                                    </div>
+                                </div>
                             
                                         <div class="mb-3">
                                             <label for="genre" class="form-label">Selectionner le genre</label>

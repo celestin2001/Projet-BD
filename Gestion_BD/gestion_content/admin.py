@@ -14,6 +14,8 @@ admin.site.index_title = "Gestion des auteurs"
 admin.site.register(Contact)
 admin.site.register(Auteur)
 
+admin.site.register(Jours)
+
 @admin.register(Editeur)
 class EditeurAdmin(admin.ModelAdmin):
     list_display = ('nom', 'nom_contact_1', 'email_contact_1', 'pays_siege')
@@ -34,6 +36,8 @@ class BdthequeAdmin(admin.ModelAdmin):
     def valider_oeuvres(self, request, queryset):
         queryset.update(valide=True)
     valider_oeuvres.short_description = "Valider les œuvres sélectionnées"
+
+
 
 
 

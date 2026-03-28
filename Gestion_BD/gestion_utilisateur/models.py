@@ -36,7 +36,7 @@ class Utilisateur(AbstractUser):
 
     role = models.CharField(max_length=120, choices=Role_choice,default='auteur')
    
-    bio = models.TextField()
+    bio = models.TextField(blank=True,null=True)
     email = models.EmailField(unique=True)
     profil_picture = models.ImageField(upload_to='media/',blank=True,null=True)
     genres = models.ManyToManyField("gestion_content.Genre", related_name="auteurs", blank=True, null=True)
@@ -99,7 +99,9 @@ class BlogPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     media = models.ImageField(upload_to='media/',blank=True,null=True)
     url_actu = models.URLField(null=True,blank=True)
-    valid = models.BooleanField(default=False)
+    # valid = models.BooleanField(default=False)
+    class Meta:
+        verbose_name_plural = "Actualités"
 
     def __str__(self):
         return self.title

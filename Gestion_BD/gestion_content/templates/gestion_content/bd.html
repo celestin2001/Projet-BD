@@ -251,7 +251,18 @@
                                     
                                     {# Éditeur #}
                                     <p class="card-text small text-secondary">
-                                        Editeur: <span class="fw-semibold text-dark">{{ livre.editeur.nom }}</span>
+                                         Editeur: <span class="fw-semibold text-dark">
+                                                {% if livre.edition %}
+                                                    {# Cas A : L'éditeur est enregistré sur le site #}
+                                                    {{ livre.edition.nom }}
+                                                {% elif livre.autre_editeur_nom %}
+                                                    {# Cas B : C'est un nom saisi manuellement #}
+                                                    {{ livre.autre_editeur_nom }}
+                                                {% else %}
+                                                    {# Cas C : Rien n'a été renseigné #}
+                                                    Auto-édition
+                                                {% endif %}
+                                            </span>
                                     </p>
                                     
                                     {# Lien de détail #}

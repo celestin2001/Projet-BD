@@ -76,6 +76,7 @@ def detail_auteur_editeur(request, auteur_id):
     edition_choice = Work.choix_edition
     genre_choice = Work.choix_genre
     influence_choice = Work.choix_influence
+    editeurs_list = Editeur.objects.all().order_by('nom')
 
     # Infos sur l'utilisateur connecté
     user_authenticate = request.user.is_authenticated
@@ -145,6 +146,7 @@ def detail_auteur_editeur(request, auteur_id):
             return redirect('detail_auteur', auteur_id=auteur_id)
 
         elif form_type == 'ajout_oeuvre':
+            editeur_id = request.POST.get('editeur')
             titre = request.POST.get('titre')
             contenue = request.POST.get('description')
             edition = request.POST.get('edition')
@@ -160,7 +162,8 @@ def detail_auteur_editeur(request, auteur_id):
                     title=titre,
                     description=contenue,
                     author=auteur,
-                    edition=edition,
+                    editeur=Editeur.objects.get(id=editeur_id) if editeur_id else None,
+                    other_editor_name=request.POST.get('other_editor_name'),
                     genres=genre,
                     influence=influence,
                     planche1=planche1,
@@ -184,7 +187,8 @@ def detail_auteur_editeur(request, auteur_id):
         'reseau_choice': Social_link.lien,
         'edition': edition_choice,
         'genre': genre_choice,
-        'influence': influence_choice
+        'influence': influence_choice,
+        'editeurs_list': editeurs_list
     })
 
 def detail_auteur2(request):
@@ -306,16 +310,16 @@ def custom_404_view(request, exception):
 
 def Librairies(request):
     # 1. Récupération des données pour les sections
-    librairies_vedettes = Librairie.objects.filter(vedette=True, valide=True)[:6]
+    librairies_vedettes = Librairie.objects.filter(vedette=True)[:6]
 
     # --- Équivalent du bloc villes pour les tuiles ---
-    villes = (Librairie.objects.filter(valide=True)
+    villes = (Librairie.objects.all()
               .values('ville')
               .annotate(count=Count('id'))
               .order_by('ville'))
 
     # 2. Logique de Filtrage
-    librairies = Librairie.objects.filter(valide=True).order_by('nom') # Tri par défaut
+    librairies = Librairie.objects.all().order_by('nom') # Tri par défaut
 
     # Filtre par Pays
     pays_filtre = request.GET.get('pays', '')
@@ -364,28 +368,31 @@ def Librairies(request):
 
 def detail_librairie(request, librairie_id):
     """
-    Affiche la page de détail d'une librairie spécifique en utilisant son ID.
+    Affiche la page de détail d'une librairie spécifique.
+    Optimisé avec prefetch_related pour les jours d'ouverture.
     """
-    # 1. Récupération de l'objet Librairie (retourne 404 si non trouvé)
-    librairie = get_object_or_404(Librairie, pk=librairie_id)
+    # 1. Récupération de l'objet avec pré-chargement des relations ManyToMany
+    librairie = get_object_or_404(
+        Librairie.objects.prefetch_related('jours_ouverture'), 
+        pk=librairie_id
+    )
 
-    # 2. Préparation des informations de pays
-    # Cette étape nécessite d'accéder à la liste PAYS_AFRICAINS
-    # (J'utilise ici une méthode générique pour simuler l'accès aux choix)
-    
-    # Construction d'un dictionnaire pour la traduction du code pays
+    # 2. Récupération propre du nom du pays
+    # Si 'pays' est un champ avec des 'choices' dans votre modèle, 
+    # Django offre une méthode magique : get_FOO_display()
     try:
-        pays_list = dict(Utilisateur.PAYS_AFRICAINS)
-        nom_pays = pays_list.get(librairie.pays, librairie.pays)
-    except NameError:
-        # Solution de repli si Utilisateur.PAYS_AFRICAINS n'est pas accessible
-        nom_pays = librairie.pays
+        # Tente d'utiliser la méthode automatique de Django
+        nom_pays = librairie.get_pays_display()
+    except AttributeError:
+        # Repli sur votre logique manuelle si la méthode automatique n'est pas disponible
+        pays_dict = dict(getattr(Utilisateur, 'PAYS_AFRICAINS', {}))
+        nom_pays = pays_dict.get(librairie.pays, librairie.pays)
 
-    # 3. Préparation du contexte
+    # 3. Contexte
     context = {
         "librairie": librairie,
         "nom_pays": nom_pays,
-        'user_authenticate':request.user.is_authenticated
+        "user_authenticate": request.user.is_authenticated
     }
 
     return render(request, "gestion_content/detail_librairie.html", context)
