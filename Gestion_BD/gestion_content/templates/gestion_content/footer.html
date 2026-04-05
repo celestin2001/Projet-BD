@@ -41,29 +41,22 @@
             letter-spacing: 1.5px;
         }
 
-        .partners-grid {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 60px; /* Espace entre les logos */
+        .partners-carousel .carousel-item {
+            text-align: center;
         }
 
-        .partners-grid img {
-            /* On utilise max-height pour ne pas forcer l'agrandissement au-delà du réel si c'est petit */
+        .partners-carousel img {
             max-height: 95px; 
             width: auto;
             max-width: 240px;
             object-fit: contain;
-            
-            /* ASTUCE ANTI-FLOU : Améliore la netteté du rendu navigateur */
             image-rendering: -webkit-optimize-contrast;
             image-rendering: crisp-edges;
-            
             transition: transform 0.3s ease;
+            margin: 0 auto;
         }
 
-        .partners-grid img:hover {
+        .partners-carousel img:hover {
             transform: scale(1.05);
         }
 
@@ -176,11 +169,29 @@
     <section class="partners-section">
         <div class="container text-center">
             <h5>Soutenu par</h5>
-            <div class="partners-grid">
-                <img src="{% static 'gestion_content/images/logo3.png' %}" alt="Bili BD Festival">
-                <img src="{% static 'gestion_content/images/logo4.jpg' %}" alt="AFD">
-                <img src="{% static 'gestion_content/images/logo5.png' %}" alt="CIBDI">
-                <img src="{% static 'gestion_content/images/logo.png' %}" alt="IFC">
+            <div id="partnersCarousel" class="carousel slide partners-carousel" data-bs-ride="carousel" data-bs-interval="3000">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{% static 'gestion_content/images/logo3.png' %}" alt="Bili BD Festival">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'gestion_content/images/logo4.jpg' %}" alt="AFD">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'gestion_content/images/logo5.png' %}" alt="CIBDI">
+                    </div>
+                    <div class="carousel-item">
+                        <img src="{% static 'gestion_content/images/logo.png' %}" alt="IFC">
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#partnersCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#partnersCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
             </div>
         </div>
     </section>

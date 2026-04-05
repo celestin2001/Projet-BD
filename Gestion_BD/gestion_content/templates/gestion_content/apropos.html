@@ -129,6 +129,17 @@
             border: 2px solid var(--yellow-accent);
         }
 
+        @media (max-width: 991.98px) {
+            .top-bar {
+                padding: 0.3rem 0;
+                font-size: 0.7rem;
+            }
+            .user-dropdown .dropdown-toggle {
+                padding: 0.2rem 0.5rem;
+                font-size: 0.8rem;
+            }
+        }
+
         /* --- MOBILE OPTIMIZATION --- */
         @media (max-width: 991.98px) {
             .navbar-collapse {
@@ -137,6 +148,8 @@
                 border-radius: 15px;
                 margin: 15px 0;
                 box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+                overflow-y: auto;
+                max-height: 80vh;
             }
             .nav-link {
                 padding: 12px 0 !important;
@@ -144,6 +157,16 @@
                 margin: 0;
             }
             .nav-link:last-child { border-bottom: none; }
+        }
+
+        /* --- DROPDOWN Z-INDEX FIX --- */
+        .user-dropdown {
+            position: relative;
+            z-index: 1050;
+        }
+        
+        .dropdown-menu {
+            z-index: 1100;
         }
 
         /* --- STYLE SPÉCIFIQUE PAGE À PROPOS --- */
@@ -201,7 +224,7 @@
 <body>
 
     <header>
-        <div class="top-bar d-none d-lg-block">
+        <div class="top-bar">
             <div class="header-inner-wrapper d-flex justify-content-between align-items-center">
                 <div class="text-white fw-bold">
                     <i class="bi bi-geo-alt-fill text-warning me-1"></i> MAISON AFRICAINE DE LA BANDE DESSINÉE
@@ -211,15 +234,15 @@
                     
                     {% if user.is_authenticated %}
                         <div class="dropdown user-dropdown">
-                            <a class="dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button class="btn btn-outline-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 {% if user.profil_picture %}
                                     <img src="{{ user.profil_picture.url }}" class="user-avatar-mini">
                                 {% else %}
                                     <i class="bi bi-person-circle fs-5"></i>
                                 {% endif %}
                                 {{ user.username|upper }}
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end">
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end" onclick="event.stopPropagation()">
                                 <li><h6 class="dropdown-header fw-bold text-muted text-uppercase mb-2">Mon Espace</h6></li>
                                 <li><a class="dropdown-item" href="#"><i class="bi bi-person-badge me-2"></i> Mon Profil</a></li>
                                 <li><a class="dropdown-item" href="{% url 'updatepwd' %}"><i class="bi bi-key-fill me-2 text-warning"></i> Mot de passe</a></li>
@@ -243,8 +266,9 @@
                     </a>
 
                     <button class="navbar-toggler border-0 shadow-none" type="button" 
-                            data-bs-toggle="collapse" 
-                            data-bs-target="#mainNav">
+                            aria-controls="mainNav" 
+                            aria-expanded="false" 
+                            aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
 
@@ -264,6 +288,26 @@
                                     <div class="d-grid gap-2">
                                         <a href="{% url 'updatepwd' %}" class="btn btn-warning fw-bold">Changer mot de passe</a>
                                         <a href="{% url 'deconnexion' %}" class="btn btn-danger fw-bold">Déconnexion</a>
+                                    </div>
+                                    <div class="dropdown mt-3">
+                                        <button class="btn btn-outline-light dropdown-toggle w-100" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="event.stopPropagation()">
+                                            {% if user.profil_picture %}
+                                                <img src="{{ user.profil_picture.url }}" class="user-avatar-mini me-2">
+                                            {% else %}
+                                                <i class="bi bi-person-circle me-2"></i>
+                                            {% endif %}
+                                            {{ user.username|upper }}
+                                        </button>
+                                        <ul class="dropdown-menu w-100" onclick="event.stopPropagation()">
+                                            <li><h6 class="dropdown-header fw-bold text-muted text-uppercase mb-2">Mon Espace</h6></li>
+                                            <li><a class="dropdown-item" href="#"><i class="bi bi-person-badge me-2"></i> Mon Profil</a></li>
+                                            {% if user.is_staff %}
+                                            <li><a class="dropdown-item" href="{% url 'admin:index' %}"target="_blank" rel="noopener noreferrer"><i class="bi bi-person-badge me-2"></i> Espace Admin</a></li>
+                                            {% endif %}
+                                            <li><a class="dropdown-item" href="{% url 'updatepwd' %}"><i class="bi bi-key-fill me-2 text-warning"></i> Mot de passe</a></li>
+                                            <li><hr class="dropdown-divider"></li>
+                                            <li><a class="dropdown-item text-danger fw-bold" href="{% url 'deconnexion' %}"><i class="bi bi-power me-2"></i> Déconnexion</a></li>
+                                        </ul>
                                     </div>
                                 {% else %}
                                     <div class="d-grid gap-2">
@@ -366,15 +410,74 @@
     <script>
         AOS.init({ duration: 800, once: true });
         
+        // Gestion MANUELLE du menu mobile
         document.addEventListener('DOMContentLoaded', function() {
+            const navbarToggler = document.querySelector('.navbar-toggler');
             const navbarCollapse = document.getElementById('mainNav');
-            const navLinks = document.querySelectorAll('.nav-link');
-            navLinks.forEach(link => {
+            
+            if (!navbarCollapse || !navbarToggler) {
+                console.error('Menu elements not found');
+                return;
+            }
+
+            console.log('Starting menu setup...');
+
+            // Gestionnaire de toggle manuel
+            function toggleMenu() {
+                console.log('Toggle clicked - current state:', navbarCollapse.classList.contains('show'));
+                navbarCollapse.classList.toggle('show');
+                
+                // Mettre à jour aria-expanded
+                const isExpanded = navbarCollapse.classList.contains('show');
+                navbarToggler.setAttribute('aria-expanded', isExpanded);
+            }
+
+            // Fermer le menu
+            function closeMenu() {
+                if (navbarCollapse.classList.contains('show')) {
+                    console.log('Closing menu');
+                    navbarCollapse.classList.remove('show');
+                    navbarToggler.setAttribute('aria-expanded', 'false');
+                }
+            }
+
+            // Clic sur le hamburger
+            navbarToggler.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleMenu();
+            });
+
+            // Clic sur un lien de navigation
+            document.querySelectorAll('#mainNav .nav-link').forEach(link => {
                 link.addEventListener('click', () => {
-                    const bsCollapse = bootstrap.Collapse.getInstance(navbarCollapse);
-                    if (bsCollapse) { bsCollapse.hide(); }
+                    console.log('Nav link clicked');
+                    closeMenu();
                 });
             });
+
+            // Clic sur les boutons mobiles
+            document.querySelectorAll('#mainNav .btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    console.log('Mobile button clicked');
+                    e.stopPropagation();
+                    closeMenu();
+                });
+            });
+
+            // Clic en dehors du menu
+            document.addEventListener('click', (event) => {
+                const isClickInNav = navbarCollapse.contains(event.target);
+                const isClickOnToggler = navbarToggler.contains(event.target);
+                const isClickInTopBar = event.target.closest('.top-bar');
+                
+                if (!isClickInNav && !isClickOnToggler && !isClickInTopBar && navbarCollapse.classList.contains('show')) {
+                    console.log('Click outside menu');
+                    closeMenu();
+                }
+            });
+
+            console.log('Menu setup complete');
         });
     </script>
 </body>

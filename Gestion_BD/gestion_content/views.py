@@ -848,11 +848,12 @@ def input_editeur(request):
     if not request.user.is_authenticated or request.user.role != 'editeur':
         return redirect('home')
 
-    # 2. Récupération ou Création automatique du profil éditeur
-    try:
-        editeur = request.user.details_editeur
-    except (ObjectDoesNotExist, AttributeError):
-        # On crée le profil avec les vrais noms de ton modèle : 'utilisateur', 'nom' et 'slug'
+    # 2. Récupération du profil éditeur lié à l'utilisateur
+    # On utilise .filter().first() car details_editeur est un Manager (ForeignKey)
+    editeur = request.user.details_editeur.all().first()
+
+    # Si aucun éditeur n'existe encore pour cet utilisateur, on le crée
+    if not editeur:
         nom_par_defaut = f"Édition {request.user.username}"
         editeur = Editeur.objects.create(
             utilisateur=request.user,
@@ -861,25 +862,24 @@ def input_editeur(request):
         )
 
     # 3. Récupération des livres de cet éditeur
+    # On utilise l'objet 'editeur' récupéré juste au-dessus
     mes_livres = Bdtheque.objects.filter(edition=editeur, valide=True).order_by('-date_publication')
 
     # 4. Statistiques
     nb_livres = mes_livres.count()
+    # Correction : assure-toi que le champ dans Auteur est correct (ici supposé livres_principaux)
     auteurs_lies = Auteur.objects.filter(livres_principaux__edition=editeur).distinct()
     nb_auteurs = auteurs_lies.count()
 
     # 5. Données pour les Modals
-    tous_les_auteurs = Auteur.objects.all()
-    tous_les_genres = Genre.objects.all()
-
     context = {
         'editeur': editeur,
         'livres': mes_livres,
         'nb_livres': nb_livres,
         'nb_auteurs': nb_auteurs,
         'auteurs_lies': auteurs_lies,
-        'tous_les_auteurs': tous_les_auteurs,
-        'tous_les_genres': tous_les_genres,
+        'tous_les_auteurs': Auteur.objects.all(),
+        'tous_les_genres': Genre.objects.all(),
     }
     
     return render(request, 'gestion_content/input_editeur.html', context)
