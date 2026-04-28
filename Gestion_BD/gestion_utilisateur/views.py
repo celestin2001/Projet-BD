@@ -17,6 +17,7 @@ from django.core.mail import send_mail,EmailMessage
 import random
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
+from django.db.models import Q, F, Case, When, Value
 
 def Home(request):
    actualite = BlogPost.objects.all()[:2]
@@ -53,14 +54,81 @@ def detail_actualite(request,my_id):
     return render(request,'gestion_utilisateur/detail_actualite.html',{"detail":detail})
 
 def evenements(request):
-    evenements = Evenement.objects.all()
+    from django.utils import timezone
+    from datetime import timedelta
+    
+    # Récupérer les paramètres de recherche et filtres
+    search_query = request.GET.get('q', '')
+    lieu_filter = request.GET.get('lieu', '')
+    status_filter = request.GET.get('status', 'all')  # all, upcoming, past
+    view_type = request.GET.get('view', 'calendar')  # calendar ou list
+    sort_by = request.GET.get('sort', 'closest')  # closest, oldest, alpha
+    
+    # Date actuelle
+    today = timezone.now().date()
+    
+    # Requête de base
+    evenements_queryset = Evenement.objects.all().order_by('date_evenement')
+    
+    # Filtrer par statut (à venir / passé)
+    if status_filter == 'upcoming':
+        evenements_queryset = evenements_queryset.filter(date_evenement__gte=today)
+    elif status_filter == 'past':
+        evenements_queryset = evenements_queryset.filter(date_evenement__lt=today)
+    
+    # Recherche par titre/description
+    if search_query:
+        evenements_queryset = evenements_queryset.filter(
+            Q(titre_evenement__icontains=search_query) |
+            Q(description__icontains=search_query)
+        )
+    
+    # Filtrer par lieu
+    if lieu_filter:
+        evenements_queryset = evenements_queryset.filter(
+            lieu_evenement__icontains=lieu_filter
+        )
+    
+    # Tri
+    if sort_by == 'closest':
+        # Les plus proches d'abord (événements à venir d'abord, puis passés)
+        evenements_queryset = evenements_queryset.annotate(
+            days_diff=Case(
+                When(date_evenement__gte=today, then=F('date_evenement') - Value(today)),
+                default=Value(timedelta(days=999999))
+            )
+        ).order_by('days_diff')
+    elif sort_by == 'oldest':
+        evenements_queryset = evenements_queryset.order_by('date_evenement')
+    elif sort_by == 'alpha':
+        evenements_queryset = evenements_queryset.order_by('titre_evenement')
+    
+    # Séparer les événements à venir et passés
+    upcoming_events = [e for e in evenements_queryset if e.date_evenement >= today]
+    past_events = [e for e in evenements_queryset if e.date_evenement < today]
+    
+    # Tous les lieux uniques pour le filtre
+    all_lieux = Evenement.objects.values_list('lieu_evenement', flat=True).distinct().exclude(lieu_evenement__isnull=True).exclude(lieu_evenement='')
+    
     user_authenticate = request.user.is_authenticated
+    
     context = {
-         'evenements':evenements,
-         'user_authenticate':user_authenticate
+        'evenements': list(evenements_queryset),
+        'upcoming_events': upcoming_events,
+        'past_events': past_events,
+        'all_lieux': all_lieux,
+        'user_authenticate': user_authenticate,
+        'search_query': search_query,
+        'lieu_filter': lieu_filter,
+        'status_filter': status_filter,
+        'view_type': view_type,
+        'sort_by': sort_by,
+        'total_upcoming': len(upcoming_events),
+        'total_past': len(past_events),
+        'today': today,
     }
-    print(evenements)
-    return render(request, 'gestion_utilisateur/evenement.html',context)
+    
+    return render(request, 'gestion_utilisateur/evenement.html', context)
 
 # def evenements_json(request):
 #     evenements = Evenement.objects.all()

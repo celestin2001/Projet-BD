@@ -172,7 +172,7 @@ class Editeur(models.Model):
     
     # RELATION À L'UTILISATEUR (Compte et authentification)
     # OnDelete=CASCADE signifie que si le compte utilisateur est supprimé, l'éditeur l'est aussi.
-    utilisateur = models.ForeignKey(
+    utilisateur = models.OneToOneField(
         settings.AUTH_USER_MODEL, # Fait référence à votre classe Utilisateur(AbstractUser)
         on_delete=models.CASCADE,
         related_name='details_editeur',

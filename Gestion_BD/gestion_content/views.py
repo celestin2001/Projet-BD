@@ -587,6 +587,7 @@ def bdtheque(request):
     auteur_id = request.GET.get('auteur')
     editeur_id = request.GET.get('editeur')
     genre_slug = request.GET.get('genre')
+    sort_by = request.GET.get('sort', 'recent')  # Paramètre de tri avec valeur par défaut
 
     # 3. Application des Filtres
     
@@ -616,8 +617,17 @@ def bdtheque(request):
     if genre_slug:
         queryset = queryset.filter(genres__slug=genre_slug).distinct()
         
-    # Ordonner les résultats (par exemple, du plus récent au plus ancien)
-    queryset = queryset.order_by('-date_publication')
+    # Ordonner les résultats en fonction du paramètre de tri
+    if sort_by == 'titre_asc':
+        queryset = queryset.order_by('titre')
+    elif sort_by == 'titre_desc':
+        queryset = queryset.order_by('-titre')
+    elif sort_by == 'auteur':
+        queryset = queryset.order_by('auteur_principal__utilisateur__last_name')
+    elif sort_by == 'ancien':
+        queryset = queryset.order_by('date_publication')
+    else:  # 'recent' par défaut
+        queryset = queryset.order_by('-date_publication')
     
     # Nombre total de résultats (important pour l'affichage)
     total_results = queryset.count()
@@ -650,6 +660,7 @@ def bdtheque(request):
         'current_auteur': auteur_id if auteur_id is not None else '',
         'current_editeur': editeur_id if editeur_id is not None else '',
         'current_genre': genre_slug if genre_slug is not None else '',
+        'current_sort': sort_by,
         'user_authenticate':request.user.is_authenticated
     }
 

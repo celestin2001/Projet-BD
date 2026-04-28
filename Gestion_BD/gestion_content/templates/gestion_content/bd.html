@@ -99,11 +99,73 @@
 
         /* --- STYLES SPÉCIFIQUES BDTHÈQUE --- */
         .filter-card { border-radius: 8px; }
+        
+        /* Filtre sidebar - masquer sur mobile */
+        .filters-sidebar {
+            transition: all 0.3s ease;
+        }
+        
+        @media (max-width: 991.98px) {
+            .filters-sidebar {
+                display: none;
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100vh;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1050;
+                overflow-y: auto;
+            }
+            
+            .filters-sidebar.show {
+                display: block;
+            }
+            
+            .filter-card {
+                position: fixed;
+                left: 0;
+                top: 0;
+                width: 85%;
+                max-width: 350px;
+                height: 100vh;
+                border-radius: 0;
+                z-index: 1051;
+                overflow-y: auto;
+                margin: 0;
+            }
+            
+            .filters-close-btn {
+                display: block;
+            }
+        }
+        
+        @media (min-width: 992px) {
+            .filters-close-btn {
+                display: none;
+            }
+        }
+        
+        .filters-toggle-btn {
+            display: none;
+        }
+        
+        @media (max-width: 991.98px) {
+            .filters-toggle-btn {
+                display: inline-block;
+                margin-bottom: 1rem;
+            }
+        }
+        
+        /* Amélioration des cartes */
         .bd-card {
             transition: transform 0.3s, box-shadow 0.3s;
             border-radius: 8px;
             overflow: hidden;
             cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
         }
         .bd-card:hover {
             transform: translateY(-5px);
@@ -116,6 +178,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            aspect-ratio: 3/4;
         }
         .bd-cover-img {
             width: 100%;
@@ -125,6 +188,54 @@
         }
         .bd-card:hover .bd-cover-img {
             transform: scale(1.05);
+        }
+        
+        /* Meilleur espacement sur mobile */
+        @media (max-width: 575.98px) {
+            .row-cols-1 {
+                --bs-columns: 1;
+            }
+            
+            .row.row-cols-1 > .col {
+                flex: 0 0 auto;
+                width: 100%;
+            }
+            
+            .g-4 {
+                --bs-gutter-y: 1.5rem;
+                --bs-gutter-x: 1rem;
+            }
+        }
+        
+        @media (min-width: 576px) and (max-width: 767.98px) {
+            .row.row-cols-sm-2 > .col {
+                flex: 0 0 auto;
+                width: 50%;
+            }
+        }
+        
+        .sort-and-results {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .sort-selector {
+            min-width: 200px;
+        }
+        
+        @media (max-width: 767.98px) {
+            .sort-and-results {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .sort-selector {
+                min-width: auto;
+            }
         }
     </style>
 </head>
@@ -143,20 +254,33 @@
                     Explorez le catalogue complet des bandes dessinées d'auteurs et d'éditeurs africains.
                 </p>
             </div>
-        </div> 
+        </div>
 
         <div class="row">
             
+            {# --- BOUTON TOGGLE FILTRES (Mobile uniquement) --- #}
+            <div class="col-12 d-lg-none mb-3">
+                <button class="btn btn-primary filters-toggle-btn w-100" id="filtersToggle">
+                    <i class="fas fa-filter me-2"></i>Afficher les filtres
+                </button>
+            </div>
+            
+            {# --- BACKDROP POUR FERMER LES FILTRES --- #}
+            <div class="filters-sidebar" id="filtersSidebar"></div>
+            
             {# --- COLONNE FILTRES (Dynamique) --- #}
-            <div class="col-lg-3 mb-4">
+            <div class="col-lg-3 mb-4 filters-sidebar" id="filtersPanel">
                 <div class="card shadow-sm border-0 filter-card">
                     <div class="card-body">
-                        <h5 class="card-title fw-bold border-bottom pb-2 mb-3 text-primary">
-                            <i class="fas fa-filter me-2"></i>Filtrer
-                        </h5>
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="card-title fw-bold border-bottom pb-2 mb-0 text-primary flex-grow-1">
+                                <i class="fas fa-filter me-2"></i>Filtrer
+                            </h5>
+                            <button type="button" class="btn-close filters-close-btn" id="filtersClose"></button>
+                        </div>
 
                         {# Le formulaire pointe vers l'URL nommée 'bdtheque' #}
-                        <form method="GET" action="{% url 'bdtheque' %}"> 
+                        <form method="GET" action="{% url 'bdtheque' %}" id="filterForm"> 
                             
                             <div class="mb-3">
                                 <label for="search_query" class="form-label fw-bold">Recherche rapide</label>
@@ -219,7 +343,30 @@
             {# --- COLONNE RÉSULTATS (Dynamique) --- #}
             <div class="col-lg-9">
                 
-                <h4 class="mb-4 fw-bold">Résultats trouvés : <span class="text-primary fw-bolder">{{ total_results }} BD</span></h4>
+                <div class="sort-and-results">
+                    <div>
+                        <h4 class="mb-0 fw-bold">
+                            Résultats : <span class="text-primary fw-bolder">{{ total_results }} BD</span>
+                        </h4>
+                    </div>
+                    <div class="sort-selector">
+                        <form method="GET" action="{% url 'bdtheque' %}" id="sortForm" class="d-flex gap-2">
+                            {# Conserver les autres paramètres #}
+                            {% if current_q %}<input type="hidden" name="q" value="{{ current_q }}">{% endif %}
+                            {% if current_auteur %}<input type="hidden" name="auteur" value="{{ current_auteur }}">{% endif %}
+                            {% if current_editeur %}<input type="hidden" name="editeur" value="{{ current_editeur }}">{% endif %}
+                            {% if current_genre %}<input type="hidden" name="genre" value="{{ current_genre }}">{% endif %}
+                            
+                            <select name="sort" id="sortSelect" class="form-select" onchange="document.getElementById('sortForm').submit()">
+                                <option value="recent" {% if current_sort == 'recent' %}selected{% endif %}>Plus récent</option>
+                                <option value="ancien" {% if current_sort == 'ancien' %}selected{% endif %}>Plus ancien</option>
+                                <option value="titre_asc" {% if current_sort == 'titre_asc' %}selected{% endif %}>Titre A-Z</option>
+                                <option value="titre_desc" {% if current_sort == 'titre_desc' %}selected{% endif %}>Titre Z-A</option>
+                                <option value="auteur" {% if current_sort == 'auteur' %}selected{% endif %}>Auteur</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
 
                 <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
                     
@@ -286,20 +433,16 @@
                 {# --- PAGINATION (Logique de pagination propre aux fonctions de vue) --- #}
                 {% if livres.has_other_pages %}
                 <div class="d-flex justify-content-center mt-5">
-                    <nav aria-label="Page navigation example">
+                    <nav aria-label="Page navigation">
                         <ul class="pagination">
                             
-                            {# URL de base sans paramètres de pagination #}
+                            {# Construire les paramètres de query #}
                             {% url 'bdtheque' as bdtheque_url %}
                             
                             {# Bouton Précédent #}
                             <li class="page-item {% if not livres.has_previous %}disabled{% endif %}">
                                 <a class="page-link" 
-                                   href="{% if livres.has_previous %}
-                                           {{ bdtheque_url }}?page={{ livres.previous_page_number }}&{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}
-                                         {% else %}
-                                           #
-                                         {% endif %}">
+                                   href="{% if livres.has_previous %}{{ bdtheque_url }}?page={{ livres.previous_page_number }}{% if current_q %}&q={{ current_q }}{% endif %}{% if current_auteur %}&auteur={{ current_auteur }}{% endif %}{% if current_editeur %}&editeur={{ current_editeur }}{% endif %}{% if current_genre %}&genre={{ current_genre }}{% endif %}{% if current_sort != 'recent' %}&sort={{ current_sort }}{% endif %}{% else %}#{% endif %}">
                                     Précédent
                                 </a>
                             </li>
@@ -311,7 +454,7 @@
                                 {% elif i > livres.number|add:'-3' and i < livres.number|add:'3' %}
                                     <li class="page-item">
                                         <a class="page-link" 
-                                           href="{{ bdtheque_url }}?page={{ i }}&{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}">
+                                           href="{{ bdtheque_url }}?page={{ i }}{% if current_q %}&q={{ current_q }}{% endif %}{% if current_auteur %}&auteur={{ current_auteur }}{% endif %}{% if current_editeur %}&editeur={{ current_editeur }}{% endif %}{% if current_genre %}&genre={{ current_genre }}{% endif %}{% if current_sort != 'recent' %}&sort={{ current_sort }}{% endif %}">
                                            {{ i }}
                                         </a>
                                     </li>
@@ -321,11 +464,7 @@
                             {# Bouton Suivant #}
                             <li class="page-item {% if not livres.has_next %}disabled{% endif %}">
                                 <a class="page-link" 
-                                   href="{% if livres.has_next %}
-                                           {{ bdtheque_url }}?page={{ livres.next_page_number }}&{% for key, value in request.GET.items %}{% if key != 'page' %}{{ key }}={{ value }}&{% endif %}{% endfor %}
-                                         {% else %}
-                                           #
-                                         {% endif %}">
+                                   href="{% if livres.has_next %}{{ bdtheque_url }}?page={{ livres.next_page_number }}{% if current_q %}&q={{ current_q }}{% endif %}{% if current_auteur %}&auteur={{ current_auteur }}{% endif %}{% if current_editeur %}&editeur={{ current_editeur }}{% endif %}{% if current_genre %}&genre={{ current_genre }}{% endif %}{% if current_sort != 'recent' %}&sort={{ current_sort }}{% endif %}{% else %}#{% endif %}">
                                     Suivant
                                 </a>
                             </li>
@@ -345,6 +484,50 @@
     <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/js/aos.js"></script>
     <script>
         AOS.init();
+        
+        // Gestion des filtres sur mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const filtersToggle = document.getElementById('filtersToggle');
+            const filtersPanel = document.getElementById('filtersPanel');
+            const filtersSidebar = document.getElementById('filtersSidebar');
+            const filtersClose = document.getElementById('filtersClose');
+            
+            if (filtersToggle && filtersPanel) {
+                // Ouvrir les filtres
+                filtersToggle.addEventListener('click', function() {
+                    filtersPanel.classList.add('show');
+                    filtersSidebar.classList.add('show');
+                });
+                
+                // Fermer les filtres
+                if (filtersClose) {
+                    filtersClose.addEventListener('click', function() {
+                        filtersPanel.classList.remove('show');
+                        filtersSidebar.classList.remove('show');
+                    });
+                }
+                
+                // Fermer les filtres en cliquant sur le backdrop
+                filtersSidebar.addEventListener('click', function() {
+                    filtersPanel.classList.remove('show');
+                    filtersSidebar.classList.remove('show');
+                });
+                
+                // Empêcher la propagation du clic sur le panel de filtres lui-même
+                filtersPanel.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+                
+                // Fermer les filtres après soumission du formulaire (optionnel)
+                const filterForm = document.getElementById('filterForm');
+                if (filterForm) {
+                    filterForm.addEventListener('submit', function() {
+                        filtersPanel.classList.remove('show');
+                        filtersSidebar.classList.remove('show');
+                    });
+                }
+            }
+        });
     </script>
 </body>
 </html>
