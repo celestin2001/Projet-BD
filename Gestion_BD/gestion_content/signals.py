@@ -73,7 +73,7 @@ def delete_work_from_bdtheque(sender, instance, **kwargs):
 @receiver(post_save, sender=Utilisateur)
 def sync_utilisateur_to_auteur(sender, instance, created, **kwargs):
     # SI l'utilisateur a le rôle 'auteur' ET qu'il est coché 'valid' par l'admin
-    if instance.role == 'auteur' and instance.valid:
+    if instance.is_auteur and instance.valid:
         # On crée son profil Auteur (get_or_create évite de créer des doublons)
         Auteur.objects.get_or_create(utilisateur=instance)
         print(f"Profil Auteur créé/vérifié pour {instance.username}")

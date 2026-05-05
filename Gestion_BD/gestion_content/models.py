@@ -176,7 +176,7 @@ class Editeur(models.Model):
         settings.AUTH_USER_MODEL, # Fait référence à votre classe Utilisateur(AbstractUser)
         on_delete=models.CASCADE,
         related_name='details_editeur',
-        limit_choices_to={'role': 'editeur'}, # Limite la sélection aux utilisateurs ayant le rôle 'editeur'
+        limit_choices_to={'is_editeur': True}, # Limite la sélection aux utilisateurs ayant le rôle 'editeur'
         verbose_name="Compte Utilisateur de l'Éditeur"
     )
     
@@ -321,7 +321,7 @@ class Auteur(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='details_auteur',
-        limit_choices_to={'role': 'auteur'},
+        limit_choices_to={'is_auteur': True},
         verbose_name="Compte Utilisateur de l'Auteur"
     )
     

@@ -81,6 +81,15 @@
             border-bottom: 2px solid var(--grey-border); 
         }
 
+        {% if limit_reached %}
+        .blur-content {
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.6;
+        }
+        {% endif %}
+
         /* Style spécifique pour le logo */
         .logo-card {
             border-radius: 50%;
@@ -188,10 +197,12 @@
     </style>
 </head>
 <body>
+
+
     
    {% include "gestion_content/header.html" %}
 
-    <main>
+    <main class="{% if limit_reached %}blur-content{% endif %}">
         <div class="detail-header-editor">
             <div class="container text-center">
                 <div class="logo-card">
@@ -304,7 +315,11 @@
                                             {% endif %}
                                         </div>
                                         <span class="book-title" title="{{ livre.titre }}">{{ livre.titre }}</span>
-                                        <span class="book-author">{{ livre.auteur_principal.utilisateur.get_full_name|default:livre.auteur_principal.utilisateur.username }}</span>
+                                        {% if livre.auteur_principal %}
+                                            <span class="book-author">{{ livre.auteur_principal.utilisateur.get_full_name|default:livre.auteur_principal.utilisateur.username }}</span>
+                                        {% else %}
+                                            <span class="book-author text-muted">Auteur inconnu</span>
+                                        {% endif %}
                                     </a>
                                 {% endfor %}
                             </div>
@@ -390,5 +405,36 @@
    {% include "gestion_content/footer.html" %}
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% if limit_reached %}
+    <!-- Limit Reached Modal -->
+    <div class="modal fade" id="limitReachedModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="limitReachedModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white border-0">
+                    <h5 class="modal-title mx-auto" id="limitReachedModalLabel"><i class="bi bi-lock-fill me-2"></i>Limite de visites atteinte</h5>
+                </div>
+                <div class="modal-body text-center p-4">
+                    <h4 class="mt-2 fw-bold text-dark">Vous aimez ce que vous voyez ?</h4>
+                    <p class="mt-3 text-muted">Vous avez atteint votre limite de <strong>2 profils consultés</strong> ce mois-ci.</p>
+                    <p class="text-muted">Notre plan d'abonnement pour un accès illimité sera bientôt disponible !</p>
+                    <div class="d-grid gap-3 mt-4">
+                        <a href="{% url 'home' %}" class="btn btn-primary btn-lg rounded-pill shadow-sm">Retour à l'accueil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        var myModal = new bootstrap.Modal(document.getElementById('limitReachedModal'), {
+            backdrop: 'static',
+            keyboard: false
+        });
+        myModal.show();
+    });
+    </script>
+    {% endif %}
 </body>
 </html>

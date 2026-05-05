@@ -241,14 +241,27 @@
                     </div>
                 
                 <div class="mb-3">
-                    <label for="role" class="form-label">Rôle</label>
-                    <select class="form-select" id="role" name="role" required>
-                        <option value="" selected disabled>S'inscrire en tant que</option>
-                        {% for valeur, labele in role %}
-                        <option value="{{ valeur }}">{{ labele }}</option>
-                        {% endfor %}
-                    </select>
-                    <div class="invalid-feedback">Veuillez sélectionner un rôle.</div>
+                    <label class="form-label">Rôles (cochez les rôles souhaités)</label>
+                    <div class="form-check">
+                        <input class="form-check-input role-checkbox" type="checkbox" name="is_auteur" id="role_auteur">
+                        <label class="form-check-label" for="role_auteur">Auteur</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input role-checkbox" type="checkbox" name="is_editeur" id="role_editeur">
+                        <label class="form-check-label" for="role_editeur">Éditeur</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input role-checkbox" type="checkbox" name="is_libraire" id="role_libraire">
+                        <label class="form-check-label" for="role_libraire">Libraire</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input role-checkbox" type="checkbox" name="is_organisateur" id="role_organisateur">
+                        <label class="form-check-label" for="role_organisateur">Organisateur d'Évènement</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input role-checkbox" type="checkbox" name="is_autre" id="role_autre">
+                        <label class="form-check-label" for="role_autre">Autre</label>
+                    </div>
                 </div>
 
                 <div class="mb-3">
@@ -294,7 +307,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
 
     <script>
-        var roleSelect = document.getElementById("role");
+        var roleAuteurCheckbox = document.getElementById("role_auteur");
         var auteurSection = document.querySelector(".section_auteur");
         var nationaliteSelect = document.getElementById("nationalite");
         var bioTextarea = document.getElementById("bio");
@@ -312,7 +325,7 @@
 
         // Fonction pour gérer la visibilité et la validation des champs auteur
         function toggleAuteurFields() {
-            if (roleSelect.value === "auteur") {
+            if (roleAuteurCheckbox.checked) {
                 auteurSection.style.display = "block";
                 nationaliteSelect.setAttribute("required", "true");
                 bioTextarea.setAttribute("required", "true");
@@ -355,7 +368,10 @@
         });
 
         // Écouteur d'événement pour le changement de rôle
-        roleSelect.addEventListener("change", toggleAuteurFields);
+        var checkboxes = document.querySelectorAll('.role-checkbox');
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', toggleAuteurFields);
+        });
 
         // Appeler la fonction au chargement de la page pour gérer l'état initial
         document.addEventListener('DOMContentLoaded', toggleAuteurFields);
@@ -368,7 +384,7 @@
             Array.prototype.slice.call(forms).forEach(function (form) {
                 form.addEventListener('submit', function (event) {
                     // Ciblez spécifiquement les champs "required" dans la section auteur si elle est visible
-                    if (roleSelect.value === "auteur") {
+                    if (roleAuteurCheckbox.checked) {
                         // Vérifiez explicitement si les champs de la section auteur sont valides
                         const auteurRequiredFields = [
                             nationaliteSelect,

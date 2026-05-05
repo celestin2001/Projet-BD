@@ -277,6 +277,14 @@
         .fa-linkedin-in { color: #0a66c2; }
         .fa-globe { color: #6c757d; }
         /* -------------------------------------------------------------------------------- */
+        {% if limit_reached %}
+        .blur-content {
+            filter: blur(8px);
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.6;
+        }
+        {% endif %}
     </style>
 </head>
 <body>
@@ -284,7 +292,7 @@
     {% include "gestion_content/header.html" %}
 
 
-    <main class="flex-shrink-0">
+    <main class="flex-shrink-0 {% if limit_reached %}blur-content{% endif %}">
         <div class="container mt-5">
             <div class="section-green">
                 <div class="profile-card mx-auto p-4">
@@ -300,7 +308,12 @@
                         </div>
                         <div class="col-md-8">
                             <div class="mb-2 icon-text">
-                                <i class="bi bi-person-circle"></i> <span>Rôle : {{auteur.role|default:"Non spécifié"}}</span>
+                                <i class="bi bi-person-circle"></i> <span>Rôle : 
+                                {% if auteur.is_auteur and auteur.is_editeur %}Auteur & Éditeur
+                                {% elif auteur.is_auteur %}Auteur
+                                {% elif auteur.is_editeur %}Éditeur
+                                {% else %}Non spécifié{% endif %}
+                                </span>
                             </div>
                             <div class="mb-2 icon-text">
                                 <i class="bi bi-flag-fill"></i> <span>Pays : {{auteur.get_pays_display|default:"Non spécifié"}}</span>
@@ -363,7 +376,7 @@
                 {% if request.user.is_authenticated and request.user == auteur %}
 
                     {# BLOC : Ajouter une œuvre #}
-                    {% if request.user.role == "auteur" %}
+                    {% if request.user.is_auteur %}
                     <div class="text-end mb-3">
                         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ajouterOeuvreModal">
                             <i class="bi bi-plus-circle me-2"></i> Ajouter une œuvre
@@ -504,10 +517,10 @@
                     </div>
                     
 
-                    {% if auteur.role == 'auteur' %}
+                    {% if auteur.is_auteur %}
     <h5 class="fw-bold section-title mt-4">Œuvres publiées</h5>
     <div class="row g-4 mt-3">
-        {% for oeuvre in auteur_oeuvre %}
+        {% for oeuvre in auteur_oeuvres %}
             {% if oeuvre.valid %}
             <div class="col-lg-4 col-md-6">
                 <a href="{% url 'auteur_galerie_oeuvres' username=oeuvre.author.username %}" style="text-decoration: none; color: inherit;">
@@ -527,12 +540,14 @@
             </div>
         {% endfor %}
     </div>
-{% else %}
+    {% endif %}
+
+    {% if auteur.is_editeur %}
     <h5 class="fw-bold section-title mt-4">Éditions publiées</h5>
     <div class="row g-4 mt-3">
-        {% for edition in auteur_oeuvre %}
+        {% for edition in editeur_editions %}
         <div class="col-lg-4 col-md-6">
-            <a href="{% url 'editeur_detail' id=edition.id %}" style="text-decoration: none; color: inherit;">
+            <a href="{% url 'editeur_detail' id=edition.edition.id %}" style="text-decoration: none; color: inherit;">
                 <div class="bibliographie-card">
                     {% if edition.couverture %}
                         <img src="{{ edition.couverture.url }}" alt="{{ edition.titre }} Cover"> 
@@ -550,7 +565,7 @@
             </div>
         {% endfor %}
     </div>
-{% endif %}
+    {% endif %}
 </div> 
  </div>
  </main>
@@ -561,6 +576,39 @@
 <script>
  AOS.init({
  // Paramètres par défaut de AOS (optionnel)
- });</script>
+ });
+</script>
+
+{% if limit_reached %}
+<!-- Limit Reached Modal -->
+<div class="modal fade" id="limitReachedModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="limitReachedModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white border-0">
+                <h5 class="modal-title mx-auto" id="limitReachedModalLabel"><i class="bi bi-lock-fill me-2"></i>Limite de visites atteinte</h5>
+            </div>
+            <div class="modal-body text-center p-4">
+                <h4 class="mt-2 fw-bold text-dark">Vous aimez ce que vous voyez ?</h4>
+                <p class="mt-3 text-muted">Vous avez atteint votre limite de <strong>2 profils consultés</strong> ce mois-ci.</p>
+                <p class="text-muted">Notre plan d'abonnement pour un accès illimité sera bientôt disponible !</p>
+                <div class="d-grid gap-3 mt-4">
+                    <a href="{% url 'home' %}" class="btn btn-primary btn-lg rounded-pill shadow-sm">Retour à l'accueil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    var myModal = new bootstrap.Modal(document.getElementById('limitReachedModal'), {
+        backdrop: 'static',
+        keyboard: false
+    });
+    myModal.show();
+});
+</script>
+{% endif %}
+
 </body>
 </html>

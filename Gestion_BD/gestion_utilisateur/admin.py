@@ -16,7 +16,11 @@ class CustomUserCreationForm(UserCreationForm):
             "email",
             "first_name",
             "last_name",
-            "role",
+            "is_auteur",
+            "is_editeur",
+            "is_libraire",
+            "is_organisateur",
+            "is_autre",
             "bio",
             "profil_picture",
             "pays",
@@ -38,7 +42,11 @@ class CustomUserChangeForm(UserChangeForm):
             "email",
             "first_name",
             "last_name",
-            "role",
+            "is_auteur",
+            "is_editeur",
+            "is_libraire",
+            "is_organisateur",
+            "is_autre",
             "bio",
             "profil_picture",
             "pays",
@@ -59,7 +67,7 @@ class UtilisateurAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = Utilisateur
 
-    list_display = ("username", "email", "first_name", "last_name", "role", "is_staff")
+    list_display = ("username", "email", "first_name", "last_name", "is_auteur", "is_editeur", "is_staff")
     search_fields = ("username", "email", "first_name", "last_name")
     ordering = ("username",)
 
@@ -76,7 +84,11 @@ class UtilisateurAdmin(UserAdmin):
 
         ("Informations supplémentaires", {
             "fields": (
-                "role",
+                "is_auteur",
+                "is_editeur",
+                "is_libraire",
+                "is_organisateur",
+                "is_autre",
                 "bio",
                 "profil_picture",
                 "pays",
@@ -101,7 +113,11 @@ class UtilisateurAdmin(UserAdmin):
         }),
         ("Informations supplémentaires", {
             "fields": (
-                "role",
+                "is_auteur",
+                "is_editeur",
+                "is_libraire",
+                "is_organisateur",
+                "is_autre",
                 "bio",
                 "profil_picture",
                 "pays",
@@ -114,12 +130,37 @@ class UtilisateurAdmin(UserAdmin):
     )
 
 
+from django import forms
+from django.forms.widgets import TextInput
+
+class ColorInput(TextInput):
+    input_type = 'color'
+
+from colorfield.fields import ColorField
+
+class EvenementAdminForm(forms.ModelForm):
+    couleur_evenement = forms.CharField(
+        widget=forms.TextInput(attrs={'type': 'color', 'style': 'height: 40px; width: 60px; padding: 0; cursor: pointer;'}),
+        required=False,
+        label="Couleur de l'événement"
+    )
+    class Meta:
+        model = Evenement
+        fields = '__all__'
+
 # ==========================
 # ADMIN EVENEMENT
 # ==========================
 class EvenementList(admin.ModelAdmin):
-    list_display = ['titre_evenement', 'date_evenement', 'date_fin_evenement', 'couleur_evenement']
+    form = EvenementAdminForm
+    formfield_overrides = {
+        ColorField: {'widget': forms.TextInput(attrs={'type': 'color', 'style': 'height: 40px; width: 60px; padding: 0; cursor: pointer;'})},
+    }
+    list_display = ['titre_evenement', 'date_evenement', 'date_fin_evenement', 'organisateur', 'valide', 'couleur_evenement']
+    list_filter = ['valide', 'date_evenement', 'organisateur']
     fields = (
+        'valide',
+        'organisateur',
         'titre_evenement',
         'description',
         'image',
@@ -129,6 +170,11 @@ class EvenementList(admin.ModelAdmin):
         'heure_evenement',
         'lieu_evenement'
     )
+
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == 'couleur_evenement':
+            kwargs['widget'] = forms.TextInput(attrs={'type': 'color', 'style': 'height: 40px; width: 60px; padding: 0; cursor: pointer;'})
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 
 # ==========================

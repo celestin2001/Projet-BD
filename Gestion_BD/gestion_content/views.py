@@ -15,20 +15,46 @@ from django.template.loader import render_to_string
 from django.db.models import Q, Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.core.exceptions import ObjectDoesNotExist
+from datetime import datetime
+
+def check_profile_limit(request, profile_id):
+    """
+    Vérifie si un visiteur a dépassé sa limite de 2 profils par mois.
+    Retourne True si la limite est atteinte, False sinon.
+    """
+    if request.user.is_authenticated and (request.user.is_superuser or request.user.is_staff):
+        return False
+        
+    current_month = datetime.now().strftime('%Y-%m')
+    session_data = request.session.get('profile_views', {})
+    
+    if session_data.get('month') != current_month:
+        session_data = {'month': current_month, 'viewed_ids': []}
+        
+    viewed_ids = session_data.get('viewed_ids', [])
+    
+    if profile_id not in viewed_ids:
+        if len(viewed_ids) >= 2:
+            return True
+        viewed_ids.append(profile_id)
+        session_data['viewed_ids'] = viewed_ids
+        request.session['profile_views'] = session_data
+        
+    return False
 
 def auteur(request):
     User = get_user_model()
 
-    auteurs_vedettes_principaux = User.objects.filter(role="auteur", vedette=True, valid=True)[:6]
+    auteurs_vedettes_principaux = User.objects.filter(is_auteur=True, vedette=True, valid=True)[:6]
     vedettes_ids = [auteur.id for auteur in auteurs_vedettes_principaux]
 
-    auteurs_par_pays = User.objects.filter(role="auteur", valid=True).exclude(id__in=vedettes_ids).values('pays').annotate(count=Count('id')).order_by('pays')
+    auteurs_par_pays = User.objects.filter(is_auteur=True, valid=True).exclude(id__in=vedettes_ids).values('pays').annotate(count=Count('id')).order_by('pays')
     auteurs_par_pays_list = []
     for pays_data in auteurs_par_pays:
-        auteurs_du_pays = User.objects.filter(role="auteur", pays=pays_data['pays'], valid=True).exclude(id__in=vedettes_ids).order_by('?')[:2]
+        auteurs_du_pays = User.objects.filter(is_auteur=True, pays=pays_data['pays'], valid=True).exclude(id__in=vedettes_ids).order_by('?')[:2]
         auteurs_par_pays_list.extend(auteurs_du_pays)
 
-    tous_les_auteurs = User.objects.filter(role="auteur", valid=True)
+    tous_les_auteurs = User.objects.filter(is_auteur=True, valid=True)
     # .exclude(id__in=vedettes_ids)
     exclude_vedettes = request.GET.get('exclude_vedettes')
     if exclude_vedettes == 'true':
@@ -78,6 +104,9 @@ def detail_auteur_editeur(request, auteur_id):
     influence_choice = Work.choix_influence
     editeurs_list = Editeur.objects.all().order_by('nom')
 
+    # Vérification de la limite pour les visiteurs non connectés
+    limit_reached = check_profile_limit(request, f"auteur_{auteur_id}")
+
     # Infos sur l'utilisateur connecté
     user_authenticate = request.user.is_authenticated
     try:
@@ -90,10 +119,11 @@ def detail_auteur_editeur(request, auteur_id):
 
     # Initialisation des variables
     editeur = None
-    auteur_oeuvre = []
+    editeur_editions = []
+    auteur_oeuvres = []
 
     # Si c'est un éditeur, récupérer ou créer son profil Editeur
-    if auteur.role == "editeur":
+    if auteur.is_editeur:
         editeur, created = Editeur.objects.get_or_create(
             utilisateur=auteur,
             defaults={
@@ -102,12 +132,12 @@ def detail_auteur_editeur(request, auteur_id):
             }
         )
         # Récupérer les éditions publiées par cet éditeur
-        auteur_oeuvre = Bdtheque.objects.filter(edition=editeur)
+        editeur_editions = Bdtheque.objects.filter(edition=editeur)
     
     # Si c'est un auteur, récupérer ses œuvres Work
-    elif auteur.role == "auteur":
+    if auteur.is_auteur:
         oeuvres = Work.objects.filter(author=auteur).annotate(moyenne_note=Avg('notation__rating'))
-        auteur_oeuvre = oeuvres[:2]
+        auteur_oeuvres = oeuvres[:2]
 
     # Toutes les œuvres de l'auteur pour calcul des notes
     oeuvres = Work.objects.filter(author=auteur).annotate(moyenne_note=Avg('notation__rating'))
@@ -178,10 +208,13 @@ def detail_auteur_editeur(request, auteur_id):
         'auteur': auteur,
         'editeur': editeur,
         'oeuvres': oeuvres,
-        'auteur_oeuvre': auteur_oeuvre,
+        'auteur_oeuvre': auteur_oeuvres, # Keep for backward compatibility or change template to use auteur_oeuvres
+        'auteur_oeuvres': auteur_oeuvres,
+        'editeur_editions': editeur_editions,
         'notations': notations,
         'liens_sociaux': liens_sociaux,
         'user_authenticate': user_authenticate,
+        'limit_reached': limit_reached,
         'profil': profil,
         'user': request.user,
         'reseau_choice': Social_link.lien,
@@ -204,7 +237,7 @@ def actualite(request):
     return render(request,'gestion_content/actualite.html',{'actualite':actualite})
 
 def text_affichage(request):
-    auteurs = Utilisateur.objects.all().filter(role="auteur")
+    auteurs = Utilisateur.objects.all().filter(is_auteur=True)
 
     # Récupérer les filtres sélectionnés
     genres = request.GET.getlist('genre')  # Liste des genres sélectionnés
@@ -515,6 +548,9 @@ def editeur_detail_view(request, id): # J'utilise 'id' car c'est ce que vous ave
     # 1. Récupérer l'objet Editeur (via son ID comme dans votre code)
     editeur = get_object_or_404(Editeur, id=id)
 
+    # Vérification de la limite pour les visiteurs non connectés
+    limit_reached = check_profile_limit(request, f"editeur_{id}")
+
     # 2. Préparation des données complexes (Logique de la vue)
     
     # A. Catalogue de livres
@@ -564,6 +600,7 @@ def editeur_detail_view(request, id): # J'utilise 'id' car c'est ce que vous ave
         'auteurs_editeur':auteurs_editeur,
         'livres_publies':livres_publies,
         'tous_livres_count':tous_livres_count,
+        'limit_reached': limit_reached,
         'user_authenticate':request.user.is_authenticated
     }
 
@@ -770,16 +807,16 @@ def bdtheque(request):
 def editeur(request):
     User = get_user_model()
 
-    editeurs_vedettes_principaux = User.objects.filter(role="editeur", vedette=True, valid=True)[:6]
+    editeurs_vedettes_principaux = User.objects.filter(is_editeur=True, vedette=True, valid=True)[:6]
     vedettes_ids = [editeur.id for editeur in editeurs_vedettes_principaux]
 
-    editeurs_par_pays = User.objects.filter(role="editeur", valid=True).exclude(id__in=vedettes_ids).values('pays').annotate(count=Count('id')).order_by('pays')
+    editeurs_par_pays = User.objects.filter(is_editeur=True, valid=True).exclude(id__in=vedettes_ids).values('pays').annotate(count=Count('id')).order_by('pays')
     editeurs_par_pays_list = []
     for pays_data in editeurs_par_pays:
-        editeurs_du_pays = User.objects.filter(role="editeur", pays=pays_data['pays'], valid=True).exclude(id__in=vedettes_ids).order_by('?')[:2]
+        editeurs_du_pays = User.objects.filter(is_editeur=True, pays=pays_data['pays'], valid=True).exclude(id__in=vedettes_ids).order_by('?')[:2]
         editeurs_par_pays_list.extend(editeurs_du_pays)
 
-    tous_les_editeurs = User.objects.filter(role="editeur", valid=True)
+    tous_les_editeurs = User.objects.filter(is_editeur=True, valid=True)
     # .exclude(id__in=vedettes_ids)
     exclude_vedettes = request.GET.get('exclude_vedettes')
     if exclude_vedettes == 'true':
@@ -856,7 +893,7 @@ from .models import Bdtheque, Editeur, Auteur, Genre
 
 def input_editeur(request):
     # 1. Vérification du rôle
-    if not request.user.is_authenticated or request.user.role != 'editeur':
+    if not request.user.is_authenticated or not request.user.is_editeur:
         return redirect('home')
 
     # 2. Récupération du profil éditeur lié à l'utilisateur

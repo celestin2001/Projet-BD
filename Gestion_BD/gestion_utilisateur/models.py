@@ -1,19 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.conf import settings
 
 
 class Utilisateur(AbstractUser):
-    Role_choice = [
-        ('auteur','auteur'),
-        ('editeur','editeur'),
-        ('libraire','libraire'),
-        ('organisateur_Evènement','organisateur_Evènement'),  
-        ('autre','autre'),
-       
-        
-    ]
-  
-    
+    is_auteur = models.BooleanField(default=False)
+    is_editeur = models.BooleanField(default=False)
+    is_libraire = models.BooleanField(default=False)
+    is_organisateur = models.BooleanField(default=False, verbose_name="Organisateur d'Évènement")
+    is_autre = models.BooleanField(default=False)
+
     PAYS_AFRICAINS = [
         ("dz", "Algérie"), ("ao", "Angola"), ("bj", "Bénin"), ("bw", "Botswana"),
         ("bf", "Burkina Faso"), ("bi", "Burundi"), ("cm", "Cameroun"),
@@ -32,9 +28,6 @@ class Utilisateur(AbstractUser):
         ("sd", "Soudan"), ("tz", "Tanzanie"), ("tg", "Togo"), ("tn", "Tunisie"),
         ("ug", "Ouganda"), ("zm", "Zambie"), ("zw", "Zimbabwe")
     ]
-
-
-    role = models.CharField(max_length=120, choices=Role_choice,default='auteur')
    
     bio = models.TextField(blank=True,null=True)
     email = models.EmailField(unique=True)
@@ -119,6 +112,14 @@ class Evenement(models.Model):
     couleur_evenement = ColorField(
         default='#007bff', 
         verbose_name="Couleur de l'événement"
+    )
+    valide = models.BooleanField(default=False, verbose_name="Approuvé par l'admin")
+    organisateur = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        on_delete=models.SET_NULL, 
+        null=True, 
+        blank=True,
+        verbose_name="Organisateur"
     )
 
 class ParticipationEvenement(models.Model):

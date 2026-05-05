@@ -68,7 +68,7 @@ def evenements(request):
     today = timezone.now().date()
     
     # Requête de base
-    evenements_queryset = Evenement.objects.all().order_by('date_evenement')
+    evenements_queryset = Evenement.objects.filter(valide=True).order_by('date_evenement')
     
     # Filtrer par statut (à venir / passé)
     if status_filter == 'upcoming':
@@ -108,7 +108,7 @@ def evenements(request):
     past_events = [e for e in evenements_queryset if e.date_evenement < today]
     
     # Tous les lieux uniques pour le filtre
-    all_lieux = Evenement.objects.values_list('lieu_evenement', flat=True).distinct().exclude(lieu_evenement__isnull=True).exclude(lieu_evenement='')
+    all_lieux = Evenement.objects.filter(valide=True).values_list('lieu_evenement', flat=True).distinct().exclude(lieu_evenement__isnull=True).exclude(lieu_evenement='')
     
     user_authenticate = request.user.is_authenticated
     
@@ -158,7 +158,7 @@ def signup(request):
     erreur = ""
     genrese = Genre.objects.all()
     pays = Utilisateur.PAYS_AFRICAINS
-    role_choix = Utilisateur.Role_choice
+
     if request.method == 'POST':
         username = request.POST.get('username')
         email = request.POST.get('email')
@@ -171,7 +171,11 @@ def signup(request):
         profil_picture = request.FILES.get('profile_pic')
         telephone = request.POST.get('telephone')
         pays = request.POST.get('nationalite')
-        role = request.POST.get('role')
+        is_auteur = request.POST.get('is_auteur') == 'on'
+        is_editeur = request.POST.get('is_editeur') == 'on'
+        is_libraire = request.POST.get('is_libraire') == 'on'
+        is_organisateur = request.POST.get('is_organisateur') == 'on'
+        is_autre = request.POST.get('is_autre') == 'on'
         # genre = request.POST.getlist('genre')
         user_exist = Utilisateur.objects.filter(username=username)
         if user_exist:
@@ -209,16 +213,20 @@ def signup(request):
             ville_residence = ville_residence,
             telephone = telephone,
             pays = pays,
-            role = role
+            is_auteur = is_auteur,
+            is_editeur = is_editeur,
+            is_libraire = is_libraire,
+            is_organisateur = is_organisateur,
+            is_autre = is_autre
             
             # genres = genre
         )
         user = authenticate(request, username=email, password=password)
         if user:
             login(request, user)  # 🔥 Connexion correcte avec l'utilisateur authentifié
-            if user.role == 'editeur':
+            if user.is_editeur:
                  return redirect('editeur')
-            if user.role == "auteur":
+            if user.is_auteur:
                     sujet = "Nous avons reçu votre inscription"
                     message = "Merci pour votre inscription en tant qu'auteur. Dans 48 heures, nous vous enverrons un email pour vous informer si vous êtes approuvé."
                     from_email = settings.EMAIL_HOST_USER
@@ -251,8 +259,7 @@ def signup(request):
                     mail = "Un mail a été envoyé, merci de consulter votre boîte mail"
           #       send_approval_email.delay(user.id)
             return render(request,'gestion_utilisateur/index.html',{'mail':mail})
-    return render(request,'gestion_utilisateur/signup.html',{'genres':genrese,
-                        "role":role_choix,'pays':pays,"erreur":erreur})
+    return render(request,'gestion_utilisateur/signup.html',{'genres':genrese, 'pays':pays,"erreur":erreur})
 
 
 # def auteur(request):
@@ -273,9 +280,9 @@ def signin(request):
             login(request,user)
             # if user.change_pwd:    
             #     return redirect('updatepwd')
-            if user.role == 'editeur' and user.vedette == True:
+            if user.is_editeur and user.vedette == True:
                  return redirect('editeur')
-            if user.role == 'auteur' and user.vedette == True:
+            if user.is_auteur and user.vedette == True:
                  return redirect('auteur')
             return redirect('home')
         else:
@@ -304,9 +311,9 @@ def updatePWD(request):
         update_session_auth_hash(request, user)
 
         messages.success(request, "Mot de passe mis à jour avec succès.")
-        if user.role == 'editeur' and user.vedette == True:
+        if user.is_editeur and user.vedette == True:
                  return redirect('editeur')
-        if user.role == 'auteur' and user.vedette == True:
+        if user.is_auteur and user.vedette == True:
                  return redirect('auteur')
         return redirect('home')
 
@@ -385,7 +392,7 @@ def signin_auteur(request):
        
         bio = request.POST.get('bio')
         # profil = request.FILES.get('profil')
-        role = request.POST.get('role')
+
        
         pays = request.POST.get('pays')
         # image=request.FILES.get('image')
@@ -393,7 +400,7 @@ def signin_auteur(request):
             
         
         user.bio = bio
-        user.role = "auteur"
+        user.is_auteur = True
        
         user.pays = pays
         user.save()
@@ -610,3 +617,53 @@ def modifier_password_confirm(request, uidb64, token):
         return render(request, 'gestion_utilisateur/password_change.html')
     else:
         return render(request, 'gestion_utilisateur/reset_password.html', {'errors': "Le lien est invalide ou a expiré."})
+
+@login_required
+def ajouter_evenement(request):
+    if not request.user.is_organisateur:
+        messages.error(request, "Vous devez avoir le rôle d'organisateur pour proposer un événement.")
+        return redirect('evenement')
+        
+    if request.method == 'POST':
+        titre = request.POST.get('titre_evenement')
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+        date_evenement = request.POST.get('date_evenement')
+        date_fin_evenement = request.POST.get('date_fin_evenement') or None
+        lieu = request.POST.get('lieu_evenement')
+        heure = request.POST.get('heure_evenement') or None
+        
+        evenement = Evenement.objects.create(
+            titre_evenement=titre,
+            description=description,
+            image=image,
+            date_evenement=date_evenement,
+            date_fin_evenement=date_fin_evenement,
+            lieu_evenement=lieu,
+            heure_evenement=heure,
+            organisateur=request.user,
+            valide=False
+        )
+        
+        sujet = f"Nouvel événement proposé : {titre}"
+        message = f"""
+Bonjour Administrateur,
+
+L'utilisateur {request.user.username} ({request.user.email}) vient de proposer un nouvel événement.
+
+Titre : {titre}
+Date : {date_evenement}
+Lieu : {lieu}
+
+Veuillez vous connecter à l'interface d'administration pour l'approuver.
+"""
+        try:
+            email = EmailMessage(sujet, message, settings.EMAIL_HOST_USER, ['comm.bililibd@gmail.com'])
+            email.send(fail_silently=False)
+        except Exception:
+            pass # Ignorer les erreurs d'envoi d'email
+            
+        messages.success(request, "Votre événement a été soumis avec succès. Il sera publié après validation par un administrateur.")
+        return redirect('evenement')
+        
+    return redirect('evenement')
