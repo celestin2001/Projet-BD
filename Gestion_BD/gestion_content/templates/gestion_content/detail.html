@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Détail Auteur-BD - {{ auteur.username|default:"Auteur" }}</title>
+    <title>{% if auteur.is_editeur %}Détail Éditeur{% else %}Détail Auteur-BD{% endif %} - {{ auteur.utilisateur.get_full_name|default:auteur.get_full_name|default:auteur.username|default:"Profil" }}</title>
 
     <link rel="icon" type="image/png" href="{% static "gestion_content/images/logo.png" %}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -296,7 +296,7 @@
         <div class="container mt-5">
             <div class="section-green">
                 <div class="profile-card mx-auto p-4">
-                    <h4 class="fw-bold section-title">Découvrez {{auteur.username|default:"cet Auteur"}}</h4>
+                    <h4 class="fw-bold section-title">Découvrez {{ auteur.utilisateur.get_full_name|default:auteur.get_full_name|default:auteur.username }}</h4>
 
                     <div class="row">
                         <div class="col-md-4 text-center">
@@ -318,8 +318,14 @@
                             <div class="mb-2 icon-text">
                                 <i class="bi bi-flag-fill"></i> <span>Pays : {{auteur.get_pays_display|default:"Non spécifié"}}</span>
                             </div>
-                            <h5 class="mt-4">Biographie</h5>
-                            <p>{{auteur.bio|default:"La biographie de cet auteur n'est pas encore disponible."}}</p>
+                            <h5 class="mt-4">{% if auteur.is_editeur %}À propos{% else %}Biographie{% endif %}</h5>
+                            <p>
+                                {% if auteur.is_editeur %}
+                                    {{ editeur.description|default:auteur.bio|default:"Aucune description disponible pour cet éditeur." }}
+                                {% else %}
+                                    {{ auteur.bio|default:"La biographie de cet auteur n'est pas encore disponible." }}
+                                {% endif %}
+                            </p>
                             
                             {# --- NOUVELLE SECTION : Affichage des Réseaux Sociaux --- #}
                             <h5 class="mt-4">Réseaux Sociaux</h5>
@@ -493,18 +499,34 @@
                                              <label for="description" class="form-label">Entrer la description</label>
                                              <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
                                          </div>
-                                             <div class="mb-3">
-                                             <label for="image" class="form-label">Selectionner l'image de couverture</label>
-                                             <input class="form-control" type="file" id="image" name="image">
-                                         </div>
                                          <div class="mb-3">
-                                             <label for="planche1" class="form-label">Selectionner une planche (1)</label>
-                                             <input class="form-control" type="file" id="planche1" name="planche1">
+                                              <label for="image" class="form-label">Couverture principale / Tome 1</label>
+                                              <input class="form-control" type="file" id="image" name="image">
+                                              <small class="text-muted">Cette image sert de couverture principale et devient le Tome 1 si aucun Tome 1 n'est fourni.</small>
+                                          </div>
+                                          <div class="mb-3">
+                                              <label class="form-label fw-bold">Images de couverture supplémentaires (Optionnel)</label>
+                                              <input class="form-control" type="file" name="images_supplementaires" accept="image/*" multiple>
+                                              <small class="text-muted">Sélectionnez une ou plusieurs images de couverture additionnelles.</small>
+                                          </div>
+                                         {% for _ in "12345" %}
+                                         <div class="card mb-3">
+                                             <div class="card-header bg-light">
+                                                 <strong>Tome {{ forloop.counter }}</strong>
+                                             </div>
+                                             <div class="card-body">
+                                                 <div class="mb-3">
+                                                     <label for="tome{{ forloop.counter }}" class="form-label">Image du Tome {{ forloop.counter }}</label>
+                                                     <input class="form-control" type="file" id="tome{{ forloop.counter }}" name="tome{{ forloop.counter }}">
+                                                 </div>
+                                                 <div class="mb-3">
+                                                     <label for="planches_tome{{ forloop.counter }}" class="form-label">Planches du Tome {{ forloop.counter }}</label>
+                                                     <input class="form-control" type="file" id="planches_tome{{ forloop.counter }}" name="planches_tome{{ forloop.counter }}" multiple>
+                                                     <small class="text-muted">Ajoutez toutes les images de planches qui appartiennent à ce tome.</small>
+                                                 </div>
+                                             </div>
                                          </div>
-                                         <div class="mb-3">
-                                             <label for="planche2" class="form-label">Selectionner une planche (2)</label>
-                                             <input class="form-control" type="file" id="planche2" name="planche2">
-                                         </div>
+                                         {% endfor %}
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
@@ -523,12 +545,26 @@
         {% for oeuvre in auteur_oeuvres %}
             {% if oeuvre.valid %}
             <div class="col-lg-4 col-md-6">
-                <a href="{% url 'auteur_galerie_oeuvres' username=oeuvre.author.username %}" style="text-decoration: none; color: inherit;">
+                <a href="{% url 'auteur_galerie_oeuvres' auteur_id=oeuvre.author.pk %}" style="text-decoration: none; color: inherit;">
                     <div class="bibliographie-card">
                         <img src="{{ oeuvre.cover_image.url }}" alt="{{ oeuvre.title }} Cover"> 
                         <div>
                             <div class="title">{{ oeuvre.title }} ({{ oeuvre.publication_date|date:"Y" }})</div>
                             <p class="description mb-0">{{ oeuvre.description|truncatechars:50|default:"Pas de description courte disponible." }}</p>
+                            {% if oeuvre.images.all|length or oeuvre.tomes.all|length %}
+                            <div class="mt-2 d-flex gap-1 align-items-center flex-wrap">
+                                <span class="text-muted small me-1">Galerie :</span>
+                                {% if oeuvre.cover_image %}
+                                    <img src="{{ oeuvre.cover_image.url }}" class="border rounded" style="width: 25px; height: 35px; object-fit: cover;" title="Couverture principale">
+                                {% endif %}
+                                {% for img in oeuvre.images.all %}
+                                    <img src="{{ img.image.url }}" class="border rounded" style="width: 25px; height: 35px; object-fit: cover;" title="Couverture sup {{ forloop.counter }}">
+                                {% endfor %}
+                                {% for tome in oeuvre.tomes.all %}
+                                    <img src="{{ tome.image.url }}" class="border rounded" style="width: 25px; height: 35px; object-fit: cover;" title="Tome {{ tome.numero }}">
+                                {% endfor %}
+                            </div>
+                            {% endif %}
                         </div>
                     </div>
                 </a>
@@ -543,11 +579,34 @@
     {% endif %}
 
     {% if auteur.is_editeur %}
+    
+    {% if auteurs_editeur %}
+    <h5 class="fw-bold section-title mt-4">Auteurs associés</h5>
+    <div class="row g-4 mt-3">
+        {% for a in auteurs_editeur %}
+        <div class="col-lg-4 col-md-6">
+            <div class="bibliographie-card p-3 d-flex align-items-center gap-3">
+                {% if a.profil_picture %}
+                    <img src="{{ a.profil_picture.url }}" alt="{{ a.username }}" style="width: 80px; height: 80px; min-width: 80px; object-fit: cover; border-radius: 50%;">
+                {% else %}
+                    <div class="bg-light rounded-circle d-flex align-items-center justify-content-center" style="width: 80px; height: 80px; min-width: 80px; border: 1px solid var(--light-blue);"><i class="fas fa-user fa-2x text-muted"></i></div>
+                {% endif %}
+                <div class="flex-grow-1">
+                    <div class="title mb-1" style="font-size: 1.1rem; font-weight: bold;">{{ a.get_full_name|default:a.username }}</div>
+                    <p class="description mb-2 text-muted small"><i class="bi bi-flag-fill me-1"></i>{{ a.get_pays_display|default:"Non spécifié" }}</p>
+                    <a href="{% url 'detail_auteur' a.id %}" class="btn btn-sm btn-outline-primary py-1 px-3" style="font-size: 0.8rem; border-radius: 20px;">Voir le profil</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
     <h5 class="fw-bold section-title mt-4">Éditions publiées</h5>
     <div class="row g-4 mt-3">
         {% for edition in editeur_editions %}
         <div class="col-lg-4 col-md-6">
-            <a href="{% url 'editeur_detail' id=edition.edition.id %}" style="text-decoration: none; color: inherit;">
+            <a href="{% url 'livre_detail' slug=edition.slug %}" style="text-decoration: none; color: inherit;" title="Voir les détails de l'œuvre">
                 <div class="bibliographie-card">
                     {% if edition.couverture %}
                         <img src="{{ edition.couverture.url }}" alt="{{ edition.titre }} Cover"> 
@@ -555,6 +614,17 @@
                     <div>
                         <div class="title">{{ edition.titre }} ({{ edition.date_publication|date:"Y" }})</div>
                         <p class="description mb-0">{{ edition.resumé|truncatechars:50|default:"Pas de résumé disponible." }}</p>
+                        {% if edition.couverture or edition.images.exists %}
+                        <div class="mt-2 d-flex gap-1 align-items-center flex-wrap">
+                            <span class="text-muted small me-1">Galerie :</span>
+                            {% if edition.couverture %}
+                                <img src="{{ edition.couverture.url }}" class="border rounded" style="width: 25px; height: 35px; object-fit: cover;" title="Couverture principale">
+                            {% endif %}
+                            {% for img in edition.images.all %}
+                                <img src="{{ img.image.url }}" class="border rounded" style="width: 25px; height: 35px; object-fit: cover;" title="Couverture sup {{ forloop.counter }}">
+                            {% endfor %}
+                        </div>
+                        {% endif %}
                     </div>
                 </div>
             </a>

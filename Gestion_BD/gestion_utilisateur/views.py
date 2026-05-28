@@ -176,6 +176,8 @@ def signup(request):
         is_libraire = request.POST.get('is_libraire') == 'on'
         is_organisateur = request.POST.get('is_organisateur') == 'on'
         is_autre = request.POST.get('is_autre') == 'on'
+        is_scenariste = request.POST.get('is_scenariste') == 'on'
+        is_illustrateur = request.POST.get('is_illustrateur') == 'on'
         # genre = request.POST.getlist('genre')
         user_exist = Utilisateur.objects.filter(username=username)
         if user_exist:
@@ -217,7 +219,9 @@ def signup(request):
             is_editeur = is_editeur,
             is_libraire = is_libraire,
             is_organisateur = is_organisateur,
-            is_autre = is_autre
+            is_autre = is_autre,
+            is_scenariste = is_scenariste,
+            is_illustrateur = is_illustrateur,
             
             # genres = genre
         )

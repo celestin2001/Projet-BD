@@ -1,7 +1,8 @@
 from datetime import timezone
 from pyexpat.errors import messages
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render,redirect
+from django.shortcuts import get_object_or_404, render, redirect
+from django.utils.text import slugify
 from Gestion_BD.settings import EMAIL_HOST_USER
 from gestion_content.models import *
 from gestion_utilisateur.models import *
@@ -121,6 +122,7 @@ def detail_auteur_editeur(request, auteur_id):
     editeur = None
     editeur_editions = []
     auteur_oeuvres = []
+    auteurs_editeur = []
 
     # Si c'est un éditeur, récupérer ou créer son profil Editeur
     if auteur.is_editeur:
@@ -133,6 +135,9 @@ def detail_auteur_editeur(request, auteur_id):
         )
         # Récupérer les éditions publiées par cet éditeur
         editeur_editions = Bdtheque.objects.filter(edition=editeur)
+        auteurs_editeur = Utilisateur.objects.filter(
+            details_auteur__livres_principaux__edition__id=editeur.id
+        ).distinct().order_by('last_name')[:10]
     
     # Si c'est un auteur, récupérer ses œuvres Work
     if auteur.is_auteur:
@@ -183,12 +188,20 @@ def detail_auteur_editeur(request, auteur_id):
             genre = request.POST.get('genre')
             influence = request.POST.get('influence')
             image = request.FILES.get('image')
-            planche1 = request.FILES.get('planche1')
-            planche2 = request.FILES.get('planche2')
+            tome1 = request.FILES.get('tome1')
+            tome2 = request.FILES.get('tome2')
+            tome3 = request.FILES.get('tome3')
+            tome4 = request.FILES.get('tome4')
+            tome5 = request.FILES.get('tome5')
+            plaches_tome1 = request.FILES.getlist('planches_tome1')
+            plaches_tome2 = request.FILES.getlist('planches_tome2')
+            plaches_tome3 = request.FILES.getlist('planches_tome3')
+            plaches_tome4 = request.FILES.getlist('planches_tome4')
+            plaches_tome5 = request.FILES.getlist('planches_tome5')
             date = request.POST.get('annee')
 
             if titre and contenue:
-                Work.objects.create(
+                oeuvre = Work.objects.create(
                     title=titre,
                     description=contenue,
                     author=auteur,
@@ -196,11 +209,29 @@ def detail_auteur_editeur(request, auteur_id):
                     other_editor_name=request.POST.get('other_editor_name'),
                     genres=genre,
                     influence=influence,
-                    planche1=planche1,
-                    planche2=planche2,
                     cover_image=image,
                     publication_date=date
                 )
+
+                # Enregistrement des images de couverture supplémentaires multiples
+                images_supplementaires = request.FILES.getlist('images_supplementaires')
+                for img in images_supplementaires:
+                    WorkImage.objects.create(work=oeuvre, image=img)
+
+                # Créer les objets Tome et Planche associés (si fournis)
+                from .models import Tome, Planche
+
+                tome_files = [tome1, tome2, tome3, tome4, tome5]
+                if image and not tome1:
+                    tome_files[0] = image
+
+                plaches_lists = [plaches_tome1, plaches_tome2, plaches_tome3, plaches_tome4, plaches_tome5]
+
+                for idx, tome_file in enumerate(tome_files, start=1):
+                    if tome_file:
+                        tome_obj = Tome.objects.create(work=oeuvre, numero=idx, image=tome_file)
+                        for planche_file in plaches_lists[idx-1]:
+                            Planche.objects.create(tome=tome_obj, image=planche_file)
             return redirect('detail_auteur', auteur_id=auteur_id)
 
     # Rendu du template
@@ -211,6 +242,7 @@ def detail_auteur_editeur(request, auteur_id):
         'auteur_oeuvre': auteur_oeuvres, # Keep for backward compatibility or change template to use auteur_oeuvres
         'auteur_oeuvres': auteur_oeuvres,
         'editeur_editions': editeur_editions,
+        'auteurs_editeur': auteurs_editeur,
         'notations': notations,
         'liens_sociaux': liens_sociaux,
         'user_authenticate': user_authenticate,
@@ -545,67 +577,24 @@ def editeur_detail_view(request, id): # J'utilise 'id' car c'est ce que vous ave
     """
     Vue basée sur une fonction pour afficher les détails d'un éditeur.
     """
-    # 1. Récupérer l'objet Editeur (via son ID comme dans votre code)
-    editeur = get_object_or_404(Editeur, id=id)
+    # 1. Récupérer l'objet Editeur — priorité aux liens passant l'ID de l'utilisateur
+    #    (évite de renvoyer un Editeur avec le même PK qu'un Utilisateur différent)
+    editeur = Editeur.objects.filter(utilisateur__id=id).first()
+    if not editeur:
+        try:
+            editeur = Editeur.objects.get(id=id)
+        except Editeur.DoesNotExist:
+            # Si aucun Editeur trouvé, essayer de retrouver un Utilisateur-éditeur
+            utilisateur = get_object_or_404(Utilisateur, id=id, is_editeur=True)
+            # Par défaut on crée un enregistrement Editeur avec un nom lisible
+            default_name = f"Éditions {utilisateur.get_full_name() or utilisateur.username}"
+            editeur = Editeur.objects.create(
+                utilisateur=utilisateur,
+                nom=default_name,
+                slug=slugify(default_name)
+            )
 
-    # Vérification de la limite pour les visiteurs non connectés
-    limit_reached = check_profile_limit(request, f"editeur_{id}")
-
-    # 2. Préparation des données complexes (Logique de la vue)
-    
-    # A. Catalogue de livres
-    tous_livres_qs = Bdtheque.objects.filter(edition=editeur)
-    tous_livres_count = tous_livres_qs.count()
-    livres_publies = tous_livres_qs.order_by('-date_publication')[:10]
-
-    # B. Auteurs distincts (CORRIGÉ)
-    # L'accès de Utilisateur à Auteur se fait via 'details_auteur'
-    auteurs_editeur = Utilisateur.objects.filter(
-        details_auteur__livres_principaux__edition__id=editeur.id
-    ).distinct().order_by('last_name')[:10]
-    
-    # C. Événements à venir (Logique supposée)
-    # On suppose que vous avez un `Evenement` avec une ForeignKey vers `Editeur`.
-    # Si le modèle Evenement n'existe pas, cette partie générera une AttributeError.
-    try:
-        # Utilisez le related_name par défaut 'evenement_set' si aucun n'est spécifié
-        evenements_a_venir = editeur.evenement_set.filter(
-            date__gte=timezone.now()
-        ).order_by('date')[:3]
-    except AttributeError:
-        # Gère le cas où le modèle Evenement n'est pas encore créé ou lié
-        evenements_a_venir = [] 
-
-    # D. CORRECTION DE L'ERREUR DE TEMPLATE (Liens sociaux)
-    # Nous calculons les booléens pour éviter les requêtes complexes dans le template
-    # J'assume que `editeur.utilisateur.social_link` est une ManyToMany ou ForeignKey inverse.
-    try:
-        social_links_qs = editeur.utilisateur.social_link.all()
-        # Ces variables sont des booléens simples
-        has_facebook_link = social_links_qs.filter(plateforme='Facebook').exists()
-        has_instagram_link = social_links_qs.filter(plateforme='Instagram').exists()
-    except:
-        has_facebook_link = False
-        has_instagram_link = False
-    
-    # ...
-    
-    # 3. Préparation du Contexte
-    context = {
-        # ... autres variables
-        # Variables de correction pour le template
-        'has_facebook_link': has_facebook_link,
-        'has_instagram_link': has_instagram_link,
-        'editeur':editeur,
-        'auteurs_editeur':auteurs_editeur,
-        'livres_publies':livres_publies,
-        'tous_livres_count':tous_livres_count,
-        'limit_reached': limit_reached,
-        'user_authenticate':request.user.is_authenticated
-    }
-
-    # 4. Rendu du template
-    return render(request, 'gestion_content/detail_editeur.html', context)
+    return detail_auteur_editeur(request, auteur_id=editeur.utilisateur.id)
 
 # N'oubliez pas de lier cette vue dans votre urls.py :
 # path('editeur/<slug:slug>/', EditeurDetailView.as_view(), name='editeur_detail'),
@@ -704,6 +693,14 @@ def bdtheque(request):
     # 6. Rendu du template
     return render(request,'gestion_content/bd.html',context)
 
+
+def livre_detail_view(request, slug):
+    """Page de détail d'une œuvre/Bdtheque."""
+    livre = get_object_or_404(Bdtheque, slug=slug)
+    return render(request, 'gestion_content/livre_detail.html', {
+        'livre': livre,
+        'user_authenticate': request.user.is_authenticated,
+    })
 
 
 # def editeur(request):
@@ -869,27 +866,99 @@ def editeur(request):
 #     return render(request,'gestion_content/detail_editeur2.html')
 
 
-def auteur_galerie_view(request, username):
+def auteur_galerie_view(request, auteur_id):
     """Affiche toutes les oeuvres (Work) d'un auteur dans une galerie."""
     
-    auteur = get_object_or_404(Utilisateur, username=username)
+    auteur = get_object_or_404(Utilisateur, pk=auteur_id)
     oeuvres = auteur.works.filter(valid=True).order_by('-publication_date')
     
-    # --- LA CORRECTION EST ICI ---
-    # Utilisez 'auteur_id' au lieu de 'pk'
     return_url = reverse('detail_auteur', kwargs={'auteur_id': auteur.pk}) 
     
     context = {
         'auteur': auteur,
         'oeuvres': oeuvres,
-        'return_url': return_url, # C'est cette variable qui est utilisée dans le template
+        'return_url': return_url,
     }
     
     return render(request, 'gestion_content/oeuvre_detail.html', context)
 
+def work_detail_view(request, work_id):
+    """Affiche le détail complet d'une œuvre avec toutes ses images de couverture."""
+    
+    oeuvre = get_object_or_404(Work, id=work_id, valid=True)
+    auteur = oeuvre.author
+    
+    # Récupérer les images de couverture et les tomes
+    toutes_images = []
+    
+    # Ajouter l'image de couverture principale
+    if oeuvre.cover_image:
+        toutes_images.append({
+            'url': oeuvre.cover_image.url,
+            'type': 'Couverture principale',
+            'titre': oeuvre.title
+        })
+    
+    # Ajouter les images supplémentaires de couverture (WorkImage)
+    for i, img in enumerate(oeuvre.images.all(), 1):
+        toutes_images.append({
+            'url': img.image.url,
+            'type': f'Couverture alternative {i}',
+            'titre': oeuvre.title
+        })
+
+    # Ajouter les tomes et leurs planches depuis les modèles Tome/Planche
+    from .models import Tome
+
+    tomes_qs = oeuvre.tomes.all().order_by('numero')
+    tomes_images = []
+    for tome in tomes_qs:
+        tom_dict = {
+            'numero': tome.numero,
+            'url': tome.image.url,
+            'planches': [
+                {'url': p.image.url}
+                for p in tome.planches.all()
+            ]
+        }
+        tomes_images.append(tom_dict)
+
+    # Si l'œuvre n'a pas de tomes, utiliser la couverture principale comme Tome 1
+    if not tomes_images and oeuvre.cover_image:
+        tomes_images.append({
+            'numero': 1,
+            'url': oeuvre.cover_image.url,
+            'planches': []
+        })
+
+    # Construire la liste globale des planches (toutes planches de tous les tomes)
+    planches_images = []
+    for tome in tomes_qs:
+        for idx, p in enumerate(tome.planches.all(), start=1):
+            planches_images.append({
+                'url': p.image.url,
+                'type': f'Planche {idx} - Tome {tome.numero}'
+            })
+    
+    # Récupérer les notations
+    notations = Notation.objects.filter(work=oeuvre).select_related('user')
+    moyenne_note = oeuvre.notation.aggregate(Avg('rating'))['rating__avg']
+    
+    context = {
+        'oeuvre': oeuvre,
+        'auteur': auteur,
+        'toutes_images': toutes_images,
+        'tomes_images': tomes_images,
+        'planches_images': planches_images,
+        'notations': notations,
+        'moyenne_note': moyenne_note,
+    }
+    
+    return render(request, 'gestion_content/work_detail.html', context)
+
 # vue spécifique aux editeur pour alimenter la bd
 from django.contrib import messages
-from .models import Bdtheque, Editeur, Auteur, Genre
+from .models import Bdtheque, Editeur, Auteur, Genre, BdthequeImage
 
 def input_editeur(request):
     # 1. Vérification du rôle
@@ -954,6 +1023,11 @@ def ajouter_bd(request):
             nouvelle_bd.genres.set(request.POST.getlist('genres'))
             nouvelle_bd.auteurs_secondaires.set(request.POST.getlist('auteurs_secondaires'))
             
+            # Enregistrement des images de couverture supplémentaires
+            images_supplementaires = request.FILES.getlist('images_supplementaires')
+            for img in images_supplementaires:
+                BdthequeImage.objects.create(bd=nouvelle_bd, image=img)
+            
             messages.success(request, f"L'œuvre '{nouvelle_bd.titre}' a été ajoutée !")
         except Exception as e:
             messages.error(request, f"Erreur lors de l'ajout : {e}")
@@ -979,6 +1053,16 @@ def modifier_bd(request, id):
             # Mise à jour des relations multiples
             livre.genres.set(request.POST.getlist('genres'))
             livre.auteurs_secondaires.set(request.POST.getlist('auteurs_secondaires'))
+            
+            # Gestion de la suppression des images cochées
+            supprimer_images = request.POST.getlist('supprimer_images')
+            if supprimer_images:
+                BdthequeImage.objects.filter(id__in=supprimer_images, bd=livre).delete()
+            
+            # Ajout des nouvelles images supplémentaires
+            images_supplementaires = request.FILES.getlist('images_supplementaires')
+            for img in images_supplementaires:
+                BdthequeImage.objects.create(bd=livre, image=img)
             
             livre.save()
             messages.success(request, "Mise à jour réussie.")
@@ -1011,7 +1095,10 @@ def modifier_profil_editeur(request):
             editeur.site_web = request.POST.get('site_web')
 
             if request.FILES.get('logo'):
-                editeur.logo = request.FILES.get('logo')
+                logo_file = request.FILES.get('logo')
+                editeur.logo = logo_file
+                request.user.profil_picture = logo_file
+                request.user.save()
 
             editeur.save()
             messages.success(request, "Profil de la maison d'édition mis à jour.")

@@ -1,0 +1,478 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ oeuvre.title }} - MABD</title>
+    <link rel="icon" type="image/png" href="{% static 'gestion_content/images/logo.png' %}">
+    
+    <!-- Bootstrap + Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <!-- SimpleLightbox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.css">
+
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --dark-blue: #0056b3;
+            --text-color: #343a40;
+        }
+
+        body {
+            background: #f4f7f9;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .work-header {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .work-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(0,0,0,.08);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .main-image {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .main-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s;
+        }
+
+        .main-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-thumbnails {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .thumbnail {
+            position: relative;
+            border-radius: 6px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            flex: 0 0 auto;
+        }
+
+        .thumbnail img {
+            width: 100px;
+            height: 140px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .thumbnail:hover {
+            border-color: var(--primary-blue);
+            transform: scale(1.05);
+        }
+
+        .thumbnail.active {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+
+        .thumbnail-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 4px 8px;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .info-section {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .badge-genre {
+            display: inline-block;
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+
+        .rating-stars {
+            color: #ffc107;
+            font-size: 1.2rem;
+        }
+
+        .notations-section {
+            margin-top: 3rem;
+        }
+
+        .notation-card {
+            background: #f8f9fa;
+            border-left: 4px solid var(--primary-blue);
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1rem;
+        }
+
+        .notation-header {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notation-rating {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        /* Bouton personnalisé Lightbox */
+        #custom-sl-close {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999999;
+            display: none;
+            background: rgba(0,0,0,0.75);
+            color: white;
+            font-size: 32px;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .sl-close {
+            display: none !important;
+        }
+
+        .image-count {
+            background: var(--primary-blue);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    {% include "gestion_content/header.html" %}
+
+    <div class="work-header">
+        <div class="container">
+            <div class="d-flex align-items-center gap-3 mb-3">
+                <a href="{% url 'auteur_galerie_oeuvres' auteur_id=auteur.pk %}" class="btn btn-light btn-sm">
+                    <i class="fas fa-arrow-left me-2"></i> Retour à la galerie
+                </a>
+            </div>
+            <h1 class="fw-bold mb-2">{{ oeuvre.title }}</h1>
+            <p class="lead mb-0">
+                <i class="fas fa-user me-2"></i>
+                <a href="{% url 'detail_auteur' auteur.pk %}" style="color: white; text-decoration: underline;">
+                    {{ auteur.utilisateur.get_full_name|default:auteur.get_full_name|default:auteur.username }}
+                </a>
+                <span class="ms-3">
+                    <i class="fas fa-calendar me-2"></i>{{ oeuvre.publication_date|date:"Y" }}
+                </span>
+            </p>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="work-container">
+            <div class="row">
+                <!-- Colonne Images -->
+                <div class="col-lg-5">
+                    <div class="main-image" id="mainImageContainer">
+                        {% if tomes_images and tomes_images.0.url %}
+                            <a href="{{ tomes_images.0.url }}" id="mainImageLink" title="{{ oeuvre.title }}">
+                                <img src="{{ tomes_images.0.url }}" alt="{{ oeuvre.title }}" id="mainImage">
+                            </a>
+                        {% elif oeuvre.cover_image %}
+                            <a href="{{ oeuvre.cover_image.url }}" id="mainImageLink" title="{{ oeuvre.title }}">
+                                <img src="{{ oeuvre.cover_image.url }}" alt="{{ oeuvre.title }}" id="mainImage">
+                            </a>
+                        {% else %}
+                            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 400px; border-radius: 8px;">
+                                <i class="fas fa-image fa-3x text-muted"></i>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Galerie de vignettes -->
+                    {% if toutes_images %}
+                        <div class="image-count">
+                            <i class="fas fa-images me-2"></i>{{ tomes_images|length }} tome{{ tomes_images|length|pluralize }}
+                        </div>
+
+                        <div class="gallery-thumbnails" id="galerie">
+                            {% for tome in tomes_images %}
+                                <a href="#" 
+                                   class="thumbnail {% if forloop.first %}active{% endif %} tome-thumb"
+                                   data-index="{{ forloop.counter0 }}"
+                                   title="Tome {{ tome.numero }}">
+                                    <img src="{{ tome.url }}" alt="Tome {{ tome.numero }}">
+                                    <div class="thumbnail-label">Tome {{ tome.numero }}</div>
+                                </a>
+                            {% endfor %}
+                        </div>
+
+                        <!-- Conteneurs cachés des planches par tome (pour modal) -->
+                        {% for tome in tomes_images %}
+                            <div id="planches-for-tome-{{ forloop.counter0 }}" style="display:none;">
+                                {% for p in tome.planches %}
+                                    <a href="{{ p.url }}" data-caption="{{ oeuvre.title }} - Tome {{ tome.numero }}"></a>
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+
+                <!-- Colonne Informations -->
+                <div class="col-lg-7">
+                    <!-- Description -->
+                    <section class="mb-4">
+                        <h3 class="fw-bold mb-3">
+                            <i class="fas fa-book me-2"></i>Résumé
+                        </h3>
+                        <p class="text-muted">{{ oeuvre.description }}</p>
+                    </section>
+
+                    <!-- Métadonnées -->
+                    <section class="info-section">
+                        <div class="row g-3">
+                            {% if oeuvre.genres %}
+                            <div class="col-md-6">
+                                <h5 class="fw-bold mb-2">
+                                    <i class="fas fa-tag me-2"></i>Genre
+                                </h5>
+                                <span class="badge bg-primary badge-genre">{{ oeuvre.genres }}</span>
+                            </div>
+                            {% endif %}
+
+                            {% if oeuvre.influence %}
+                            <div class="col-md-6">
+                                <h5 class="fw-bold mb-2">
+                                    <i class="fas fa-palette me-2"></i>Influence
+                                </h5>
+                                <span class="badge bg-secondary badge-genre">{{ oeuvre.influence }}</span>
+                            </div>
+                            {% endif %}
+
+                            {% if oeuvre.editeur %}
+                            <div class="col-md-6">
+                                <h5 class="fw-bold mb-2">
+                                    <i class="fas fa-building me-2"></i>Maison d'édition
+                                </h5>
+                                <p class="mb-0">
+                                    <a href="{% url 'editeur_detail' oeuvre.editeur.id %}" class="text-decoration-none">
+                                        {{ oeuvre.editeur.nom }}
+                                    </a>
+                                </p>
+                            </div>
+                            {% elif oeuvre.other_editor_name %}
+                            <div class="col-md-6">
+                                <h5 class="fw-bold mb-2">
+                                    <i class="fas fa-building me-2"></i>Maison d'édition
+                                </h5>
+                                <p class="mb-0">{{ oeuvre.other_editor_name }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if oeuvre.edition %}
+                            <div class="col-md-6">
+                                <h5 class="fw-bold mb-2">
+                                    <i class="fas fa-cube me-2"></i>Type d'édition
+                                </h5>
+                                <span class="badge bg-info badge-genre">{{ oeuvre.edition }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </section>
+
+                            {% if tomes_images %}
+                            <section class="info-section">
+                                <h5 class="fw-bold mb-3">
+                                    <i class="fas fa-book-open me-2"></i>Tomes disponibles
+                                </h5>
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% for image in tomes_images %}
+                                        <div class="text-center">
+                                            <img src="{{ image.url }}" alt="{{ image.type }}" class="rounded" style="width:120px; height:170px; object-fit:cover;">
+                                            <div class="mt-1 small text-muted">{{ image.type }}</div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </section>
+                            {% endif %}
+
+                            {% for tome in tomes_images %}
+                            <section class="info-section">
+                                <h5 class="fw-bold mb-3">
+                                    <i class="fas fa-book-open me-2"></i>Planches du Tome {{ tome.numero }}
+                                </h5>
+                                {% if tome.planches %}
+                                <div class="d-flex flex-wrap gap-2">
+                                    {% for planche in tome.planches %}
+                                        <div class="text-center">
+                                            <img src="{{ planche.url }}" alt="Planche {{ forloop.counter }} - Tome {{ tome.numero }}" class="rounded" style="width:120px; height:170px; object-fit:cover;">
+                                            <div class="mt-1 small text-muted">Planche {{ forloop.counter }}</div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                {% else %}
+                                <p class="text-muted">Aucune planche pour ce tome.</p>
+                                {% endif %}
+                            </section>
+                            {% endfor %}
+
+                    <!-- Notation moyenne -->
+                    {% if moyenne_note %}
+                    <section class="info-section">
+                        <h5 class="fw-bold mb-2">
+                            <i class="fas fa-star me-2"></i>Note moyenne
+                        </h5>
+                        <div class="rating-stars mb-2">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= moyenne_note %}
+                                    <i class="fas fa-star"></i>
+                                {% else %}
+                                    <i class="far fa-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                            <span class="text-dark ms-2">{{ moyenne_note|floatformat:1 }}/5</span>
+                        </div>
+                    </section>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Notations/Avis -->
+        {% if notations %}
+        <div class="work-container notations-section">
+            <h3 class="fw-bold mb-4">
+                <i class="fas fa-comments me-2"></i>Avis des lecteurs ({{ notations|length }})
+            </h3>
+
+            {% for notation in notations %}
+            <div class="notation-card">
+                <div class="notation-header">
+                    <span>
+                        <i class="fas fa-user-circle me-2"></i>{{ notation.user.username }}
+                    </span>
+                    <span class="notation-rating">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= notation.rating %}
+                                <i class="fas fa-star"></i>
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </span>
+                </div>
+                <p class="text-muted mb-0">{{ notation.comment }}</p>
+                <small class="text-muted d-block mt-2">
+                    <i class="fas fa-clock me-1"></i>{{ notation.created_at|date:"d/m/Y H:i" }}
+                </small>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+    </div>
+
+    {% include "gestion_content/footer.html" %}
+
+    <!-- JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/simplelightbox/2.10.3/simple-lightbox.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const thumbnails = document.querySelectorAll('.tome-thumb');
+            const mainImage = document.getElementById('mainImage');
+            const mainImageLink = document.getElementById('mainImageLink');
+
+            const modalEl = document.getElementById('tomePlancheModal');
+            const modalBody = document.getElementById('tomePlancheContent');
+            const bsModal = new bootstrap.Modal(modalEl);
+
+            thumbnails.forEach((thumb) => {
+                thumb.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const idx = this.dataset.index;
+                    const imgEl = this.querySelector('img');
+                    const imageUrl = imgEl ? imgEl.src : null;
+
+                    if (imageUrl) {
+                        mainImage.src = imageUrl;
+                        mainImageLink.href = imageUrl;
+                    }
+
+                    // Active class
+                    document.querySelectorAll('.tome-thumb').forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Remplir la modale avec les planches correspondant au tome
+                    modalBody.innerHTML = '';
+                    const plancheAnchors = document.querySelectorAll(`#planches-for-tome-${idx} a`);
+                    if (plancheAnchors.length === 0) {
+                        modalBody.innerHTML = '<p class="text-muted">Aucune planche pour ce tome.</p>';
+                    } else {
+                        plancheAnchors.forEach(a => {
+                            const src = a.getAttribute('href');
+                            const img = document.createElement('img');
+                            img.src = src;
+                            img.className = 'img-fluid mb-2';
+                            modalBody.appendChild(img);
+                        });
+                    }
+
+                    bsModal.show();
+                });
+            });
+        });
+    </script>
+
+    <!-- Modal pour afficher les planches d'un tome -->
+    <div class="modal fade" id="tomePlancheModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Planches</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body" id="tomePlancheContent" style="max-height:70vh; overflow:auto;">
+            <!-- Contenu injecté dynamiquement -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+</body>
+</html>

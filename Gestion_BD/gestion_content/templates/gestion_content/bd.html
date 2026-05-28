@@ -374,7 +374,7 @@
                     {% for livre in livres %} 
                     <div class="col" data-aos="fade-up" ">
                         <div class="card h-100 shadow-sm border-0 bd-card">
-                            <a href="" class="text-decoration-none text-dark">
+                            <a href="{% if livre.get_work_url %}{{ livre.get_work_url }}{% else %}{{ livre.get_absolute_url }}{% endif %}" class="text-decoration-none text-dark">
                                 <div class="bd-cover-container">
                                     {# Affichage de la couverture ou d'une image par défaut #}
                                     {% if livre.couverture %}
@@ -389,8 +389,8 @@
                                     {# Auteur principal #}
                                     <p class="card-text small text-secondary mb-1">
                                         Par: 
-                                        {% if livre.auteur_principal %}
-                                            <span class="fw-semibold text-dark">{{ livre.auteur_principal.utilisateur.get_full_name|default:livre.auteur_principal.utilisateur.username }}</span>
+                                        {% if livre.author_display %}
+                                            <span class="fw-semibold text-dark">{{ livre.author_display }}</span>
                                         {% else %}
                                             <span class="fw-semibold text-danger">Auteur inconnu</span>
                                         {% endif %}

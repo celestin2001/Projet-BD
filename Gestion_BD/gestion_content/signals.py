@@ -43,6 +43,21 @@ def sync_work_to_bdtheque(sender, instance, created, **kwargs):
         genre_obj, _ = Genre.objects.get_or_create(nom=instance.genres)
         bd_item.genres.add(genre_obj)
 
+    # Synchronisation des images de couverture et planches supplémentaires vers BdthequeImage
+    from .models import BdthequeImage
+    bd_item.images.all().delete()
+    
+    # Copie de toutes les images de couverture supplémentaires
+    for work_img in instance.images.all():
+        BdthequeImage.objects.create(bd=bd_item, image=work_img.image)
+        
+    # Copie des tomes et des planches (modèle Tome/Planche)
+    for tome in instance.tomes.all():
+        if tome.image:
+            BdthequeImage.objects.create(bd=bd_item, image=tome.image)
+        for p in tome.planches.all():
+            BdthequeImage.objects.create(bd=bd_item, image=p.image)
+
     # 4. Génération d'un Slug unique
     # On ne génère le slug que si c'est une création ou si le slug est vide
     if not bd_item.slug:

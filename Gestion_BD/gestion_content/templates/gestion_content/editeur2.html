@@ -66,9 +66,39 @@
         text-align: center;
         color: var(--dark-blue);
         font-size: 2.5rem; 
-        margin-bottom: 2.5rem; 
+        margin-bottom: 0.5rem; 
         font-weight: 700;
         animation: fadeIn 1s ease-out; 
+    }
+    .hero-description {
+        text-align: center;
+        color: #495057;
+        max-width: 820px;
+        margin: 0 auto 1.5rem;
+        font-size: 1rem;
+        line-height: 1.75;
+    }
+    .result-summary {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        color: #495057;
+        font-size: 0.95rem;
+    }
+    .result-summary .badge {
+        background-color: var(--light-blue);
+        color: var(--dark-blue);
+        font-weight: 600;
+    }
+    .result-summary a {
+        color: var(--primary-blue);
+        text-decoration: none;
+    }
+    .result-summary a:hover {
+        text-decoration: underline;
     }
     .section-auteur-contenu { /* Renommé mais conservé pour le style existant */
         margin-top: 2rem;
@@ -85,6 +115,77 @@
         font-weight: 600;
         border-bottom: 2px solid var(--light-blue);
         padding-bottom: 0.5rem;
+    }
+    .profile-card {
+        border: 1px solid #e9ecef;
+        border-radius: 14px;
+        box-shadow: 0 4px 18px rgba(0,0,0,0.06);
+        background-color: #fff;
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+    }
+    .profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 28px rgba(0,0,0,0.12);
+    }
+    .profile-card img {
+        width: 100%;
+        object-fit: cover;
+        aspect-ratio: 1/1;
+        background-color: #f8f9fa;
+    }
+    .profile-card-body {
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+    }
+    .profile-card-body h5 {
+        color: var(--dark-blue);
+        margin-bottom: 0.3rem;
+        font-size: 1.15rem;
+        font-weight: 600;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+    }
+    .profile-card-body p {
+        font-size: 0.9rem;
+        color: #555;
+        margin-bottom: 0.75rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        min-width: 0;
+    }
+    .profile-card-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin-bottom: 1rem;
+    }
+    .profile-card-tag {
+        background-color: var(--light-blue);
+        color: var(--dark-blue);
+        border-radius: 999px;
+        padding: 0.25rem 0.65rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+    }
+    .profile-card-footer {
+        margin-top: auto;
+    }
+    .profile-card-footer .btn {
+        width: 100%;
+        justify-content: center;
     }
 
     /* Card Éditeur */
@@ -421,6 +522,19 @@
     <main class="flex-shrink-0"> 
         <div class="container mt-4">
             <h1 class="titre-auteurs">Découvrez nos Maisons d'Édition</h1>
+            <p class="hero-description">Parcourez notre sélection d'éditeurs partenaires, trouvez facilement leur profil et découvrez leurs publications. Filtrez par pays ou recherchez par nom pour aller droit au but.</p>
+            <div class="result-summary">
+                <span class="badge">{{ editeurs_paginated.paginator.count|default:0 }} éditeurs trouvés</span>
+                {% if request.GET.pays %}
+                <span>Filtre pays : <strong>{{ request.GET.pays }}</strong></span>
+                {% endif %}
+                {% if request.GET.q %}
+                <span>Recherche : <strong>"{{ request.GET.q }}"</strong></span>
+                {% endif %}
+                {% if request.GET.pays or request.GET.q %}
+                <a href="{% url 'editeur' %}" class="text-primary">Réinitialiser</a>
+                {% endif %}
+            </div>
 
             <div class="section-auteur-contenu">
                 <section class="section-vedettes mb-4">
@@ -429,19 +543,26 @@
                         {% for editeur in editeurs_vedettes_principaux %}
                         <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <div class="auteur-card-wrapper">
-                                <div class="auteur-card">
+                                <a href="{% url 'editeur_detail' editeur.id %}" class="profile-card">
                                     {% if editeur.profil_picture %}
-                                    <img src="{{ editeur.profil_picture.url }}" alt="{{ editeur.nom }}" class="img-fluid">
+                                    <img src="{{ editeur.profil_picture.url }}" alt="{{ editeur.utilisateur.get_full_name|default:editeur.get_full_name|default:editeur.username }}" class="img-fluid">
+                                    {% else %}
+                                    <img src="{% static 'gestion_content/images/prof.png' %}" alt="Default Profile Picture" class="img-fluid">
                                     {% endif %}
-                                    <div class="auteur-info">
-                                        <h5>{{ editeur.username }}</h5>
-                                        <p>
-                                            <span class="flag-icon flag-icon-{{ editeur.pays|lower }}"></span> 
-                                            {{ editeur.get_pays_display }}
-                                        </p>
-                                        <a href="{% url 'detail_auteur' editeur.id %}" class="btn btn-primary">PLUS D'INFOS</a>
+                                    <div class="profile-card-body">
+                                        <h5>{{ editeur.utilisateur.get_full_name|default:editeur.get_full_name|default:editeur.username }}</h5>
+                                        <div class="profile-card-tags">
+                                            <span class="profile-card-tag"><i class="fas fa-globe-africa me-1"></i>{{ editeur.get_pays_display }}</span>
+                                            {% if editeur.vedette %}
+                                            <span class="profile-card-tag"><i class="fas fa-star me-1"></i>Vedette</span>
+                                            {% endif %}
+                                        </div>
+                                        <p>Découvrez sa maison d'édition et ses publications phares.</p>
+                                        <div class="profile-card-footer">
+                                            <span class="btn btn-primary">Voir le profil</span>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                         {% empty %}
@@ -496,19 +617,26 @@
                         {% for editeur in editeurs_paginated %}
                         <div class="col-6 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                             <div class="auteur-card-wrapper">
-                                <div class="auteur-card">
+                                <a href="{% url 'editeur_detail' editeur.id %}" class="profile-card">
                                     {% if editeur.profil_picture %}
-                                    <img src="{{ editeur.profil_picture.url }}" alt="{{ editeur.nom }}" class="img-fluid">
+                                    <img src="{{ editeur.profil_picture.url }}" alt="{{ editeur.utilisateur.get_full_name|default:editeur.get_full_name|default:editeur.username }}" class="img-fluid">
+                                    {% else %}
+                                    <img src="{% static 'gestion_content/images/prof.png' %}" alt="Default Profile Picture" class="img-fluid">
                                     {% endif %}
-                                    <div class="auteur-info">
-                                        <h5>{{ editeur.username }}</h5>
-                                        <p>
-                                            <span class="flag-icon flag-icon-{{ editeur.pays|lower }}"></span> 
-                                            {{ editeur.get_pays_display }}
-                                        </p>
-                                        <a href="{% url 'detail_auteur' editeur.id %}" class="btn btn-primary">PLUS D'INFOS</a>
+                                    <div class="profile-card-body">
+                                        <h5>{{ editeur.utilisateur.get_full_name|default:editeur.get_full_name|default:editeur.username }}</h5>
+                                        <div class="profile-card-tags">
+                                            <span class="profile-card-tag"><i class="fas fa-globe-africa me-1"></i>{{ editeur.get_pays_display }}</span>
+                                            {% if editeur.vedette %}
+                                            <span class="profile-card-tag"><i class="fas fa-star me-1"></i>Vedette</span>
+                                            {% endif %}
+                                        </div>
+                                        <p>Visitez le profil pour visualiser ses livres, auteurs associés et actualités.</p>
+                                        <div class="profile-card-footer">
+                                            <span class="btn btn-primary">Voir le profil</span>
+                                        </div>
                                     </div>
-                                </div>
+                                </a>
                             </div>
                         </div>
                         {% empty %}

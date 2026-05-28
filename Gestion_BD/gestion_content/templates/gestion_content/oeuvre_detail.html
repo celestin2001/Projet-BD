@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galerie des Œuvres de {{ auteur.username }} - MABD</title>
+    <title>Galerie des Œuvres de {{ auteur.utilisateur.get_full_name|default:auteur.get_full_name|default:auteur.username }} - MABD</title>
     <link rel="icon" type="image/png" href="{% static 'gestion_content/images/logo.png' %}">
     
     <!-- Bootstrap + Icons -->
@@ -106,7 +106,7 @@
             <h1 class="fw-bold text-primary">
                 <i class="fas fa-book-open me-2"></i> Galerie des Œuvres
             </h1>
-            <p>Découvrez les créations de <b>{{ auteur.username }}</b> ({{ auteur.utilisateur.get_pays_display }})</p>
+            <p>Découvrez les créations de <b>{{ auteur.utilisateur.get_full_name|default:auteur.get_full_name|default:auteur.username }}</b> ({{ auteur.utilisateur.get_pays_display }})</p>
 
             {% if return_url %}
                 <a href="{{ return_url }}" class="btn btn-primary">
@@ -125,8 +125,8 @@
                     {% for oeuvre in oeuvres %}
                         <div class="col-6 col-sm-4 col-md-3 col-lg-2">
 
-                            <!-- Image principale -->
-                            <a href="{{ oeuvre.cover_image.url }}" class="oeuvre-item" title="{{ oeuvre.title }}">
+                            <!-- Image principale - Cliquable vers la page de détail -->
+                            <a href="{% url 'work_detail' oeuvre.id %}" class="oeuvre-item" title="{{ oeuvre.title }}">
                                 <img src="{{ oeuvre.cover_image.url }}" alt="{{ oeuvre.title }}">
                                 <div class="oeuvre-overlay">
                                     <h5 class="mb-1">{{ oeuvre.title }}</h5>
@@ -134,13 +134,19 @@
                                 </div>
                             </a>
 
-                            <!-- Images supplémentaires -->
-                            {% if oeuvre.image2 %}
-                                <a href="{{ oeuvre.image2.url }}" hidden title="{{ oeuvre.title }}"></a>
-                            {% endif %}
-                            {% if oeuvre.image3 %}
-                                <a href="{{ oeuvre.image3.url }}" hidden title="{{ oeuvre.title }}"></a>
-                            {% endif %}
+                            <!-- Indicateur du nombre d'images de couverture disponibles -->
+                            {% with total_couvertures=oeuvre.images.count|add:1 %}
+                                {% if total_couvertures > 1 %}
+                                <div class="position-absolute top-0 end-0 m-2" style="background: rgba(0,0,0,0.8); color: white; padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: bold;">
+                                    🖼️ {{ total_couvertures }}
+                                </div>
+                                {% endif %}
+                            {% endwith %}
+
+                            <!-- Images supplémentaires de couverture - liens cachés pour galerie -->
+                            {% for img in oeuvre.images.all %}
+                                <a href="{{ img.image.url }}" hidden title="{{ oeuvre.title }} - Couverture {{ forloop.counter|add:1 }}"></a>
+                            {% endfor %}
 
                         </div>
                     {% endfor %}

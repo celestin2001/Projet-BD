@@ -154,8 +154,7 @@
             
             {% for editeur in editeurs %}
             <div class="col-md-6">
-                <a href="" class="editor-card">
-                    <a href="{% url 'editeur_detail' editeur.id %}" class="editor-card">
+                <a href="{% url 'editeur_detail' editeur.id %}" class="editor-card">
                     <div class="editor-logo">
                         {% if editeur.logo %}
                             <img src="{{ editeur.logo.url }}" alt="Logo de {{ editeur.nom }}">

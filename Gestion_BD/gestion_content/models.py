@@ -59,14 +59,50 @@ class Work(models.Model):
     cover_image = models.ImageField(upload_to='media/', blank=True, null=True)
     description = models.TextField()
     genres = models.CharField(max_length=50,choices=choix_genre,default='Comedie')
-    planche1 = models.ImageField(upload_to='media/', blank=True, null=True)
-    planche2 = models.ImageField(upload_to='media/', blank=True, null=True)
     valid = models.BooleanField(default=False)
     class Meta:
         verbose_name_plural = "Oeuvres"
 
     def __str__(self):
         return self.title
+
+
+class WorkImage(models.Model):
+    work = models.ForeignKey(Work, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='media/')
+
+    class Meta:
+        verbose_name = "Image de couverture supplémentaire (Œuvre)"
+        verbose_name_plural = "Images de couverture supplémentaires (Œuvre)"
+
+    def __str__(self):
+        return f"Image pour {self.work.title}"
+
+
+class Tome(models.Model):
+    """Représente un tome d'une œuvre : permet d'associer plusieurs planches par tome."""
+    work = models.ForeignKey(Work, on_delete=models.CASCADE, related_name='tomes')
+    numero = models.PositiveSmallIntegerField()
+    image = models.ImageField(upload_to='media/')
+
+    class Meta:
+        unique_together = ('work', 'numero')
+        ordering = ['numero']
+
+    def __str__(self):
+        return f"{self.work.title} - Tome {self.numero}"
+
+
+class Planche(models.Model):
+    tome = models.ForeignKey(Tome, on_delete=models.CASCADE, related_name='planches')
+    image = models.ImageField(upload_to='media/')
+
+    class Meta:
+        verbose_name = "Planche"
+        verbose_name_plural = "Planches"
+
+    def __str__(self):
+        return f"Planche pour {self.tome}"
 
 class Notation(models.Model):
     user = models.ForeignKey('gestion_utilisateur.Utilisateur', on_delete=models.CASCADE, related_name='notation')  # ✅ Ici aussi
@@ -420,11 +456,55 @@ class Bdtheque(models.Model):
         
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.titre)
+            base_slug = slugify(self.titre)
+            unique_slug = base_slug
+            num = 1
+            while Bdtheque.objects.filter(slug=unique_slug).exclude(id=self.id).exists():
+                unique_slug = f'{base_slug}-{num}'
+                num += 1
+            self.slug = unique_slug
         super().save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse('livre_detail', kwargs={'slug': self.slug})
+
+    def get_related_work(self):
+        if not self.auteur_principal or not self.auteur_principal.utilisateur:
+            return None
+        return Work.objects.filter(
+            title=self.titre,
+            author=self.auteur_principal.utilisateur,
+            valid=True
+        ).first()
+
+    @property
+    def author_display(self):
+        if self.auteur_principal:
+            return self.auteur_principal.utilisateur.get_full_name() or self.auteur_principal.utilisateur.username
+
+        related_work = self.get_related_work()
+        if related_work and related_work.author:
+            return related_work.author.get_full_name() or related_work.author.username
+
+        return None
+
+    def get_work_url(self):
+        related_work = self.get_related_work()
+        if related_work:
+            return reverse('work_detail', kwargs={'work_id': related_work.pk})
+        return None
+
+
+class BdthequeImage(models.Model):
+    bd = models.ForeignKey(Bdtheque, on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='livres/couvertures/')
+
+    class Meta:
+        verbose_name = "Image de couverture supplémentaire"
+        verbose_name_plural = "Images de couverture supplémentaires"
+
+    def __str__(self):
+        return f"Image pour {self.bd.titre}"
     
 
 

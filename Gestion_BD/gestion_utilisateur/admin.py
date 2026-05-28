@@ -21,6 +21,8 @@ class CustomUserCreationForm(UserCreationForm):
             "is_libraire",
             "is_organisateur",
             "is_autre",
+            "is_scenariste",
+            "is_illustrateur",
             "bio",
             "profil_picture",
             "pays",
@@ -47,6 +49,8 @@ class CustomUserChangeForm(UserChangeForm):
             "is_libraire",
             "is_organisateur",
             "is_autre",
+            "is_scenariste",
+            "is_illustrateur",
             "bio",
             "profil_picture",
             "pays",
@@ -67,7 +71,7 @@ class UtilisateurAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = Utilisateur
 
-    list_display = ("username", "email", "first_name", "last_name", "is_auteur", "is_editeur", "is_staff")
+    list_display = ("username", "email", "first_name", "last_name", "is_auteur", "is_editeur", "is_scenariste", "is_illustrateur", "is_staff")
     search_fields = ("username", "email", "first_name", "last_name")
     ordering = ("username",)
 
@@ -89,6 +93,8 @@ class UtilisateurAdmin(UserAdmin):
                 "is_libraire",
                 "is_organisateur",
                 "is_autre",
+                "is_scenariste",
+                "is_illustrateur",
                 "bio",
                 "profil_picture",
                 "pays",
@@ -118,6 +124,8 @@ class UtilisateurAdmin(UserAdmin):
                 "is_libraire",
                 "is_organisateur",
                 "is_autre",
+                "is_scenariste",
+                "is_illustrateur",
                 "bio",
                 "profil_picture",
                 "pays",

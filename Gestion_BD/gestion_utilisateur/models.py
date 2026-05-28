@@ -9,6 +9,8 @@ class Utilisateur(AbstractUser):
     is_libraire = models.BooleanField(default=False)
     is_organisateur = models.BooleanField(default=False, verbose_name="Organisateur d'Évènement")
     is_autre = models.BooleanField(default=False)
+    is_scenariste = models.BooleanField(default=False)
+    is_illustrateur = models.BooleanField(default=False)
 
     PAYS_AFRICAINS = [
         ("dz", "Algérie"), ("ao", "Angola"), ("bj", "Bénin"), ("bw", "Botswana"),
